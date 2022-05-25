@@ -10,14 +10,16 @@
 		053D936389B5299965350BE6 /* Pods_Netflix_NetflixUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70351BE97642B4564DA5DB6 /* Pods_Netflix_NetflixUITests.framework */; };
 		165357344AC9CC8C97EFDC40 /* Pods_NetflixTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */; };
 		3127F9BA5683082FC5930A6D /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
-		5AFEDBC4283D19A0005DDDE0 /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5AFEDBC3283D19A0005DDDE0 /* swiftgen.yml */; };
+		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
+		5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */; };
+		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
+		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
+		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
 		5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */; };
 		95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD5283BA0F4003D059D /* AppDelegate.swift */; };
 		95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD7283BA0F4003D059D /* SceneDelegate.swift */; };
 		95210FDA283BA0F4003D059D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD9283BA0F4003D059D /* ViewController.swift */; };
-		95210FDD283BA0F4003D059D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95210FDB283BA0F4003D059D /* Main.storyboard */; };
 		95210FDF283BA0F6003D059D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95210FDE283BA0F6003D059D /* Assets.xcassets */; };
-		95210FE2283BA0F6003D059D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95210FE0283BA0F6003D059D /* LaunchScreen.storyboard */; };
 		95210FED283BA0F7003D059D /* NetflixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FEC283BA0F7003D059D /* NetflixTests.swift */; };
 		95210FF7283BA0F7003D059D /* NetflixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FF6283BA0F7003D059D /* NetflixUITests.swift */; };
 		95210FF9283BA0F7003D059D /* NetflixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FF8283BA0F7003D059D /* NetflixUITestsLaunchTests.swift */; };
@@ -46,15 +48,17 @@
 		3E3530BF3A27EABD84051C68 /* Pods-NetflixTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.debug.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.debug.xcconfig"; sourceTree = "<group>"; };
 		496329F2FF4FE7BC7C320B6D /* Pods-NetflixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.release.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.release.xcconfig"; sourceTree = "<group>"; };
 		56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetflixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AFEDBC3283D19A0005DDDE0 /* swiftgen.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
+		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
+		5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
+		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
 		5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		95210FD2283BA0F4003D059D /* Netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95210FD5283BA0F4003D059D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		95210FD7283BA0F4003D059D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		95210FD9283BA0F4003D059D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		95210FDC283BA0F4003D059D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		95210FDE283BA0F6003D059D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		95210FE1283BA0F6003D059D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		95210FE3283BA0F6003D059D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95210FE8283BA0F7003D059D /* NetflixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetflixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		95210FEC283BA0F7003D059D /* NetflixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetflixTests.swift; sourceTree = "<group>"; };
@@ -95,11 +99,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A71C778283E34FB00DA7B7C /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				5AFEDBD4283D469E005DDDE0 /* Splash */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		5AFEDBD4283D469E005DDDE0 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */,
+				5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */,
+				5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		95210FC9283BA0F4003D059D = {
 			isa = PBXGroup;
 			children = (
+				5A31D908283E138D006AEEAA /* swiftgen.yml */,
 				5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */,
-				5AFEDBC3283D19A0005DDDE0 /* swiftgen.yml */,
 				95210FD4283BA0F4003D059D /* Netflix */,
 				95210FEB283BA0F7003D059D /* NetflixTests */,
 				95210FF5283BA0F7003D059D /* NetflixUITests */,
@@ -122,12 +152,12 @@
 		95210FD4283BA0F4003D059D /* Netflix */ = {
 			isa = PBXGroup;
 			children = (
+				5A71C778283E34FB00DA7B7C /* Generated */,
+				5AFEDBD3283D4688005DDDE0 /* Screens */,
 				95210FD5283BA0F4003D059D /* AppDelegate.swift */,
 				95210FD7283BA0F4003D059D /* SceneDelegate.swift */,
 				95210FD9283BA0F4003D059D /* ViewController.swift */,
-				95210FDB283BA0F4003D059D /* Main.storyboard */,
 				95210FDE283BA0F6003D059D /* Assets.xcassets */,
-				95210FE0283BA0F6003D059D /* LaunchScreen.storyboard */,
 				95210FE3283BA0F6003D059D /* Info.plist */,
 			);
 			path = Netflix;
@@ -181,12 +211,12 @@
 			buildConfigurationList = 95210FFC283BA0F7003D059D /* Build configuration list for PBXNativeTarget "Netflix" */;
 			buildPhases = (
 				24F580CE0DBC2487D58B284C /* [CP] Check Pods Manifest.lock */,
+				5AFEDBC2283D18BC005DDDE0 /* SwiftGen */,
+				5AFEDBBF283CDA1F005DDDE0 /* SwiftLint */,
 				95210FCE283BA0F4003D059D /* Sources */,
 				95210FCF283BA0F4003D059D /* Frameworks */,
 				95210FD0283BA0F4003D059D /* Resources */,
 				29C20B7BF931F4BEFC4E0905 /* [CP] Embed Pods Frameworks */,
-				5AFEDBBF283CDA1F005DDDE0 /* ShellScript */,
-				5AFEDBC2283D18BC005DDDE0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -285,10 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */,
-				5AFEDBC4283D19A0005DDDE0 /* swiftgen.yml in Resources */,
-				95210FE2283BA0F6003D059D /* LaunchScreen.storyboard in Resources */,
+				5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */,
 				95210FDF283BA0F6003D059D /* Assets.xcassets in Resources */,
-				95210FDD283BA0F4003D059D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +393,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Netflix/Pods-Netflix-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5AFEDBBF283CDA1F005DDDE0 /* ShellScript */ = {
+		5AFEDBBF283CDA1F005DDDE0 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -374,6 +402,7 @@
 			);
 			inputPaths = (
 			);
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -382,7 +411,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		5AFEDBC2283D18BC005DDDE0 /* ShellScript */ = {
+		5AFEDBC2283D18BC005DDDE0 /* SwiftGen */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -391,6 +420,7 @@
 			);
 			inputPaths = (
 			);
+			name = SwiftGen;
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -450,9 +480,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
+				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
+				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
+				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,25 +521,6 @@
 			targetProxy = 95210FF3283BA0F7003D059D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		95210FDB283BA0F4003D059D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				95210FDC283BA0F4003D059D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		95210FE0283BA0F6003D059D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				95210FE1283BA0F6003D059D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		95210FFA283BA0F7003D059D /* Debug */ = {
@@ -634,8 +649,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Netflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -663,8 +676,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Netflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
