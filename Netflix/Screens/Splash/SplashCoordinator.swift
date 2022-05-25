@@ -17,8 +17,8 @@ class SplashCoordinator {
     }
     
     func start() {
-        let splashVCc = SplashViewController()
-        window.rootViewController = splashVCc
+        let splashViewController = SplashViewController()
+        window.rootViewController = splashViewController
         window.makeKeyAndVisible()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {

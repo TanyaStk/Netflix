@@ -15,7 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         self.window = UIWindow(windowScene: windowScene)
-        SplashCoordinator(window: self.window!).start()
+        
+        guard let window = self.window else { return }
+        
+        SplashCoordinator(window: window).start()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
