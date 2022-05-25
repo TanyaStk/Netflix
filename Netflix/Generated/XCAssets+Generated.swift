@@ -24,6 +24,7 @@ internal enum Asset {
   internal enum Assets {
     internal static let accentColor = ColorAsset(name: "AccentColor")
     internal static let logoNetflix = ImageAsset(name: "logo-netflix")
+    internal static let onboarding = ImageAsset(name: "onboarding")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

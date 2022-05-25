@@ -12,6 +12,7 @@
 		3127F9BA5683082FC5930A6D /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
 		5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */; };
+		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
 		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
@@ -50,6 +51,7 @@
 		56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetflixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
 		5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
+		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
@@ -107,9 +109,18 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
+		5A71C77F283E45DF00DA7B7C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5A71C77F283E45DF00DA7B7C /* Onboarding */,
 				5AFEDBD4283D469E005DDDE0 /* Splash */,
 			);
 			path = Screens;
@@ -483,6 +494,7 @@
 				5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
+				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
