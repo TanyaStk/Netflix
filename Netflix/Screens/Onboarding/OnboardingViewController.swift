@@ -20,8 +20,13 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         button.setTitle("SIGN IN", for: .normal)
         button.backgroundColor = Asset.Colors.onboardingButtons.color
         button.setTitleColor(.white, for: .normal)
+        button.addTarget(OnboardingViewController.self, action: #selector(buttonTapped), for: .touchUpInside)
         return button
     }()
+    
+    @objc func buttonTapped(sender: UIButton) {
+        print("Hello")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
