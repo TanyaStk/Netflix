@@ -24,11 +24,12 @@ class DashboardViewController: UITabBarController {
         
         guard let items = self.tabBar.items else { return }
         
-        let images = [Asset.Assets.home.name, Asset.Assets.commingSoon.name, Asset.Assets.favorites.name]
-        
+        let images = [Asset.Assets.home.name, Asset.Assets.comingSoon.name, Asset.Assets.favorites.name]
+
         for ind in 0...2 {
-            items[ind].image = UIImage(systemName: images[ind])
+            items[ind].image = UIImage(named: images[ind])
         }
         self.tabBar.tintColor = .white
+        self.tabBar.backgroundColor = .clear
     }
 }
