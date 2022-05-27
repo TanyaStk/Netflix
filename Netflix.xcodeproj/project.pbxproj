@@ -13,6 +13,8 @@
 		5A0E9863284022F100BACC1F /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
 		5A0E9864284022F100BACC1F /* Pods_Netflix.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
+		5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276B2840D01C00694205 /* FirstPageViewController.swift */; };
+		5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276D2840D05500694205 /* SecondPageViewController.swift */; };
 		5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */; };
 		5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */; };
 		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
@@ -68,6 +70,8 @@
 		56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetflixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A0E9861283FAFB700BACC1F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
+		5A51276B2840D01C00694205 /* FirstPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
+		5A51276D2840D05500694205 /* SecondPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageViewController.swift; sourceTree = "<group>"; };
 		5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
 		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 			isa = PBXGroup;
 			children = (
 				5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */,
+				5A51276B2840D01C00694205 /* FirstPageViewController.swift */,
+				5A51276D2840D05500694205 /* SecondPageViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -521,8 +527,10 @@
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
+				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
+				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +707,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -728,6 +737,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};
