@@ -2,3 +2,11 @@
 input_dir: Netflix/
 # 2
 output_dir: Netflix/Generated/
+## XCAssets
+xcassets:
+  inputs:
+    - Assets.xcassets
+    - Colors.xcassets
+  outputs:
+    templateName: swift5
+    output: XCAssets+Generated.swift
