@@ -10,7 +10,13 @@ import SnapKit
 
 class OnboardingViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-    var pageController: UIPageViewController!
+    private lazy var pageController: UIPageViewController = {
+        pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageController.dataSource = self
+        pageController.delegate = self
+        addChild(pageController)
+        return pageController
+    }()
     var controllers = [UIViewController]()
 
     private let backgroundImageView = UIImageView(image: UIImage(named: Asset.Assets.onboarding.name))
@@ -29,10 +35,6 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         view.addSubview(backgroundImageView)
         backgroundImageView.alpha = 0.4
         view.addSubview(signInButton)
-        pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageController.dataSource = self
-        pageController.delegate = self
-
         addChild(pageController)
         view.addSubview(pageController.view)
 
@@ -42,32 +44,26 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         controllers.append(firstPageViewController)
         controllers.append(secondPageViewController)
 
-        pageController.setViewControllers([controllers[0]], direction: .forward, animated: false)
+        if let firstViewController = controllers.first {
+            pageController.setViewControllers([firstViewController], direction: .forward, animated: false)
+        }
         setConstraints()
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let index = controllers.firstIndex(of: viewController) {
-            if index > 0 {
-                return controllers[index - 1]
-            } else {
-                return nil
-            }
+        guard let index =  controllers.firstIndex(of: viewController),
+              index > 0 else {
+            return nil
         }
-
-        return nil
+        return controllers[index - 1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = controllers.firstIndex(of: viewController) {
-            if index < controllers.count - 1 {
-                return controllers[index + 1]
-            } else {
-                return nil
-            }
+        guard let index = controllers.firstIndex(of: viewController),
+              index < controllers.count - 1 else {
+            return nil
         }
-
-        return nil
+        return controllers[index + 1]
     }
 
     func setConstraints() {
