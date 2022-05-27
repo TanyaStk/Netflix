@@ -9,9 +9,15 @@
 /* Begin PBXBuildFile section */
 		053D936389B5299965350BE6 /* Pods_Netflix_NetflixUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70351BE97642B4564DA5DB6 /* Pods_Netflix_NetflixUITests.framework */; };
 		165357344AC9CC8C97EFDC40 /* Pods_NetflixTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */; };
-		3127F9BA5683082FC5930A6D /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
+		5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E9861283FAFB700BACC1F /* Colors.xcassets */; };
+		5A0E9863284022F100BACC1F /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
+		5A0E9864284022F100BACC1F /* Pods_Netflix.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
+		5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276B2840D01C00694205 /* FirstPageViewController.swift */; };
+		5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276D2840D05500694205 /* SecondPageViewController.swift */; };
+		5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */; };
 		5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */; };
+		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
 		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
@@ -42,14 +48,33 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5A0E9865284022F100BACC1F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5A0E9864284022F100BACC1F /* Pods_Netflix.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		025C01A87C0EA36564C8B324 /* Pods-Netflix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Netflix.release.xcconfig"; path = "Target Support Files/Pods-Netflix/Pods-Netflix.release.xcconfig"; sourceTree = "<group>"; };
 		1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Netflix.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E3530BF3A27EABD84051C68 /* Pods-NetflixTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.debug.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.debug.xcconfig"; sourceTree = "<group>"; };
 		496329F2FF4FE7BC7C320B6D /* Pods-NetflixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.release.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.release.xcconfig"; sourceTree = "<group>"; };
 		56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetflixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0E9861283FAFB700BACC1F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
+		5A51276B2840D01C00694205 /* FirstPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
+		5A51276D2840D05500694205 /* SecondPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageViewController.swift; sourceTree = "<group>"; };
+		5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
+		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
@@ -76,7 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3127F9BA5683082FC5930A6D /* Pods_Netflix.framework in Frameworks */,
+				5A0E9863284022F100BACC1F /* Pods_Netflix.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,9 +132,20 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
+		5A71C77F283E45DF00DA7B7C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */,
+				5A51276B2840D01C00694205 /* FirstPageViewController.swift */,
+				5A51276D2840D05500694205 /* SecondPageViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5A71C77F283E45DF00DA7B7C /* Onboarding */,
 				5AFEDBD4283D469E005DDDE0 /* Splash */,
 			);
 			path = Screens;
@@ -159,6 +195,8 @@
 				95210FD9283BA0F4003D059D /* ViewController.swift */,
 				95210FDE283BA0F6003D059D /* Assets.xcassets */,
 				95210FE3283BA0F6003D059D /* Info.plist */,
+				5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */,
+				5A0E9861283FAFB700BACC1F /* Colors.xcassets */,
 			);
 			path = Netflix;
 			sourceTree = "<group>";
@@ -217,6 +255,7 @@
 				95210FCF283BA0F4003D059D /* Frameworks */,
 				95210FD0283BA0F4003D059D /* Resources */,
 				29C20B7BF931F4BEFC4E0905 /* [CP] Embed Pods Frameworks */,
+				5A0E9865284022F100BACC1F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,7 +353,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */,
 				5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */,
+				5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */,
 				5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */,
 				95210FDF283BA0F6003D059D /* Assets.xcassets in Resources */,
 			);
@@ -483,10 +524,13 @@
 				5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
+				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
+				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
+				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,8 +693,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Netflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -661,6 +707,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -676,8 +723,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Netflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -688,6 +737,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};
