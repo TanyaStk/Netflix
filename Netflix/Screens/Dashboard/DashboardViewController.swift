@@ -20,16 +20,13 @@ class DashboardViewController: UITabBarController {
         comingSoonViewController.title = "Coming Soon"
         favoritesViewController.title = "Favorites"
         
-        self.setViewControllers([homeViewController, comingSoonViewController, favoritesViewController], animated: false)
+        homeViewController.tabBarItem.image = UIImage(systemName: "house")
+        comingSoonViewController.tabBarItem.image = UIImage(systemName: "film")
+        favoritesViewController.tabBarItem.image = UIImage(systemName: "heart")
         
-        guard let items = self.tabBar.items else { return }
+        tabBar.tintColor = .white
+        tabBar.barStyle = .black
         
-        let images = [Asset.Assets.home.name, Asset.Assets.comingSoon.name, Asset.Assets.favorites.name]
-
-        for ind in 0...2 {
-            items[ind].image = UIImage(named: images[ind])
-        }
-        self.tabBar.tintColor = .white
-        self.tabBar.backgroundColor = .clear
+        setViewControllers([homeViewController, comingSoonViewController, favoritesViewController], animated: false)
     }
 }
