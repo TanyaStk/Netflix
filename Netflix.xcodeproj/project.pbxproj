@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		053D936389B5299965350BE6 /* Pods_Netflix_NetflixUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70351BE97642B4564DA5DB6 /* Pods_Netflix_NetflixUITests.framework */; };
 		165357344AC9CC8C97EFDC40 /* Pods_NetflixTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */; };
+		38A5C7B83F0B3502CFB3B9D2 /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
 		5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E9861283FAFB700BACC1F /* Colors.xcassets */; };
-		5A0E9863284022F100BACC1F /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
-		5A0E9864284022F100BACC1F /* Pods_Netflix.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
 		5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276B2840D01C00694205 /* FirstPageViewController.swift */; };
 		5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276D2840D05500694205 /* SecondPageViewController.swift */; };
@@ -47,20 +46,6 @@
 			remoteInfo = Netflix;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		5A0E9865284022F100BACC1F /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				5A0E9864284022F100BACC1F /* Pods_Netflix.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		025C01A87C0EA36564C8B324 /* Pods-Netflix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Netflix.release.xcconfig"; path = "Target Support Files/Pods-Netflix/Pods-Netflix.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,7 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A0E9863284022F100BACC1F /* Pods_Netflix.framework in Frameworks */,
+				38A5C7B83F0B3502CFB3B9D2 /* Pods_Netflix.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,7 +240,6 @@
 				95210FCF283BA0F4003D059D /* Frameworks */,
 				95210FD0283BA0F4003D059D /* Resources */,
 				29C20B7BF931F4BEFC4E0905 /* [CP] Embed Pods Frameworks */,
-				5A0E9865284022F100BACC1F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
