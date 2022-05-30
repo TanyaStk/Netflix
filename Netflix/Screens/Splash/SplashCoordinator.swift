@@ -22,7 +22,8 @@ class SplashCoordinator {
         window.makeKeyAndVisible()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.window.rootViewController = OnboardingViewController()
+//            self.window.rootViewController = OnboardingViewController()
+            self.window.rootViewController = LoginViewController()
             self.window.makeKeyAndVisible()
         }
     }

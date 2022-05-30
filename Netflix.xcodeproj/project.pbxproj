@@ -21,6 +21,9 @@
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
 		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
+		5AE38C302844AB8A00804CD0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE38C2F2844AB8A00804CD0 /* LoginViewController.swift */; };
+		5AE38C322844AB9D00804CD0 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE38C312844AB9D00804CD0 /* LoginViewModel.swift */; };
+		5AE38C342844ABAE00804CD0 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE38C332844ABAE00804CD0 /* LoginCoordinator.swift */; };
 		5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */; };
 		95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD5283BA0F4003D059D /* AppDelegate.swift */; };
 		95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD7283BA0F4003D059D /* SceneDelegate.swift */; };
@@ -78,6 +81,9 @@
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		5AE38C2F2844AB8A00804CD0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		5AE38C312844AB9D00804CD0 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		5AE38C332844ABAE00804CD0 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		95210FD2283BA0F4003D059D /* Netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95210FD5283BA0F4003D059D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -142,9 +148,20 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		5AE38C2E2844AB7300804CD0 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				5AE38C2F2844AB8A00804CD0 /* LoginViewController.swift */,
+				5AE38C312844AB9D00804CD0 /* LoginViewModel.swift */,
+				5AE38C332844ABAE00804CD0 /* LoginCoordinator.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5AE38C2E2844AB7300804CD0 /* Login */,
 				5A71C77F283E45DF00DA7B7C /* Onboarding */,
 				5AFEDBD4283D469E005DDDE0 /* Splash */,
 			);
@@ -525,12 +542,15 @@
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
+				5AE38C342844ABAE00804CD0 /* LoginCoordinator.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
+				5AE38C322844AB9D00804CD0 /* LoginViewModel.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
 				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
+				5AE38C302844AB8A00804CD0 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

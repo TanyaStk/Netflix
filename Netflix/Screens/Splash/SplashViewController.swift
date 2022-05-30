@@ -15,7 +15,7 @@ class SplashViewController: ViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .black
-        let logoImageView = UIImageView(image: UIImage(named: Asset.Assets.logoNetflix.name))
+        let logoImageView = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixShort .name))
         view.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
