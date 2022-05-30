@@ -20,6 +20,11 @@
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
 		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
+		5AFAAFC42840DD3200F11183 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */; };
+		5AFAAFC62840DD5A00F11183 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */; };
+		5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */; };
+		5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */; };
+		5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFCB2840E29E00F11183 /* OnboardingCoordinator.swift */; };
 		5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */; };
 		95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD5283BA0F4003D059D /* AppDelegate.swift */; };
 		95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD7283BA0F4003D059D /* SceneDelegate.swift */; };
@@ -63,6 +68,11 @@
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonViewController.swift; sourceTree = "<group>"; };
+		5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		5AFAAFCB2840E29E00F11183 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		95210FD2283BA0F4003D059D /* Netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95210FD5283BA0F4003D059D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -123,13 +133,50 @@
 				5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */,
 				5A51276B2840D01C00694205 /* FirstPageViewController.swift */,
 				5A51276D2840D05500694205 /* SecondPageViewController.swift */,
+				5AFAAFCB2840E29E00F11183 /* OnboardingCoordinator.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		5AFAAFC22840DB5400F11183 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5AFAAFCF2840E45E00F11183 /* Favorites */,
+				5AFAAFCE2840E45300F11183 /* ComingSoon */,
+				5AFAAFCD2840E44B00F11183 /* Home */,
+				5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		5AFAAFCD2840E44B00F11183 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		5AFAAFCE2840E45300F11183 /* ComingSoon */ = {
+			isa = PBXGroup;
+			children = (
+				5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */,
+			);
+			path = ComingSoon;
+			sourceTree = "<group>";
+		};
+		5AFAAFCF2840E45E00F11183 /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */,
+			);
+			path = Favorites;
 			sourceTree = "<group>";
 		};
 		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5AFAAFC22840DB5400F11183 /* Dashboard */,
 				5A71C77F283E45DF00DA7B7C /* Onboarding */,
 				5AFEDBD4283D469E005DDDE0 /* Splash */,
 			);
@@ -506,15 +553,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */,
+				5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */,
+				5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
+				5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
+				5AFAAFC42840DD3200F11183 /* DashboardViewController.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
 				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
+				5AFAAFC62840DD5A00F11183 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
