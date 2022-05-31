@@ -23,6 +23,7 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 internal enum Asset {
   internal enum Assets {
     internal static let onboarding = ImageAsset(name: "Onboarding")
+    internal static let filmCover = ImageAsset(name: "film-cover")
     internal static let logoNetflix = ImageAsset(name: "logo-netflix")
   }
   internal enum Colors {
