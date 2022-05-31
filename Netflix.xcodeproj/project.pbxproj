@@ -33,6 +33,9 @@
 		95210FED283BA0F7003D059D /* NetflixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FEC283BA0F7003D059D /* NetflixTests.swift */; };
 		95210FF7283BA0F7003D059D /* NetflixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FF6283BA0F7003D059D /* NetflixUITests.swift */; };
 		95210FF9283BA0F7003D059D /* NetflixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FF8283BA0F7003D059D /* NetflixUITestsLaunchTests.swift */; };
+		AE0503B8284601000031D490 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0503B5284601000031D490 /* LoginViewModel.swift */; };
+		AE0503B9284601000031D490 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0503B6284601000031D490 /* LoginCoordinator.swift */; };
+		AE0503BA284601000031D490 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0503B7284601000031D490 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +91,9 @@
 		996D1E6F8A6A195E67A9C550 /* Pods-Netflix.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Netflix.debug.xcconfig"; path = "Target Support Files/Pods-Netflix/Pods-Netflix.debug.xcconfig"; sourceTree = "<group>"; };
 		A434C425F67535628AF133E3 /* Pods-Netflix-NetflixUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Netflix-NetflixUITests.release.xcconfig"; path = "Target Support Files/Pods-Netflix-NetflixUITests/Pods-Netflix-NetflixUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A70351BE97642B4564DA5DB6 /* Pods_Netflix_NetflixUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Netflix_NetflixUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE0503B5284601000031D490 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		AE0503B6284601000031D490 /* LoginCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		AE0503B7284601000031D490 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		C2782AB747E7AEE17E60B3CA /* Pods-Netflix-NetflixUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Netflix-NetflixUITests.debug.xcconfig"; path = "Target Support Files/Pods-Netflix-NetflixUITests/Pods-Netflix-NetflixUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -176,6 +182,7 @@
 		5AFEDBD3283D4688005DDDE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				AE0503B4284601000031D490 /* Login */,
 				5AFAAFC22840DB5400F11183 /* Dashboard */,
 				5A71C77F283E45DF00DA7B7C /* Onboarding */,
 				5AFEDBD4283D469E005DDDE0 /* Splash */,
@@ -258,6 +265,16 @@
 				56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AE0503B4284601000031D490 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				AE0503B5284601000031D490 /* LoginViewModel.swift */,
+				AE0503B6284601000031D490 /* LoginCoordinator.swift */,
+				AE0503B7284601000031D490 /* LoginViewController.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		EBF1AAAE5FEC4CEF2578E0BC /* Pods */ = {
@@ -552,10 +569,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE0503BA284601000031D490 /* LoginViewController.swift in Sources */,
+				AE0503B9284601000031D490 /* LoginCoordinator.swift in Sources */,
 				5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */,
 				5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */,
 				5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
+				AE0503B8284601000031D490 /* LoginViewModel.swift in Sources */,
 				5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
