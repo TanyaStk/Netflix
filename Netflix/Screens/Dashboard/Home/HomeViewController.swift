@@ -16,6 +16,25 @@ class HomeViewController: UIViewController {
         return imageView
     }()
     
+    private let netflixButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: Asset.Assets.logoNetflix.name), for: .normal)
+        button.imageView?.snp.makeConstraints({ make in
+            make.width.height.equalToSuperview()
+        })
+        return button
+    }()
+    
+    private let profileButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "person.fill"), for: .normal)
+        button.imageView?.snp.makeConstraints({ make in
+            make.width.height.equalToSuperview()
+        })
+        button.tintColor = .white
+        return button
+    }()
+    
     private let likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "heart"), for: .normal)
@@ -31,6 +50,7 @@ class HomeViewController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .black
         button.backgroundColor = .white
+        button.contentMode = .scaleAspectFit
         return button
     }()
     
@@ -67,6 +87,8 @@ class HomeViewController: UIViewController {
     
     private func addSubviews() {
         view.addSubview(latestFilm)
+        view.addSubview(netflixButton)
+        view.addSubview(profileButton)
         view.addSubview(likeButton)
         view.addSubview(playButton)
         view.addSubview(popularMoviesCollection)
@@ -78,6 +100,17 @@ class HomeViewController: UIViewController {
             make.width.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.6)
+        }
+        netflixButton.snp.makeConstraints { make in
+            make.width.height.equalToSuperview().multipliedBy(0.1)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-8)
+            make.left.equalToSuperview().offset(8)
+        }
+        profileButton.snp.makeConstraints { make in
+            make.height.equalToSuperview().multipliedBy(0.05)
+            make.width.equalToSuperview().multipliedBy(0.1)
+            make.centerY.equalTo(netflixButton.snp.centerY)
+            make.right.equalToSuperview().offset(-8)
         }
         likeButton.snp.makeConstraints { make in
             make.width.height.equalToSuperview().multipliedBy(0.3)
@@ -96,7 +129,7 @@ class HomeViewController: UIViewController {
         }
         popularMoviesCollection.snp.makeConstraints { make in
             make.top.equalTo(playButton.snp.bottom).offset(8)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(24)
             make.width.equalToSuperview()
         }
     }
