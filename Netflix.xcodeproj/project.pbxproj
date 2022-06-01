@@ -17,6 +17,8 @@
 		5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */; };
 		5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */; };
 		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
+		5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */; };
+		5AB33C112847AC360027F483 /* Mansalva-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AB33C102847AC360027F483 /* Mansalva-Regular.ttf */; };
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
 		5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */; };
@@ -65,6 +67,8 @@
 		5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A71C779283E35EB00DA7B7C /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
 		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		5AB33C102847AC360027F483 /* Mansalva-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Mansalva-Regular.ttf"; path = "../../../../../Downloads/Mansalva/Mansalva-Regular.ttf"; sourceTree = "<group>"; };
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		5AB8CEBB283D470A0040C56A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
@@ -138,6 +142,14 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		5AB33C0F2847AC1D0027F483 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				5AB33C102847AC360027F483 /* Mansalva-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		5AFAAFC22840DB5400F11183 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +164,7 @@
 		5AFAAFCD2840E44B00F11183 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */,
 				5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */,
 			);
 			path = Home;
@@ -220,6 +233,7 @@
 		95210FD4283BA0F4003D059D /* Netflix */ = {
 			isa = PBXGroup;
 			children = (
+				5AB33C0F2847AC1D0027F483 /* Fonts */,
 				5A71C778283E34FB00DA7B7C /* Generated */,
 				5AFEDBD3283D4688005DDDE0 /* Screens */,
 				95210FD5283BA0F4003D059D /* AppDelegate.swift */,
@@ -384,6 +398,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AB33C112847AC360027F483 /* Mansalva-Regular.ttf in Resources */,
 				5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */,
 				5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */,
 				5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */,
@@ -559,6 +574,7 @@
 				5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
+				5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,

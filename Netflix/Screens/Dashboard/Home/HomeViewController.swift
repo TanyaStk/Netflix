@@ -10,10 +10,22 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     
-    private let latestFilm: UIImageView = {
+    private let latestFilmImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: Asset.Assets.filmCover.name)
         return imageView
+    }()
+    
+    private let latestFilmTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Never Have I Ever"
+        label.backgroundColor = .clear
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = UIFont(name: "Mansalva-Regular", size: 48)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 2
+        return label
     }()
     
     private let netflixButton: UIButton = {
@@ -86,7 +98,8 @@ class HomeViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(latestFilm)
+        view.addSubview(latestFilmImageView)
+        view.addSubview(latestFilmTitle)
         view.addSubview(netflixButton)
         view.addSubview(profileButton)
         view.addSubview(likeButton)
@@ -96,10 +109,15 @@ class HomeViewController: UIViewController {
     }
     
     private func setConstraints() {
-        latestFilm.snp.makeConstraints { make in
+        latestFilmImageView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.6)
+        }
+        latestFilmTitle.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalToSuperview().multipliedBy(0.2)
+            make.center.equalToSuperview()
         }
         netflixButton.snp.makeConstraints { make in
             make.width.height.equalToSuperview().multipliedBy(0.1)
@@ -114,13 +132,13 @@ class HomeViewController: UIViewController {
         }
         likeButton.snp.makeConstraints { make in
             make.width.height.equalToSuperview().multipliedBy(0.3)
-            make.centerY.equalTo(latestFilm.snp.bottom)
+            make.centerY.equalTo(latestFilmImageView.snp.bottom)
             make.left.equalToSuperview().multipliedBy(0.2)
         }
         playButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.centerY.equalTo(latestFilm.snp.bottom)
+            make.centerY.equalTo(latestFilmImageView.snp.bottom)
             make.centerX.equalToSuperview()
         }
         popularMoviesLabel.snp.makeConstraints { make in
@@ -136,14 +154,14 @@ class HomeViewController: UIViewController {
     
     private func addGradient() {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = latestFilm.frame
+        gradientLayer.frame = latestFilmImageView.frame
         gradientLayer.colors = [
             UIColor.black.withAlphaComponent(0.5).cgColor,
             UIColor.clear.cgColor,
             UIColor.clear.cgColor,
             UIColor.black.withAlphaComponent(0.5).cgColor
         ]
-        latestFilm.layer.addSublayer(gradientLayer)
+        latestFilmImageView.layer.addSublayer(gradientLayer)
     }
 }
 
