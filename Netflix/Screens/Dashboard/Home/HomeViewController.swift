@@ -10,7 +10,7 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     
-    private let latestFilmImageView = UIImageView(image: UIImage(named: Asset.Assets.filmCover.name))
+    private lazy var latestFilmImageView = LatestFilmView()
     
     private let latestFilmTitle: UILabel = {
         let label = UILabel()
@@ -86,17 +86,10 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         addSubviews()
         setConstraints()
-        addGradient()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-//    }
-    
+
     private func addSubviews() {
         view.addSubview(latestFilmImageView)
         view.addSubview(latestFilmTitle)
@@ -150,32 +143,6 @@ class HomeViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(24)
             make.width.equalToSuperview()
         }
-    }
-    
-    private func addGradient() {
-        let view = UIView(frame: latestFilmImageView.frame)
-        let gradient = CAGradientLayer()
-        gradient.frame = view.bounds
-        gradient.colors = [
-            UIColor.black.withAlphaComponent(0.5).cgColor,
-            UIColor.clear.cgColor,
-            UIColor.clear.cgColor,
-            UIColor.black.withAlphaComponent(0.5).cgColor
-        ]
-        view.layer.addSublayer(gradient)
-        latestFilmImageView.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = latestFilmImageView.frame
-//        gradientLayer.colors = [
-//            UIColor.black.withAlphaComponent(0.5).cgColor,
-//            UIColor.clear.cgColor,
-//            UIColor.clear.cgColor,
-//            UIColor.black.withAlphaComponent(0.5).cgColor
-//        ]
-//        latestFilmImageView.addSubview(gradientLayer)
     }
 }
 
