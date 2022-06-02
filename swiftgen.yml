@@ -10,3 +10,9 @@ xcassets:
   outputs:
     templateName: swift5
     output: XCAssets+Generated.swift
+## Fonts
+fonts:
+  inputs: Fonts
+  outputs:
+    templateName: swift5
+    output: Fonts+Generated.swift
