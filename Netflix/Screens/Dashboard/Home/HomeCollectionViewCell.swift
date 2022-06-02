@@ -22,7 +22,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(filmCoverImageView)
+        contentView.addSubview(filmCoverImageView)
         setConstraints()
     }
     
