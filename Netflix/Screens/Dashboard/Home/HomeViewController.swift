@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont(name: FontFamily.Mansalva, size: 48)
+        label.font = UIFont(name: FontFamily.Mansalva.regular.name, size: 48)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
         return label
