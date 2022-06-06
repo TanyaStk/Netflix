@@ -9,7 +9,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
+    private let logoImage = UIImageView(image: Asset.Assets.logoNetflixLong.image)
     
     private let loginField: UITextField = {
         let textField = UITextField()
@@ -69,15 +69,21 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setConstraints()
+    }
+    
+    private func addSubviews() {
         view.addSubview(logoImage)
         view.addSubview(stackView)
         stackView.addArrangedSubview(loginField)
         stackView.addArrangedSubview(passwordField)
         stackView.addArrangedSubview(loginButton)
         stackView.addArrangedSubview(guestModeButton)
-        setConstraints()
+
     }
-    func setConstraints() {
+    
+    private func setConstraints() {
         logoImage.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.centerX.equalToSuperview()
