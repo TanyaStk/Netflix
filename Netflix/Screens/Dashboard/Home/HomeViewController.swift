@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont(name: "Mansalva-Regular", size: 48)
+        label.font = UIFont(name: FontFamily.Mansalva, size: 48)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
         return label
@@ -26,7 +26,7 @@ class HomeViewController: UIViewController {
     
     private let netflixButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Asset.Assets.logoNetflix.name), for: .normal)
+        button.setImage(UIImage(named: Asset.Assets.logoNetflixShort.name), for: .normal)
         button.imageView?.snp.makeConstraints({ make in
             make.width.height.equalToSuperview()
         })
