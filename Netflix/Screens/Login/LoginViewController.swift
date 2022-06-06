@@ -6,10 +6,19 @@
 //
 
 import UIKit
+import Lottie
 
 class LoginViewController: UIViewController {
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
+    
+    private let animationView: AnimationView = {
+        let animationView = AnimationView(animation: Animation.named("LottieSpinner"))
+        animationView.loopMode = .loop
+        animationView.contentMode = .scaleAspectFit
+        animationView.isHidden = true
+        return animationView
+    }()
     
     private let loginField: UITextField = {
         let textField = UITextField()
@@ -69,15 +78,35 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setConstraints()
+    }
+    
+    private func showAnimation() {
+        stackView.isHidden = true
+        animationView.isHidden = false
+        animationView.play()
+    }
+    
+    private func hideAnimation() {
+        animationView.isHidden = true
+        animationView.stop()
+    }
+    
+    private func addSubviews() {
         view.addSubview(logoImage)
         view.addSubview(stackView)
+        view.addSubview(animationView)
         stackView.addArrangedSubview(loginField)
         stackView.addArrangedSubview(passwordField)
         stackView.addArrangedSubview(loginButton)
         stackView.addArrangedSubview(guestModeButton)
-        setConstraints()
     }
-    func setConstraints() {
+    
+    private func setConstraints() {
+        animationView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         logoImage.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.centerX.equalToSuperview()
