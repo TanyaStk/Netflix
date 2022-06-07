@@ -7,8 +7,12 @@
 
 import UIKit
 import Lottie
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
+    
+    let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
     
@@ -75,11 +79,44 @@ class LoginViewController: UIViewController {
         stackView.axis = .vertical
         return stackView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviews()
         setConstraints()
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { _ in
+                self.keyboardWillShow()
+            })
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+            .subscribe(onNext: { _ in
+                self.keyboardWillHide()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func keyboardWillShow() {
+        stackView.snp.updateConstraints { make in
+            make.centerY.equalToSuperview().offset(-10)
+        }
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    private func keyboardWillHide() {
+        stackView.snp.updateConstraints { make in
+            make.centerY.equalToSuperview()
+        }
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        })
+
     }
     
     private func showAnimation() {
