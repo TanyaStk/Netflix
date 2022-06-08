@@ -19,23 +19,7 @@ class LoginViewModel {
     struct Output {
         let isLoginButtonEnabled: Driver<Bool>
     }
-    
-    let input: Input
-    let output: Output
-    
-    private let loginSubject = PublishSubject<String>()
-    private let passwordSubject = PublishSubject<String>()
-    private let loginButtonTapSubject = PublishSubject<Void>()
-    private let isLoginButtonEnabledSubject = PublishSubject<Bool>()
-    
-    init() {
-        input = Input(login: loginSubject.asObservable(),
-                      password: passwordSubject.asObservable(),
-                      loginButtonTap: loginButtonTapSubject.asObservable())
-        
-        output = Output(isLoginButtonEnabled: isLoginButtonEnabledSubject.asDriver(onErrorJustReturn: false))
-    }
-    
+
     func transform(_ input: Input) -> Output {
         let validLogin = Observable.combineLatest(input.login, input.password)
             .map { login, password in

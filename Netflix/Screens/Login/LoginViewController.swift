@@ -97,6 +97,8 @@ class LoginViewController: UIViewController {
                 self?.keyboardWillHide()
             })
             .disposed(by: disposeBag)
+        
+        bind(to: loginViewModel)
     }
     
     func bind(to viewModel: LoginViewModel) {
