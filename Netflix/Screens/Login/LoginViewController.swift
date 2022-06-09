@@ -58,6 +58,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.setTitle("LOGIN", for: .normal)
         button.setTitleColor(Asset.Colors.loginButton.color, for: .normal)
+        button.setTitleColor(Asset.Colors.inputFields.color, for: .disabled)
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = Asset.Colors.loginButton.color.cgColor
