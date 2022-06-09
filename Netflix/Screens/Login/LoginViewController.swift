@@ -12,7 +12,8 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     
-    let disposeBag = DisposeBag()
+    private let loginViewModel = LoginViewModel()
+    private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
     
@@ -57,6 +58,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.setTitle("LOGIN", for: .normal)
         button.setTitleColor(Asset.Colors.loginButton.color, for: .normal)
+        button.setTitleColor(Asset.Colors.inputFields.color, for: .disabled)
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = Asset.Colors.loginButton.color.cgColor
@@ -96,6 +98,18 @@ class LoginViewController: UIViewController {
                 self?.keyboardWillHide()
             })
             .disposed(by: disposeBag)
+        
+        bind(to: loginViewModel)
+    }
+    
+    func bind(to viewModel: LoginViewModel) {
+        let output = viewModel.transform(LoginViewModel.Input(
+            login: loginField.rx.text.orEmpty.asObservable(),
+            password: passwordField.rx.text.orEmpty.asObservable(),
+            loginButtonTap: loginButton.rx.tap.asObservable()
+        ))
+        
+        output.isLoginButtonEnabled.drive(loginButton.rx.isEnabled).disposed(by: disposeBag)
     }
     
     private func keyboardWillShow(notification: Notification) {
