@@ -110,6 +110,11 @@ class LoginViewController: UIViewController {
         ))
         
         output.isLoginButtonEnabled.drive(loginButton.rx.isEnabled).disposed(by: disposeBag)
+        
+        viewModel.isLoginLoading.map { [weak self] in
+            self?.setLoading(visible: $0)
+        }.subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func keyboardWillShow(notification: Notification) {
@@ -140,6 +145,10 @@ class LoginViewController: UIViewController {
             self.view.layoutIfNeeded()
         })
 
+    }
+    
+    private func setLoading(visible: Bool) {
+        visible ? showAnimation() : hideAnimation()
     }
     
     private func showAnimation() {
