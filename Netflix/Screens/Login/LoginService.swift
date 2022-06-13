@@ -10,7 +10,8 @@ import RxSwift
 
 class LoginService {
     
-    func login() -> Single<Bool> {
-        return Single.just(true)
+    func login(login: String, password: String) -> Single<Bool> {
+        let isCorrectCombination = login == "email" && password == "password"
+        return Single.just(isCorrectCombination)
     }
 }

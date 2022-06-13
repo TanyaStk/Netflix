@@ -19,6 +19,7 @@ class LoginViewModel {
     
     struct Output {
         let isLoginButtonEnabled: Driver<Bool>
+        let successfullyLoggedIn: Driver<Void>
     }
     
     let isLoginLoading = BehaviorRelay<Bool>(value: false)
@@ -33,18 +34,18 @@ class LoginViewModel {
                 self.isValidPassword(password: password)
             }.asDriver(onErrorJustReturn: false)
         
-        input.loginButtonTap
-            .subscribe(onNext: { [weak self] in
-                self?.loading()
-            })
-            .disposed(by: disposeBag)
+        let successfullyLoggedIn = input.loginButtonTap
+            .withLatestFrom(Observable.combineLatest(input.login, input.password))
+            .map { login, password in
+                self.loading(login: login, password: password)
+            }.asDriver(onErrorDriveWith: Driver.never())
         
-        return Output(isLoginButtonEnabled: validLogin)
+        return Output(isLoginButtonEnabled: validLogin, successfullyLoggedIn: successfullyLoggedIn)
     }
     
-    func loading() {
+    func loading(login: String, password: String) {
         isLoginLoading.accept(true)
-        loginService.login()
+        loginService.login(login: login, password: password)
             .subscribe(onSuccess: { _ in
                 self.isLoginLoading.accept(false)
             }
