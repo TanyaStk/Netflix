@@ -58,7 +58,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.setTitle("LOGIN", for: .normal)
         button.setTitleColor(Asset.Colors.loginButton.color, for: .normal)
-        button.setTitleColor(Asset.Colors.inputFields.color, for: .disabled)
+        button.setTitleColor(Asset.Colors.loginTexts.color, for: .disabled)
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = Asset.Colors.loginButton.color.cgColor
@@ -110,6 +110,17 @@ class LoginViewController: UIViewController {
         ))
         
         output.isLoginButtonEnabled.drive(loginButton.rx.isEnabled).disposed(by: disposeBag)
+        output.successfullyLoggedIn.drive(onNext: showAlert).disposed(by: disposeBag)
+        
+        viewModel.isLoginLoading.do(onNext: { [weak self] in
+            self?.setLoading(visible: $0)
+        }).subscribe()
+            .disposed(by: disposeBag)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Logged in", message: "You're successfully logged in!.", preferredStyle: UIAlertController.Style.alert)
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func keyboardWillShow(notification: Notification) {
@@ -140,6 +151,10 @@ class LoginViewController: UIViewController {
             self.view.layoutIfNeeded()
         })
 
+    }
+    
+    private func setLoading(visible: Bool) {
+        visible ? showAnimation() : hideAnimation()
     }
     
     private func showAnimation() {
