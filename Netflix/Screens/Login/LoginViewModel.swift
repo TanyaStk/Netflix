@@ -36,20 +36,25 @@ class LoginViewModel {
         
         let successfullyLoggedIn = input.loginButtonTap
             .withLatestFrom(Observable.combineLatest(input.login, input.password))
-            .map { login, password in
-                self.loading(login: login, password: password)
-            }.asDriver(onErrorDriveWith: Driver.never())
+            .do(onNext: { [weak self] login, password in
+                self?.loading(with: login, password: password)
+            }).map { _ in }
+            .asDriver(onErrorDriveWith: Driver.never())
         
         return Output(isLoginButtonEnabled: validLogin, successfullyLoggedIn: successfullyLoggedIn)
     }
     
-    func loading(login: String, password: String) {
+    func loading(with login: String, password: String) {
         isLoginLoading.accept(true)
         loginService.login(login: login, password: password)
-            .subscribe(onSuccess: { _ in
-                self.isLoginLoading.accept(false)
-            }
-            ).disposed(by: self.disposeBag)
+            .subscribe(onSuccess: { [weak self] isSuccessfullyLoggedIn in
+                self?.isLoginLoading.accept(false)
+                if isSuccessfullyLoggedIn {
+                    
+                } else {
+                    
+                }
+            }).disposed(by: disposeBag)
     }
     
     private func isValidLogin(login: String) -> Bool {
