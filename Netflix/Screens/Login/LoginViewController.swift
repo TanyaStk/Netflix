@@ -110,11 +110,17 @@ class LoginViewController: UIViewController {
         ))
         
         output.isLoginButtonEnabled.drive(loginButton.rx.isEnabled).disposed(by: disposeBag)
+        output.successfullyLoggedIn.drive(onNext: showAlert).disposed(by: disposeBag)
         
-        viewModel.isLoginLoading.map { [weak self] in
+        viewModel.isLoginLoading.do(onNext: { [weak self] in
             self?.setLoading(visible: $0)
-        }.subscribe()
+        }).subscribe()
             .disposed(by: disposeBag)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Logged in", message: "You're successfully logged in!.", preferredStyle: UIAlertController.Style.alert)
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func keyboardWillShow(notification: Notification) {
