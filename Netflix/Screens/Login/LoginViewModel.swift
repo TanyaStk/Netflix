@@ -21,11 +21,11 @@ class LoginViewModel {
         let isLoginButtonEnabled: Driver<Bool>
         let loginLoading: Driver<Bool>
         let success: Driver<Void>
-        let error: Driver<String?>
+        let error: Driver<String>
     }
     
     private let loginLoadingBehaviorRelay = BehaviorRelay<Bool>(value: false)
-    private let errorBehaviorRelay = BehaviorRelay<String?>(value: nil)
+    private let errorRelay = PublishRelay<String>()
     private let retryLoginRelay = PublishRelay<Void>()
     
     private let loginService = LoginService()
@@ -45,7 +45,7 @@ class LoginViewModel {
             }).map {_ in }
             .asDriver(onErrorDriveWith: Driver.never())
         
-        let error = errorBehaviorRelay.asDriver()
+        let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         let loginLoading = loginLoadingBehaviorRelay.asDriver()
         
         return Output(isLoginButtonEnabled: validLogin,
@@ -62,7 +62,7 @@ class LoginViewModel {
                 if isSuccessfullyLoggedIn {
                     
                 } else {
-                    self?.errorBehaviorRelay.accept("Login failed, check if the correct combination was used and try again")
+                    self?.errorRelay.accept("Login failed, check if the correct combination was used and try again")
                 }
             }).disposed(by: disposeBag)
     }

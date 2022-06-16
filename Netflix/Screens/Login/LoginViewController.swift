@@ -122,7 +122,7 @@ class LoginViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         output.error.drive(onNext: {[weak self] (error) in
-            self?.showErrorAlert(with: error ?? "Unknown Error")
+            self?.showErrorAlert(with: error)
         }).disposed(by: disposeBag)
         
     }
