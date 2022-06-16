@@ -11,7 +11,7 @@ import RxSwift
 class LoginService {
     
     func login(login: String, password: String) -> Single<Bool> {
-        let isCorrectCombination = login == "email" && password == "password"
-        return Single.just(isCorrectCombination)
+        let isCorrectCombination = (login == "email" && password == "password")
+        return Single.just(isCorrectCombination).delay(.seconds(2), scheduler: MainScheduler.instance)
     }
 }

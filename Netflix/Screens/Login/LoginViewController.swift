@@ -109,17 +109,33 @@ class LoginViewController: UIViewController {
             loginButtonTap: loginButton.rx.tap.asObservable()
         ))
         
-        output.isLoginButtonEnabled.drive(loginButton.rx.isEnabled).disposed(by: disposeBag)
-        output.successfullyLoggedIn.drive(onNext: showAlert).disposed(by: disposeBag)
-        
-        viewModel.isLoginLoading.do(onNext: { [weak self] in
-            self?.setLoading(visible: $0)
-        }).subscribe()
+        output.isLoginButtonEnabled
+            .drive(loginButton.rx.isEnabled)
             .disposed(by: disposeBag)
+        
+        output.loginLoading.drive(onNext: { [weak self] in
+            self?.setLoading(visible: $0)
+        }).disposed(by: disposeBag)
+        
+        output.success.drive(onNext: { [weak self] _ in
+            self?.showSuccessAlert()
+        }).disposed(by: disposeBag)
+        
+        output.error.drive(onNext: {[weak self] (error) in
+            self?.showErrorAlert(with: error ?? "Unknown Error")
+        }).disposed(by: disposeBag)
+        
     }
     
-    private func showAlert() {
+    private func showSuccessAlert() {
         let alert = UIAlertController(title: "Logged in", message: "You're successfully logged in!.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction( UIAlertAction(title: "OK", style: .cancel, handler: nil))
+       self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showErrorAlert(with error: String) {
+        let alert = UIAlertController(title: "Error", message: "\(error). Please, retry", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction( UIAlertAction(title: "Retry", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -158,12 +174,15 @@ class LoginViewController: UIViewController {
     }
     
     private func showAnimation() {
+        print("Show animation")
         stackView.isHidden = true
         animationView.isHidden = false
         animationView.play()
     }
     
     private func hideAnimation() {
+        print("Hide animation")
+        stackView.isHidden = false
         animationView.isHidden = true
         animationView.stop()
     }

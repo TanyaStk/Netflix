@@ -19,10 +19,14 @@ class LoginViewModel {
     
     struct Output {
         let isLoginButtonEnabled: Driver<Bool>
-        let successfullyLoggedIn: Driver<Void>
+        let loginLoading: Driver<Bool>
+        let success: Driver<Void>
+        let error: Driver<String?>
     }
     
-    let isLoginLoading = BehaviorRelay<Bool>(value: false)
+    private let loginLoadingBehaviorRelay = BehaviorRelay<Bool>(value: false)
+    private let errorBehaviorRelay = BehaviorRelay<String?>(value: nil)
+    private let retryLoginRelay = PublishRelay<Void>()
     
     private let loginService = LoginService()
     private let disposeBag = DisposeBag()
@@ -34,25 +38,31 @@ class LoginViewModel {
                 self.isValidPassword(password: password)
             }.asDriver(onErrorJustReturn: false)
         
-        let successfullyLoggedIn = input.loginButtonTap
+        let successfullyLoggedIn = Observable.merge(input.loginButtonTap, retryLoginRelay.asObservable())
             .withLatestFrom(Observable.combineLatest(input.login, input.password))
             .do(onNext: { [weak self] login, password in
-                self?.loading(with: login, password: password)
-            }).map { _ in }
+                self?.loadingLogin(with: login, password: password)
+            }).map {_ in }
             .asDriver(onErrorDriveWith: Driver.never())
         
-        return Output(isLoginButtonEnabled: validLogin, successfullyLoggedIn: successfullyLoggedIn)
+        let error = errorBehaviorRelay.asDriver()
+        let loginLoading = loginLoadingBehaviorRelay.asDriver()
+        
+        return Output(isLoginButtonEnabled: validLogin,
+                      loginLoading: loginLoading,
+                      success: successfullyLoggedIn,
+                      error: error)
     }
     
-    func loading(with login: String, password: String) {
-        isLoginLoading.accept(true)
+    private func loadingLogin(with login: String, password: String) {
+        loginLoadingBehaviorRelay.accept(true)
         loginService.login(login: login, password: password)
             .subscribe(onSuccess: { [weak self] isSuccessfullyLoggedIn in
-                self?.isLoginLoading.accept(false)
+                self?.loginLoadingBehaviorRelay.accept(false)
                 if isSuccessfullyLoggedIn {
                     
                 } else {
-                    
+                    self?.errorBehaviorRelay.accept("Login failed, check if the correct combination was used and try again")
                 }
             }).disposed(by: disposeBag)
     }
