@@ -7,8 +7,13 @@
 
 import UIKit
 import Lottie
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
+    
+    private let loginViewModel = LoginViewModel()
+    private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
     
@@ -53,6 +58,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.setTitle("LOGIN", for: .normal)
         button.setTitleColor(Asset.Colors.loginButton.color, for: .normal)
+        button.setTitleColor(Asset.Colors.loginTexts.color, for: .disabled)
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = Asset.Colors.loginButton.color.cgColor
@@ -75,20 +81,108 @@ class LoginViewController: UIViewController {
         stackView.axis = .vertical
         return stackView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviews()
         setConstraints()
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                self?.keyboardWillShow(notification: notification)
+            })
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+            .subscribe(onNext: { [weak self] _ in
+                self?.keyboardWillHide()
+            })
+            .disposed(by: disposeBag)
+        
+        bind(to: loginViewModel)
+    }
+    
+    func bind(to viewModel: LoginViewModel) {
+        let output = viewModel.transform(LoginViewModel.Input(
+            login: loginField.rx.text.orEmpty.asObservable(),
+            password: passwordField.rx.text.orEmpty.asObservable(),
+            loginButtonTap: loginButton.rx.tap.asObservable()
+        ))
+        
+        output.isLoginButtonEnabled
+            .drive(loginButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.loginLoading.drive(onNext: { [weak self] in
+            self?.setLoading(visible: $0)
+        }).disposed(by: disposeBag)
+        
+        output.success.drive(onNext: { [weak self] _ in
+            self?.showSuccessAlert()
+        }).disposed(by: disposeBag)
+        
+        output.error.drive(onNext: {[weak self] (error) in
+            self?.showErrorAlert(with: error)
+        }).disposed(by: disposeBag)
+        
+    }
+    
+    private func showSuccessAlert() {
+        let alert = UIAlertController(title: "Logged in", message: "You're successfully logged in!.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction( UIAlertAction(title: "OK", style: .cancel, handler: nil))
+       self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showErrorAlert(with error: String) {
+        let alert = UIAlertController(title: "Error", message: "\(error). Please, retry", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction( UIAlertAction(title: "Retry", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardTopY = keyboardFrame.cgRectValue.origin.y
+        let convertedStackViewFrame = stackView.convert(stackView.frame, to: stackView.superview)
+        let stackViewBottomY = convertedStackViewFrame.origin.y + convertedStackViewFrame.size.height
+        
+        if stackViewBottomY > keyboardTopY {
+            let overlappedSpace = -(stackViewBottomY - keyboardTopY) / 2
+            stackView.snp.updateConstraints { make in
+                make.centerY.equalToSuperview().offset(overlappedSpace)
+            }
+            view.setNeedsLayout()
+        }
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    private func keyboardWillHide() {
+        stackView.snp.updateConstraints { make in
+            make.centerY.equalToSuperview()
+        }
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        })
+
+    }
+    
+    private func setLoading(visible: Bool) {
+        visible ? showAnimation() : hideAnimation()
     }
     
     private func showAnimation() {
+        print("Show animation")
         stackView.isHidden = true
         animationView.isHidden = false
         animationView.play()
     }
     
     private func hideAnimation() {
+        print("Hide animation")
+        stackView.isHidden = false
         animationView.isHidden = true
         animationView.stop()
     }
