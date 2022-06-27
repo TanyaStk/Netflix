@@ -10,6 +10,9 @@
 		053D936389B5299965350BE6 /* Pods_Netflix_NetflixUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70351BE97642B4564DA5DB6 /* Pods_Netflix_NetflixUITests.framework */; };
 		165357344AC9CC8C97EFDC40 /* Pods_NetflixTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */; };
 		38A5C7B83F0B3502CFB3B9D2 /* Pods_Netflix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA855D95B16084E7B9DA125 /* Pods_Netflix.framework */; };
+		5A07C7A028698FCD00669682 /* Animations in Resources */ = {isa = PBXBuildFile; fileRef = 5A07C79F28698FCD00669682 /* Animations */; };
+		5A07C7A228698FE300669682 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A07C7A128698FE300669682 /* User.swift */; };
+		5A07C7A428698FF200669682 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A07C7A328698FF200669682 /* LoginService.swift */; };
 		5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E9861283FAFB700BACC1F /* Colors.xcassets */; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
 		5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276B2840D01C00694205 /* FirstPageViewController.swift */; };
@@ -65,6 +68,9 @@
 		3E3530BF3A27EABD84051C68 /* Pods-NetflixTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.debug.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.debug.xcconfig"; sourceTree = "<group>"; };
 		496329F2FF4FE7BC7C320B6D /* Pods-NetflixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetflixTests.release.xcconfig"; path = "Target Support Files/Pods-NetflixTests/Pods-NetflixTests.release.xcconfig"; sourceTree = "<group>"; };
 		56F7DD78A312E024E8ADA988 /* Pods_NetflixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetflixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A07C79F28698FCD00669682 /* Animations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Animations; sourceTree = "<group>"; };
+		5A07C7A128698FE300669682 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5A07C7A328698FF200669682 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		5A0E9861283FAFB700BACC1F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
 		5A51276B2840D01C00694205 /* FirstPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
@@ -246,6 +252,7 @@
 		95210FD4283BA0F4003D059D /* Netflix */ = {
 			isa = PBXGroup;
 			children = (
+				5A07C79F28698FCD00669682 /* Animations */,
 				5AB33C0F2847AC1D0027F483 /* Fonts */,
 				5A71C778283E34FB00DA7B7C /* Generated */,
 				5AFEDBD3283D4688005DDDE0 /* Screens */,
@@ -291,6 +298,8 @@
 			isa = PBXGroup;
 			children = (
 				AE0503B5284601000031D490 /* LoginViewModel.swift */,
+				5A07C7A328698FF200669682 /* LoginService.swift */,
+				5A07C7A128698FE300669682 /* User.swift */,
 				AE0503B6284601000031D490 /* LoginCoordinator.swift */,
 				AE0503B7284601000031D490 /* LoginViewController.swift */,
 			);
@@ -423,6 +432,7 @@
 			files = (
 				5A80551E284DD48600B1FF5B /* Mansalva-Regular.ttf in Resources */,
 				5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */,
+				5A07C7A028698FCD00669682 /* Animations in Resources */,
 				5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */,
 				5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */,
 				5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */,
@@ -600,8 +610,10 @@
 				AE0503B8284601000031D490 /* LoginViewModel.swift in Sources */,
 				5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
+				5A07C7A228698FE300669682 /* User.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
 				5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */,
+				5A07C7A428698FF200669682 /* LoginService.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
