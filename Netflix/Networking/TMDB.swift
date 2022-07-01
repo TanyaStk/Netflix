@@ -32,7 +32,7 @@ extension TMDB: TargetType {
         case .session(let requestToken):
             return "/authentication/session/new?api_key=\(TMDB.publicKey)&request_token=\(requestToken)"
         case .sessionWith:
-            return "/authentication/session/new?api_key=\(TMDB.publicKey)"
+            return "/authentication/token/validate_with_login?api_key=\(TMDB.publicKey)"
         }
     }
     
