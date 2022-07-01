@@ -12,25 +12,32 @@ import Moya
 protocol UserInfo {
     
     func createRequestToken() -> Single<AuthenticationTokenResponse>
+    func createSession(requestToken: String) -> Single<CreateSessionResponse>
+    func createSessionWithLogin(username: String,
+                                password: String,
+                                requestToken: String) -> Single<AuthenticationTokenResponse>
 }
 
 final class UserInfoAPI: UserInfo {
-    
+
     let provider = MoyaProvider<TMDB>()
     
     func createRequestToken() -> Single<AuthenticationTokenResponse> {
-        return Single.create { [weak self] single in
-            self?.provider.rx.request(.token).subscribe { event in
-                switch event {
-                case .success(let response):
-                    let result = try? JSONDecoder().decode(AuthenticationTokenResponse.self, from: response.data)
-                    guard let result = result else { return }
-                    single(.success(result))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-            return Disposables.create()
-        }
+        return provider.rx.request(.token)
+            .filterSuccessfulStatusCodes()
+            .map(AuthenticationTokenResponse.self)
     }
+    
+    func createSession(requestToken: String) -> Single<CreateSessionResponse> {
+        return provider.rx.request(.session(requestToken: requestToken))
+            .filterSuccessfulStatusCodes()
+            .map(CreateSessionResponse.self)
+    }
+    
+    func createSessionWithLogin(username: String, password: String, requestToken: String) -> Single<AuthenticationTokenResponse> {
+        return provider.rx.request(.sessionWith(login: username, password: password, requestToken: requestToken))
+            .filterSuccessfulStatusCodes()
+            .map(AuthenticationTokenResponse.self)
+    }
+
 }
