@@ -1,6 +1,9 @@
 disabled_rules:
 - trailing_whitespace
 
+identifier_name:
+ allowed_symbols: "_"
+
 opt_in_rules:
 - empty_count
 - empty_string

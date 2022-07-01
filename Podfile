@@ -12,7 +12,7 @@ target 'Netflix' do
   pod 'SwiftLint'
   pod 'SwiftGen', '~> 6.0'
   pod 'lottie-ios'
-  pod 'Moya', '~> 15.0'
+  pod 'Moya/RxSwift', '~> 15.0'
 
   target 'NetflixTests' do
     inherit! :search_paths
