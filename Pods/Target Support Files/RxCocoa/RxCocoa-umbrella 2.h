@@ -13,7 +13,6 @@
 #import "RxCocoaRuntime.h"
 #import "_RX.h"
 #import "_RXDelegateProxy.h"
-#import "_RXKVOObserver 2.h"
 #import "_RXKVOObserver.h"
 #import "_RXObjCRuntime.h"
 #import "RxCocoa.h"
