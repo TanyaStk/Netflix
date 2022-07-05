@@ -68,10 +68,9 @@ class KeychainUseCase {
         return User(login: login, password: password)
     }
     
-    static func deletePassword(for user: User) throws {
+    static func deleteUser() throws {
         let query: [String: AnyObject] = [
             kSecAttrService as String: service as AnyObject,
-            kSecAttrAccount as String: user.login as AnyObject,
             kSecClass as String: kSecClassGenericPassword
         ]
         
