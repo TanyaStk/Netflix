@@ -11,8 +11,7 @@ import Moya
 
 public enum TMDB {
     
-    static private let publicKey = ""
-    static private let privateKey = ""
+    static private let apiKey = ""
     
     case token
     case session(requestToken: String)
@@ -28,11 +27,11 @@ extension TMDB: TargetType {
     public var path: String {
         switch self {
         case .token:
-            return "/authentication/token/new?api_key=\(TMDB.publicKey)"
-        case .session(let requestToken):
-            return "/authentication/session/new?api_key=\(TMDB.publicKey)&request_token=\(requestToken)"
+            return "/authentication/token/new"
+        case .session:
+            return "/authentication/session/new"
         case .sessionWith:
-            return "/authentication/token/validate_with_login?api_key=\(TMDB.publicKey)"
+            return "/authentication/token/validate_with_login"
         }
     }
     
@@ -47,16 +46,24 @@ extension TMDB: TargetType {
     
     public var task: Task {
         switch self {
+        case .token:
+            return .requestParameters(
+                parameters: ["api_key": "\(TMDB.apiKey)"],
+                encoding: URLEncoding.queryString)
+        case .session(let requestToken):
+            return .requestParameters(
+                parameters: ["api_key": "\(TMDB.apiKey)",
+                             "request_token": "\(requestToken)"],
+                encoding: URLEncoding.queryString)
         case let .sessionWith(username, password, requestToken):
             let parameters = [
+                "api_key": "\(TMDB.apiKey)",
                 "username": username,
                 "password": password,
                 "request_token": requestToken
             ]
             return .requestParameters(parameters: parameters,
-                                      encoding: URLEncoding.default)
-        default:
-            return .requestPlain
+                                      encoding: URLEncoding.queryString)
         }
     }
     
