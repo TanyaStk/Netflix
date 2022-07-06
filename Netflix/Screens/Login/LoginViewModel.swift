@@ -28,8 +28,12 @@ class LoginViewModel {
     private let errorRelay = PublishRelay<String>()
     private let retryLoginRelay = PublishRelay<Void>()
     
-    private let loginService = UserInfoAPI()
+    private let loginService: UserInfoAPI
     private let disposeBag = DisposeBag()
+    
+    init(loginService: UserInfoAPI) {
+        self.loginService = loginService
+    }
     
     func transform(_ input: Input) -> Output {
         let validLogin = Observable.combineLatest(input.login, input.password)
@@ -57,30 +61,28 @@ class LoginViewModel {
     private func loadingLogin(with login: String, password: String) {
         loginLoadingBehaviorRelay.accept(true)
         var token = ""
-        loginService.createRequestToken().flatMap { response -> Single<AuthenticationTokenResponse> in
-            return self.loginService.createSessionWithLogin(
+        loginService.createRequestToken().flatMap { [weak self] response -> Single<AuthenticationTokenResponse> in
+            return self?.loginService.createSessionWithLogin(
                 username: login,
                 password: password,
-                requestToken: response.request_token)
-        }.flatMap { sessionResponse -> Single<CreateSessionResponse> in
+                requestToken: response.request_token) ?? .never()
+        }.flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
             token = sessionResponse.request_token
-            return self.loginService.createSession(requestToken: sessionResponse.request_token)
-        }.subscribe(onSuccess: { [weak self] result in
+            return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
+        }.do(onSuccess: { [weak self] result in
             self?.loginLoadingBehaviorRelay.accept(false)
-            do {
-                let user = User(login: login,
-                                password: password,
-                                request_token: token,
-                                session_id: result.session_id)
-                try KeychainUseCase.save(user: user)
-            } catch {
-                print(error)
+            let user = User(login: login,
+                            password: password,
+                            request_token: token,
+                            session_id: result.session_id)
+            try KeychainUseCase.save(user: user)
+        }, onError: { [weak self] error in
+            self?.loginLoadingBehaviorRelay.accept(false)
+            self?.errorRelay.accept(error.localizedDescription)
+        })
+        .subscribe()
+            .disposed(by: disposeBag)
             }
-        }, onFailure: { [weak self] error in
-            self?.loginLoadingBehaviorRelay.accept(false)
-            print(error)
-        }).disposed(by: disposeBag)
-    }
     
     private func isValidLogin(login: String) -> Bool {
         return login.count >= 3

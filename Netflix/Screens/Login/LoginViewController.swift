@@ -12,7 +12,7 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     
-    private let loginViewModel = LoginViewModel()
+    private let loginViewModel = LoginViewModel(loginService: UserInfoAPI())
     private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
@@ -35,7 +35,7 @@ class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail/Phone",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])
-        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
+//        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
         return textField
     }()
     
@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(
             string: "Password",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])
-        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
+//        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
         textField.isSecureTextEntry = true
         return textField
     }()
@@ -75,7 +75,7 @@ class LoginViewController: UIViewController {
     
     let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fillEqually
         stackView.spacing = 16
         stackView.alignment = .center
         stackView.axis = .vertical
@@ -191,6 +191,7 @@ class LoginViewController: UIViewController {
         view.addSubview(logoImage)
         view.addSubview(stackView)
         view.addSubview(animationView)
+        
         stackView.addArrangedSubview(loginField)
         stackView.addArrangedSubview(passwordField)
         stackView.addArrangedSubview(loginButton)
@@ -201,31 +202,32 @@ class LoginViewController: UIViewController {
         animationView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
         logoImage.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.centerX.equalToSuperview()
         }
+        
         stackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.4)
+            make.height.equalToSuperview().multipliedBy(0.35)
             make.center.equalToSuperview()
         }
+        
         loginField.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalToSuperview().multipliedBy(0.2)
-            make.trailing.equalToSuperview().inset(16)
         }
+        
         passwordField.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalToSuperview().multipliedBy(0.2)
         }
+        
         loginButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalToSuperview().multipliedBy(0.2)
         }
+        
         guestModeButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalToSuperview().multipliedBy(0.2)
         }
     }
 }
