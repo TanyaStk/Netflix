@@ -28,7 +28,7 @@ class LoginViewModel {
     private let errorRelay = PublishRelay<String>()
     private let retryLoginRelay = PublishRelay<Void>()
     
-    private let loginService = LoginService()
+    private let loginService = UserInfoAPI()
     private let disposeBag = DisposeBag()
     
     func transform(_ input: Input) -> Output {
@@ -56,15 +56,30 @@ class LoginViewModel {
     
     private func loadingLogin(with login: String, password: String) {
         loginLoadingBehaviorRelay.accept(true)
-        loginService.login(login: login, password: password)
-            .subscribe(onSuccess: { [weak self] isSuccessfullyLoggedIn in
-                self?.loginLoadingBehaviorRelay.accept(false)
-                if isSuccessfullyLoggedIn {
-                    
-                } else {
-                    self?.errorRelay.accept("Login failed, check if the correct combination was used and try again")
-                }
-            }).disposed(by: disposeBag)
+        var token = ""
+        loginService.createRequestToken().flatMap { response -> Single<AuthenticationTokenResponse> in
+            return self.loginService.createSessionWithLogin(
+                username: login,
+                password: password,
+                requestToken: response.request_token)
+        }.flatMap { sessionResponse -> Single<CreateSessionResponse> in
+            token = sessionResponse.request_token
+            return self.loginService.createSession(requestToken: sessionResponse.request_token)
+        }.subscribe(onSuccess: { [weak self] result in
+            self?.loginLoadingBehaviorRelay.accept(false)
+            do {
+                let user = User(login: login,
+                                password: password,
+                                request_token: token,
+                                session_id: result.session_id)
+                try KeychainUseCase.save(user: user)
+            } catch {
+                print(error)
+            }
+        }, onFailure: { [weak self] error in
+            self?.loginLoadingBehaviorRelay.accept(false)
+            print(error)
+        }).disposed(by: disposeBag)
     }
     
     private func isValidLogin(login: String) -> Bool {

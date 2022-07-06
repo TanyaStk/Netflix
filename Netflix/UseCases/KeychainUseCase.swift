@@ -19,13 +19,14 @@ class KeychainUseCase {
     private static let service = "Netflix"
     
     static func save(user: User) throws {
-        let password = user.password.data(using: .utf8) ?? Data()
+        
+        let convertedUser = try? JSONEncoder().encode(user)
         
         let query: [String: AnyObject] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service as AnyObject,
             kSecAttrAccount as String: user.login as AnyObject,
-            kSecValueData as String: password as AnyObject
+            kSecValueData as String: convertedUser as AnyObject
         ]
         
         let status = SecItemAdd(query as CFDictionary, nil)
@@ -37,6 +38,8 @@ class KeychainUseCase {
         guard status == errSecSuccess else {
             throw KeychainError.unknown(status)
         }
+        
+        print("SAVED!!!")
     }
     
     static func getUser() throws -> User? {
@@ -59,19 +62,18 @@ class KeychainUseCase {
         }
         
         guard let dict = result as? [String: AnyObject],
-              let passwordData = dict[String(kSecValueData)] as? Data,
-              let password = String(data: passwordData, encoding: .utf8),
-              let login = (dict[String(kSecAttrAccount)] as? String) else {
+              let userData = dict[String(kSecValueData)] as? Data,
+              let user = try? JSONDecoder().decode(User.self, from: userData) else {
             throw KeychainError.invalidItemFormat
         }
         
-        return User(login: login, password: password)
+        return user
     }
     
     static func deleteUser() throws {
         let query: [String: AnyObject] = [
-            kSecAttrService as String: service as AnyObject,
-            kSecClass as String: kSecClassGenericPassword
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service as AnyObject
         ]
         
         let status = SecItemDelete(query as CFDictionary)
