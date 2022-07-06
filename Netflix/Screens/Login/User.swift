@@ -10,4 +10,6 @@ import Foundation
 struct User: Codable {
     let login: String
     let password: String
+    let request_token: String
+    let session_id: String
 }
