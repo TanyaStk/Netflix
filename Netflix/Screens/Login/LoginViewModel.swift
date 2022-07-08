@@ -41,23 +41,23 @@ class LoginViewModel {
                 self?.isValidLogin(login: login) ?? false &&
                 self?.isValidPassword(password: password) ?? false
             }.asDriver(onErrorJustReturn: false)
-                
+        
         let successfullyLoggedIn = Observable
             .merge(input.loginButtonTap, retryLoginRelay.asObservable())
             .withLatestFrom(Observable.combineLatest(input.login, input.password) {
                 (login: $0, password: $1)
             })
-            .do(onNext: { [weak self] _ in
+            .do(onNext: { [weak self] credentials in
                 self?.loginLoadingBehaviorRelay.accept(true)
             })
             .flatMapLatest { [unowned self] credentials in
                 self.loadingLogin(with: credentials.login, password: credentials.password)
             }
-            .do(onNext: { [weak self] login, password in
-                self?.loadingLogin(with: login, password: password)
-            })
-            
-
+            .do(onNext: { [weak self] _ in
+                self?.loginLoadingBehaviorRelay.accept(false)
+            }).map { _ in }
+            .asDriver(onErrorJustReturn: ())
+        
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         let loginLoading = loginLoadingBehaviorRelay.asDriver()
         
@@ -67,27 +67,31 @@ class LoginViewModel {
                       error: error)
     }
     
-    private func loadingLogin(with login: String, password: String) {
+    private func loadingLogin(with login: String, password: String) -> Driver<Void> {
         var token = ""
-        loginService.createRequestToken().flatMap { [weak self] response -> Single<AuthenticationTokenResponse> in
-            return self?.loginService.createSessionWithLogin(
-                username: login,
-                password: password,
-                requestToken: response.request_token) ?? .never()
-        }.flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
-            token = sessionResponse.request_token
-            return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
-        }.do(onSuccess: { result in
-            let user = User(login: login,
-                            password: password,
-                            request_token: token,
-                            session_id: result.session_id)
-            try KeychainUseCase.save(user: user)
-        }, onError: { [weak self] error in
-            self?.errorRelay.accept(error.localizedDescription)
-        }).subscribe()
-            .disposed(by: disposeBag)
+        return loginService.createRequestToken()
+            .flatMap { [weak self] response -> Single<AuthenticationTokenResponse> in
+                return self?.loginService.createSessionWithLogin(
+                    username: login,
+                    password: password,
+                    requestToken: response.request_token) ?? .never()
             }
+            .flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
+                token = sessionResponse.request_token
+                return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
+            }
+            .do(onSuccess: { result in
+                let user = User(login: login,
+                                password: password,
+                                request_token: token,
+                                session_id: result.session_id)
+                try KeychainUseCase.deleteUser()
+                try KeychainUseCase.save(user: user)
+            }, onError: { [weak self] error in
+                self?.errorRelay.accept(error.localizedDescription)
+            }).map { _ in }
+            .asDriver(onErrorDriveWith: .never())
+    }
     
     private func isValidLogin(login: String) -> Bool {
         return login.count >= 3
