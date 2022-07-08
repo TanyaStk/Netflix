@@ -47,7 +47,7 @@ class LoginViewModel {
             .withLatestFrom(Observable.combineLatest(input.login, input.password) {
                 (login: $0, password: $1)
             })
-            .do(onNext: { [weak self] credentials in
+            .do(onNext: { [weak self] _ in
                 self?.loginLoadingBehaviorRelay.accept(true)
             })
             .flatMapLatest { [unowned self] credentials in

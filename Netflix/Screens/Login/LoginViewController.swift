@@ -35,7 +35,6 @@ class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail/Phone",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])
-//        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
         return textField
     }()
     
@@ -49,7 +48,6 @@ class LoginViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(
             string: "Password",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])
-//        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
         textField.isSecureTextEntry = true
         return textField
     }()
@@ -116,15 +114,14 @@ class LoginViewController: UIViewController {
         output.loginLoading.drive(onNext: { [weak self] in
             self?.setLoading(visible: $0)
         }).disposed(by: disposeBag)
-        
-        output.success.drive(onNext: { [weak self] _ in
-            self?.showSuccessAlert()
-        }).disposed(by: disposeBag)
-        
+
         output.error.drive(onNext: {[weak self] (error) in
             self?.showErrorAlert(with: error)
         }).disposed(by: disposeBag)
         
+        output.success.drive(onNext: { [weak self] _ in
+            self?.showSuccessAlert()
+        }).disposed(by: disposeBag)
     }
     
     private func showSuccessAlert() {
