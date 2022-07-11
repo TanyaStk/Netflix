@@ -10,7 +10,7 @@ import UIKit
 class FavoritesTableViewCell: UITableViewCell {
     
     static let identifier = "FavoritesTableViewCell"
-
+    
     let filmCoverImageView: UIImageView = {
         let imageView = UIImageView(image: Asset.Assets.filmCover.image)
         imageView.layer.cornerRadius = 8
