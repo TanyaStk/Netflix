@@ -1,0 +1,40 @@
+//
+//  UpcomingMoviesTableViewCell.swift
+//  Netflix
+//
+//  Created by Tanya Samastroyenka on 11.07.2022.
+//
+
+import UIKit
+import SnapKit
+
+class UpcomingMoviesCollectionViewCell: UICollectionViewCell {
+
+    static let identifier = "UpcomingMoviesCollectionViewCell"
+    
+    let filmCoverImageView = UIImageView(image: Asset.Assets.filmCover.image)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(filmCoverImageView)
+        setConstraints()
+        addGlow()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    private func setConstraints() {
+        filmCoverImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    func addGlow() {
+        filmCoverImageView.layer.shadowOffset = .zero
+        filmCoverImageView.layer.shadowColor = UIColor.systemOrange.cgColor
+        filmCoverImageView.layer.shadowRadius = 20
+        filmCoverImageView.layer.shadowOpacity = 0.5
+    }
+}
