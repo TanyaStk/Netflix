@@ -11,7 +11,8 @@ import SnapKit
 class OnboardingViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     private lazy var pageController: UIPageViewController = {
-        pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageController = UIPageViewController(transitionStyle: .scroll,
+                                              navigationOrientation: .horizontal, options: nil)
         pageController.dataSource = self
         pageController.delegate = self
         addChild(pageController)
@@ -36,23 +37,26 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(backgroundImageView)
+        
         backgroundImageView.alpha = 0.4
-        view.addSubview(signInButton)
-        addChild(pageController)
-        view.addSubview(pageController.view)
-
-        let firstPageViewController = FirstPageViewController()
-        let secondPageViewController = SecondPageViewController()
-
-        controllers.append(firstPageViewController)
-        controllers.append(secondPageViewController)
+        addSubviews()
 
         if let firstViewController = controllers.first {
             pageController.setViewControllers([firstViewController], direction: .forward, animated: false)
         }
         setConstraints()
+    }
+    
+    private func addSubviews() {
+        view.addSubview(backgroundImageView)
+        view.addSubview(signInButton)
+        addChild(pageController)
+        view.addSubview(pageController.view)
+        let firstPageViewController = FirstPageViewController()
+        let secondPageViewController = SecondPageViewController()
+
+        controllers.append(firstPageViewController)
+        controllers.append(secondPageViewController)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -63,7 +67,8 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         return controllers[index - 1]
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = controllers.firstIndex(of: viewController),
               index < controllers.count - 1 else {
             return nil
@@ -75,11 +80,13 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+        
         signInButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.05)
             make.bottom.equalToSuperview().offset(-60)
         }
+        
         pageController.view.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.width.equalToSuperview()

@@ -76,7 +76,8 @@ extension ComingSoonViewController: UICollectionViewDelegate, UICollectionViewDa
         return 15
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: UpcomingMoviesCollectionViewCell.identifier,
             for: indexPath) as? UpcomingMoviesCollectionViewCell else {

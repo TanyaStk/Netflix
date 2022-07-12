@@ -69,7 +69,7 @@ class FavoritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addSubViews()
+        addSubviews()
         setConstraints()
         
         favoritesTable.delegate = self
@@ -78,7 +78,7 @@ class FavoritesViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .clear
     }
     
-    private func addSubViews() {
+    private func addSubviews() {
         view.addSubview(favoritesTable)
         view.addSubview(stackView)
         stackView.addArrangedSubview(emptyTitleListLabel)
@@ -136,7 +136,8 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         return 140
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView,
+                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         .delete
     }
     
