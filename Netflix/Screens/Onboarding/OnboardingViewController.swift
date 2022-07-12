@@ -59,11 +59,13 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         controllers.append(secondPageViewController)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index =  controllers.firstIndex(of: viewController),
               index > 0 else {
             return nil
         }
+        
         return controllers[index - 1]
     }
 
@@ -73,6 +75,7 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
               index < controllers.count - 1 else {
             return nil
         }
+        
         return controllers[index + 1]
     }
 
