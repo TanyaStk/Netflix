@@ -44,7 +44,7 @@ class FavoritesViewController: UIViewController {
         label.textColor = Asset.Colors.loginTexts.color
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 3
+        label.numberOfLines = 0
         return label
     }()
     
@@ -62,6 +62,7 @@ class FavoritesViewController: UIViewController {
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
         stackView.axis = .vertical
+//        stackView.isHidden = true
         return stackView
     }()
     
@@ -135,8 +136,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         return 140
     }
     
-    func tableView(_ tableView: UITableView,
-                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         .delete
     }
     

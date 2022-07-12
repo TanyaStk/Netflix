@@ -22,6 +22,7 @@
 		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
 		5A80551E284DD48600B1FF5B /* Mansalva-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A80551D284DD48600B1FF5B /* Mansalva-Regular.ttf */; };
 		5A805520284DD4EB00B1FF5B /* Fonts+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A80551F284DD4EB00B1FF5B /* Fonts+Generated.swift */; };
+		5AA483D0287C64B70051D9A9 /* FavoritesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA483CF287C64B70051D9A9 /* FavoritesTableViewCell.swift */; };
 		5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */; };
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
@@ -89,6 +90,7 @@
 		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		5A80551D284DD48600B1FF5B /* Mansalva-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mansalva-Regular.ttf"; sourceTree = "<group>"; };
 		5A80551F284DD4EB00B1FF5B /* Fonts+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Fonts+Generated.swift"; sourceTree = "<group>"; };
+		5AA483CF287C64B70051D9A9 /* FavoritesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewCell.swift; sourceTree = "<group>"; };
 		5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */,
+				5AA483CF287C64B70051D9A9 /* FavoritesTableViewCell.swift */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";
@@ -664,6 +667,7 @@
 				5AE171432872DB6500202F6A /* NetworkingError.swift in Sources */,
 				5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */,
 				5AB8CEBC283D470A0040C56A /* SplashCoordinator.swift in Sources */,
+				5AA483D0287C64B70051D9A9 /* FavoritesTableViewCell.swift in Sources */,
 				5A6DA037286C7218002D9D3A /* AuthenticationTokenResponse.swift in Sources */,
 				5A6DA039286C77AD002D9D3A /* CreateSessionResponse.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
