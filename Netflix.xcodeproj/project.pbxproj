@@ -22,6 +22,8 @@
 		5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */; };
 		5A80551E284DD48600B1FF5B /* Mansalva-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A80551D284DD48600B1FF5B /* Mansalva-Regular.ttf */; };
 		5A805520284DD4EB00B1FF5B /* Fonts+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A80551F284DD4EB00B1FF5B /* Fonts+Generated.swift */; };
+		5AA483CC287C26090051D9A9 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA483CB287C26090051D9A9 /* SearchViewController.swift */; };
+		5AA483CE287C32A10051D9A9 /* UpcomingMoviesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA483CD287C32A10051D9A9 /* UpcomingMoviesTableViewCell.swift */; };
 		5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */; };
 		5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */; };
 		5AB8CEBA283D46F50040C56A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */; };
@@ -89,6 +91,8 @@
 		5A71C780283E462D00DA7B7C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		5A80551D284DD48600B1FF5B /* Mansalva-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mansalva-Regular.ttf"; sourceTree = "<group>"; };
 		5A80551F284DD4EB00B1FF5B /* Fonts+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Fonts+Generated.swift"; sourceTree = "<group>"; };
+		5AA483CB287C26090051D9A9 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		5AA483CD287C32A10051D9A9 /* UpcomingMoviesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMoviesTableViewCell.swift; sourceTree = "<group>"; };
 		5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		5AB8CEB7283D46EB0040C56A /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		5AB8CEB9283D46F50040C56A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 			isa = PBXGroup;
 			children = (
 				5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */,
+				5AA483CB287C26090051D9A9 /* SearchViewController.swift */,
+				5AA483CD287C32A10051D9A9 /* UpcomingMoviesTableViewCell.swift */,
 			);
 			path = ComingSoon;
 			sourceTree = "<group>";
@@ -652,6 +658,7 @@
 				5A1F4F262869A87A00765DF6 /* UserAPI.swift in Sources */,
 				5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */,
 				5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */,
+				5AA483CC287C26090051D9A9 /* SearchViewController.swift in Sources */,
 				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				AE0503B8284601000031D490 /* LoginViewModel.swift in Sources */,
 				5AEE13692872E45500D539B4 /* KeychainUseCase.swift in Sources */,
@@ -672,6 +679,7 @@
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
 				5AFAAFC42840DD3200F11183 /* DashboardViewController.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
+				5AA483CE287C32A10051D9A9 /* UpcomingMoviesTableViewCell.swift in Sources */,
 				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
 				5AFAAFC62840DD5A00F11183 /* HomeViewController.swift in Sources */,
 				5AEACBC7284DD282005DAFEE /* LatestFilmView.swift in Sources */,
