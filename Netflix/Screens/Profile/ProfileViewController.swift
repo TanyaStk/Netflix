@@ -41,11 +41,9 @@ class ProfileViewController: UIViewController {
         return stack
     }()
     
-    private lazy var avatarImageView: UIImageView = {
-        let imageView = UIImageView(image: Asset.Assets.logoNetflixShort.image)
+    private let avatarImageView: UIImageView = {
+        let imageView = UIImageView(image: Asset.Assets.avatar.image)
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = imageView.frame.size.width / 2
-        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.white.cgColor
         return imageView
@@ -171,6 +169,13 @@ class ProfileViewController: UIViewController {
         
         addSubviews()
         setConstraints()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+//        print(profilePictureImageView.frame.height)
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2.0
+        avatarImageView.clipsToBounds = true
     }
     
     private func addSubviews() {
