@@ -41,7 +41,7 @@ class ProfileViewController: UIViewController {
         return stack
     }()
     
-    private let avatarImageView: UIImageView = {
+    private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView(image: Asset.Assets.logoNetflixShort.image)
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = imageView.frame.size.width / 2
@@ -55,10 +55,11 @@ class ProfileViewController: UIViewController {
         let label = UILabel()
         label.text = "Tanya Samostroyenko"
         label.backgroundColor = .clear
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.textColor = .white
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         return label
     }()
     
@@ -68,7 +69,7 @@ class ProfileViewController: UIViewController {
         label.backgroundColor = Asset.Colors.inputFields.color.withAlphaComponent(0.5)
         label.textAlignment = .center
         label.textColor = Asset.Colors.loginTexts.color
-        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.adjustsFontForContentSizeCategory = true
         label.layer.cornerRadius = 3
         label.layer.masksToBounds = true
@@ -199,6 +200,10 @@ class ProfileViewController: UIViewController {
             make.height.equalTo(avatarImageView.snp.width)
             make.centerX.equalToSuperview()
             make.top.equalTo(navigationStackView.snp.bottom).offset(8)
+        }
+
+        memberLabel.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.25)
         }
         
         nameStackView.snp.makeConstraints { make in
