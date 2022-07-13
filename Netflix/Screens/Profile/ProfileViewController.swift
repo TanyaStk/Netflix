@@ -31,7 +31,7 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    lazy var navigationStackView: UIStackView = {
+    private lazy var navigationStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .fill
@@ -74,7 +74,7 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    lazy var nameStackView: UIStackView = {
+    private lazy var nameStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
@@ -116,7 +116,7 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    lazy var totalPointsStackView: UIStackView = {
+    private lazy var totalPointsStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
@@ -146,7 +146,7 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    lazy var watchedMoviesStackView: UIStackView = {
+    private lazy var watchedMoviesStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
@@ -173,7 +173,6 @@ class ProfileViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-//        print(profilePictureImageView.frame.height)
         avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2.0
         avatarImageView.clipsToBounds = true
     }

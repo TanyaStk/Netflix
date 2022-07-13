@@ -12,9 +12,9 @@ class DashboardViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let homeViewController = HomeViewController()
-        let comingSoonViewController = ComingSoonViewController()
-        let favoritesViewController = FavoritesViewController()
+        let homeViewController = UINavigationController(rootViewController: HomeViewController())
+        let comingSoonViewController =  UINavigationController(rootViewController: ComingSoonViewController())
+        let favoritesViewController =  UINavigationController(rootViewController: FavoritesViewController())
         
         homeViewController.title = "Home"
         comingSoonViewController.title = "Coming Soon"
