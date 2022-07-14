@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class DashboardCoordinator: Coordinator {
+    
     let navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
@@ -19,8 +20,13 @@ class DashboardCoordinator: Coordinator {
         let tabBarController = UITabBarController()
         
         let homeNavigationController = UINavigationController(rootViewController: HomeViewController())
-        let comingSoonNavigationController =  UINavigationController(rootViewController: ComingSoonViewController())
+        let homeCoordinator = HomeCoordinator(navigationController: navigationController)
+        
+        let comingSoonNavigationController = UINavigationController(rootViewController: ComingSoonViewController())
+        let comingSoonCoordinator = ComingSoonCoordinator(navigationController: navigationController)
+        
         let favoritesNavigationController =  UINavigationController(rootViewController: FavoritesViewController())
+        let favoritesCoordinator = FavoritesCoordinator(navigationController: navigationController)
         
         homeNavigationController.tabBarItem = UITabBarItem(title: "Home",
                                                            image: UIImage(systemName: "house"),
@@ -40,7 +46,10 @@ class DashboardCoordinator: Coordinator {
                                             favoritesNavigationController]
         
         tabBarController.modalPresentationStyle = .fullScreen
-        
         navigationController.present(tabBarController, animated: false)
+        
+        coordinate(to: homeCoordinator)
+        coordinate(to: comingSoonCoordinator)
+        coordinate(to: favoritesCoordinator)
     }
 }
