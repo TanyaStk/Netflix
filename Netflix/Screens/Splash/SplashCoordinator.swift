@@ -8,22 +8,21 @@
 import Foundation
 import UIKit
 
-class SplashCoordinator {
+class SplashCoordinator: Coordinator {
     
-    private let window: UIWindow
+    let navigationController: UINavigationController
     
-    init(window: UIWindow) {
-        self.window = window
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
     }
-    
+
     func start() {
         let splashViewController = SplashViewController()
-        window.rootViewController = splashViewController
-        window.makeKeyAndVisible()
+        navigationController.pushViewController(splashViewController, animated: false)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.window.makeKeyAndVisible()
-//            OnboardingCoordinator(window: self.window).start()
+            let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController)
+            self.coordinate(to: dashboardCoordinator)
         }
     }
 }
