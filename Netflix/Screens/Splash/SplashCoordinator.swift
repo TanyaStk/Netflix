@@ -10,7 +10,7 @@ import UIKit
 
 class SplashCoordinator: Coordinator {
     
-    let navigationController: UINavigationController
+    private let navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -22,7 +22,7 @@ class SplashCoordinator: Coordinator {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController)
-            self.coordinate(to: dashboardCoordinator)
+            dashboardCoordinator.start()
         }
     }
 }

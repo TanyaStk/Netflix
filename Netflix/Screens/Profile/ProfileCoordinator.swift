@@ -1,14 +1,14 @@
 //
-//  OnboardingCoordinator.swift
+//  ProfileCoordinator.swift
 //  Netflix
 //
-//  Created by Tanya Samastroyenka on 27.05.2022.
+//  Created by Tanya Samastroyenka on 14.07.2022.
 //
 
 import Foundation
 import UIKit
- 
-class OnboardingCoordinator {
+
+class ProfileCoordinator: Coordinator {
     
     private let navigationController: UINavigationController
     
@@ -17,7 +17,7 @@ class OnboardingCoordinator {
     }
     
     func start() {
-        let onboardingViewController = OnboardingViewController()
-        navigationController.pushViewController(onboardingViewController, animated: false)
+        let profileViewController = ProfileViewController()
+        navigationController.present(profileViewController, animated: false)
     }
 }
