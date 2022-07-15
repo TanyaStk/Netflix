@@ -44,7 +44,6 @@
 		5AEACBC7284DD282005DAFEE /* LatestFilmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEACBC6284DD282005DAFEE /* LatestFilmView.swift */; };
 		5AEE13692872E45500D539B4 /* KeychainUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEE13682872E45500D539B4 /* KeychainUseCase.swift */; };
 		5AF42FB0286C4A970039174E /* TMDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF42FAF286C4A970039174E /* TMDB.swift */; };
-		5AFAAFC42840DD3200F11183 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */; };
 		5AFAAFC62840DD5A00F11183 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */; };
 		5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */; };
 		5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */; };
@@ -52,7 +51,6 @@
 		5AFEDBC6283D1CC0005DDDE0 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5AFEDBC5283D1CC0005DDDE0 /* .swiftlint.yml */; };
 		95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD5283BA0F4003D059D /* AppDelegate.swift */; };
 		95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD7283BA0F4003D059D /* SceneDelegate.swift */; };
-		95210FDA283BA0F4003D059D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FD9283BA0F4003D059D /* ViewController.swift */; };
 		95210FDF283BA0F6003D059D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95210FDE283BA0F6003D059D /* Assets.xcassets */; };
 		95210FED283BA0F7003D059D /* NetflixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FEC283BA0F7003D059D /* NetflixTests.swift */; };
 		95210FF7283BA0F7003D059D /* NetflixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95210FF6283BA0F7003D059D /* NetflixUITests.swift */; };
@@ -124,7 +122,6 @@
 		5AEACBC6284DD282005DAFEE /* LatestFilmView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LatestFilmView.swift; sourceTree = "<group>"; };
 		5AEE13682872E45500D539B4 /* KeychainUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainUseCase.swift; sourceTree = "<group>"; };
 		5AF42FAF286C4A970039174E /* TMDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB.swift; sourceTree = "<group>"; };
-		5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5AFAAFC72840DD8600F11183 /* ComingSoonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonViewController.swift; sourceTree = "<group>"; };
 		5AFAAFC92840DDA300F11183 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -135,7 +132,6 @@
 		95210FD2283BA0F4003D059D /* Netflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Netflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95210FD5283BA0F4003D059D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		95210FD7283BA0F4003D059D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		95210FD9283BA0F4003D059D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		95210FDE283BA0F6003D059D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		95210FE3283BA0F6003D059D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95210FE8283BA0F7003D059D /* NetflixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetflixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,7 +276,6 @@
 				5AFAAFCF2840E45E00F11183 /* Favorites */,
 				5AFAAFCE2840E45300F11183 /* ComingSoon */,
 				5AFAAFCD2840E44B00F11183 /* Home */,
-				5AFAAFC32840DD3200F11183 /* DashboardViewController.swift */,
 				5A736D2828806D6F0031CC10 /* DashboardCoordinator.swift */,
 			);
 			path = Dashboard;
@@ -375,7 +370,6 @@
 				5AB33C0F2847AC1D0027F483 /* Fonts */,
 				5A71C778283E34FB00DA7B7C /* Generated */,
 				5AFEDBD3283D4688005DDDE0 /* Screens */,
-				95210FD9283BA0F4003D059D /* ViewController.swift */,
 				95210FDE283BA0F6003D059D /* Assets.xcassets */,
 				95210FE3283BA0F6003D059D /* Info.plist */,
 				5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */,
@@ -725,7 +719,6 @@
 				5AFAAFC82840DD8600F11183 /* ComingSoonViewController.swift in Sources */,
 				5AFAAFCA2840DDA300F11183 /* FavoritesViewController.swift in Sources */,
 				5A736D2B2880AA1B0031CC10 /* HomeCoordinator.swift in Sources */,
-				95210FDA283BA0F4003D059D /* ViewController.swift in Sources */,
 				5A736D2F2880AAB60031CC10 /* FavoritesCoordinator.swift in Sources */,
 				AE0503B8284601000031D490 /* LoginViewModel.swift in Sources */,
 				5AEE13692872E45500D539B4 /* KeychainUseCase.swift in Sources */,
@@ -753,7 +746,6 @@
 				5AF42FB0286C4A970039174E /* TMDB.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
 				5A71C77A283E35EB00DA7B7C /* XCAssets+Generated.swift in Sources */,
-				5AFAAFC42840DD3200F11183 /* DashboardViewController.swift in Sources */,
 				5AB8CEB8283D46EB0040C56A /* SplashViewController.swift in Sources */,
 				5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */,
 				5ACDE36E287DE39100209D4C /* ProfileViewController.swift in Sources */,
