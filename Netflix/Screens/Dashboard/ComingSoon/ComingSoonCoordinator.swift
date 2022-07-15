@@ -10,7 +10,7 @@ import UIKit
 
 class ComingSoonCoordinator: Coordinator {
     
-    weak var navigationController: UINavigationController?
+    private weak var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -23,6 +23,6 @@ class ComingSoonCoordinator: Coordinator {
     
     func coordinateToMovieDetails() {
         let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
-        coordinate(to: movieDetailsCoordinator)
+        movieDetailsCoordinator.start()
     }
 }

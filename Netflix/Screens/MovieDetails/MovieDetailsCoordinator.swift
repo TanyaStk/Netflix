@@ -10,7 +10,7 @@ import UIKit
 
 class MovieDetailsCoordinator: Coordinator {
     
-    let navigationController: UINavigationController
+    private let navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -19,9 +19,5 @@ class MovieDetailsCoordinator: Coordinator {
     func start() {
         let movieDetailsViewController = MovieDetailsViewController()
         navigationController.present(movieDetailsViewController, animated: false)
-    }
-    
-    func dismissProfile() {
-        navigationController.dismiss(animated: false)
     }
 }

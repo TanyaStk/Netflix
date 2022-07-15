@@ -10,15 +10,14 @@ import UIKit
  
 class OnboardingCoordinator {
     
-    private let window: UIWindow
+    private let navigationController: UINavigationController
     
-    init(window: UIWindow) {
-        self.window = window
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
     }
     
     func start() {
         let onboardingViewController = OnboardingViewController()
-        window.rootViewController = onboardingViewController
-        window.makeKeyAndVisible()
+        navigationController.pushViewController(onboardingViewController, animated: false)
     }
 }

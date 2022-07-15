@@ -10,7 +10,7 @@ import UIKit
 
 class DashboardCoordinator: Coordinator {
     
-    let navigationController: UINavigationController
+    private let navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -48,8 +48,8 @@ class DashboardCoordinator: Coordinator {
         tabBarController.modalPresentationStyle = .fullScreen
         navigationController.present(tabBarController, animated: false)
         
-        coordinate(to: homeCoordinator)
-        coordinate(to: comingSoonCoordinator)
-        coordinate(to: favoritesCoordinator)
+        homeCoordinator.start()
+        comingSoonCoordinator.start()
+        favoritesCoordinator.start()
     }
 }

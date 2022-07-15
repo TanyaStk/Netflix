@@ -10,7 +10,7 @@ import UIKit
 
 class FavoritesCoordinator: Coordinator {
     
-    weak var navigationController: UINavigationController?
+    private weak var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

@@ -10,7 +10,7 @@ import UIKit
 
 class HomeCoordinator: Coordinator {
     
-    weak var navigationController: UINavigationController?
+    private weak var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -23,11 +23,11 @@ class HomeCoordinator: Coordinator {
     
     func coordinateToProfile() {
         let profileCoordinator = ProfileCoordinator(navigationController: navigationController!)
-        coordinate(to: profileCoordinator)
+        profileCoordinator.start()
     }
     
     func coordinateToMovieDetails() {
         let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
-        coordinate(to: movieDetailsCoordinator)
+        movieDetailsCoordinator.start()
     }
 }
