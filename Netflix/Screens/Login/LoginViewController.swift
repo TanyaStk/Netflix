@@ -12,7 +12,8 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     
-    private let loginViewModel = LoginViewModel(loginService: UserInfoAPI())
+    var viewModel: LoginViewModel?
+    var coordinator: LoginCoordinator?
     private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
@@ -97,7 +98,10 @@ class LoginViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        bind(to: loginViewModel)
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
     }
     
     func bind(to viewModel: LoginViewModel) {
@@ -120,7 +124,7 @@ class LoginViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         output.success.drive(onNext: { [weak self] _ in
-            self?.showSuccessAlert()
+            self?.coordinator?.coordinateToDashboard()
         }).disposed(by: disposeBag)
     }
     
