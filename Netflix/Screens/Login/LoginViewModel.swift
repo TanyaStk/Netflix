@@ -29,10 +29,12 @@ class LoginViewModel {
     private let retryLoginRelay = PublishRelay<Void>()
     
     private let loginService: UserInfoAPI
-    private let disposeBag = DisposeBag()
+    private let keychainUseCase: KeychainUseCase
     
-    init(loginService: UserInfoAPI) {
+    init(loginService: UserInfoAPI,
+         keychainUseCase: KeychainUseCase) {
         self.loginService = loginService
+        self.keychainUseCase = keychainUseCase
     }
     
     func transform(_ input: Input) -> Output {
@@ -69,6 +71,7 @@ class LoginViewModel {
     
     private func loadingLogin(with login: String, password: String) -> Driver<Void> {
         var token = ""
+        var tokenExpireAt = ""
         return loginService.createRequestToken()
             .flatMap { [weak self] response -> Single<AuthenticationTokenResponse> in
                 return self?.loginService.createSessionWithLogin(
@@ -78,15 +81,17 @@ class LoginViewModel {
             }
             .flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
                 token = sessionResponse.request_token
+                tokenExpireAt = sessionResponse.expires_at
                 return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
             }
             .do(onSuccess: { result in
                 let user = User(login: login,
                                 password: password,
                                 request_token: token,
+                                token_expire_at: tokenExpireAt,
                                 session_id: result.session_id)
-                try KeychainUseCase.deleteUser()
-                try KeychainUseCase.save(user: user)
+                try self.keychainUseCase.deleteUser()
+                try self.keychainUseCase.save(user: user)
             }, onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)
             }).map { _ in }
