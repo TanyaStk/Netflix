@@ -8,14 +8,42 @@
 import Foundation
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
-class SplashViewController: ViewController {
+class SplashViewController: UIViewController {
+    
+    var viewModel: SplashViewModel?
+    var coordinator: SplashCoordinator?
+    
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+    }
+    
+    func bind(to viewModel: SplashViewModel) {
+        let output = viewModel.transform(SplashViewModel.Input(isAppLoaded: Observable.just(true)))
+
+        output.error.drive(onNext: {[weak self] (error) in
+            print(error)
+            self?.coordinator?.coordinateToOnboarding()
+        }).disposed(by: disposeBag)
         
+        output.success.drive(onNext: { [weak self] _ in
+            self?.coordinator?.coordinateToDashboard()
+        }).disposed(by: disposeBag)
+    }
+    
+    private func setupUI() {
+        navigationController?.navigationBar.barTintColor = .clear
         view.backgroundColor = .black
-        let logoImageView = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixShort .name))
+        let logoImageView = UIImageView(image: Asset.Assets.logoNetflixShort.image)
         view.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
