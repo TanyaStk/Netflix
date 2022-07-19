@@ -18,11 +18,21 @@ class SplashCoordinator: Coordinator {
 
     func start() {
         let splashViewController = SplashViewController()
-        navigationController.pushViewController(splashViewController, animated: false)
+        let splashViewModel = SplashViewModel(loginService: UserInfoAPI(),
+                                              keychainUseCase: KeychainUseCase())
+        splashViewController.viewModel = splashViewModel
+        splashViewController.coordinator = self
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController)
-            dashboardCoordinator.start()
-        }
+        navigationController.pushViewController(splashViewController, animated: false)
+    }
+    
+    func coordinateToDashboard() {
+        let dashboardCoordinator = DashboardCoordinator(navigationController: navigationController)
+        dashboardCoordinator.start()
+    }
+    
+    func coordinateToOnboarding() {
+        let onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
+        onboardingCoordinator.start()
     }
 }
