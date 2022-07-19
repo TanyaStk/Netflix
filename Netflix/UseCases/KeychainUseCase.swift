@@ -16,9 +16,9 @@ class KeychainUseCase {
         case unknown(OSStatus)
     }
     
-    private static let service = "Netflix"
+    private let service = "Netflix"
     
-    static func save(user: User) throws {
+    func save(user: User) throws {
         
         let convertedUser = try? JSONEncoder().encode(user)
         
@@ -42,7 +42,7 @@ class KeychainUseCase {
         print("SAVED!!!")
     }
     
-    static func getUser() throws -> User? {
+    func getUser() throws -> User? {
         let query: [String: AnyObject] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service as AnyObject,
@@ -70,7 +70,7 @@ class KeychainUseCase {
         return user
     }
     
-    static func deleteUser() throws {
+    func deleteUser() throws {
         let query: [String: AnyObject] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service as AnyObject
@@ -78,6 +78,33 @@ class KeychainUseCase {
         
         let status = SecItemDelete(query as CFDictionary)
         
+        guard status == errSecSuccess else {
+            throw KeychainError.unknown(status)
+        }
+    }
+    
+    func update(user: User) throws {
+        let convertedUser = try? JSONEncoder().encode(user)
+        
+        let query: [String: AnyObject] = [
+            kSecAttrService as String: service as AnyObject,
+            kSecAttrAccount as String: user.login as AnyObject,
+            kSecClass as String: kSecClassGenericPassword
+        ]
+        
+        let attributes: [String: AnyObject] = [
+            kSecValueData as String: convertedUser as AnyObject
+        ]
+        
+        let status = SecItemUpdate(
+            query as CFDictionary,
+            attributes as CFDictionary
+        )
+
+        guard status != errSecItemNotFound else {
+            throw KeychainError.itemNotFound
+        }
+
         guard status == errSecSuccess else {
             throw KeychainError.unknown(status)
         }
