@@ -88,6 +88,8 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         addSubviews()
         setConstraints()
+        
+        navigationController?.navigationBar.barTintColor = .clear
     }
 
     private func addSubviews() {
