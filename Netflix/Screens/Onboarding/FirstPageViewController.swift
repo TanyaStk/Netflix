@@ -47,13 +47,17 @@ class FirstPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(stackView)
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(subtitleLabel)
+        addSubviews()
         setConstraints()
     }
     
-    func setConstraints() {
+    private func addSubviews() {
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(subtitleLabel)
+    }
+    
+    private func setConstraints() {
         stackView.snp.makeConstraints { make in
             make.top.equalTo(view.center)
             make.width.equalToSuperview()
