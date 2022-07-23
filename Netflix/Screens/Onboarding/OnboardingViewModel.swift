@@ -21,14 +21,26 @@ class OnboardingViewModel: ViewModel {
         let signUpButtonTap: Driver<Void>
     }
     
+    private let coordinator: OnboardingCoordinator
+    
+    init(coordinator: OnboardingCoordinator) {
+        self.coordinator = coordinator
+    }
+    
     func transform(_ input: Input) -> Output {
-        let signIpButtonTap = input.signInButtonTap.asDriver(onErrorDriveWith: .never())
+        let signIpButtonTap = input.signInButtonTap
+            .do(onNext: { [weak self] _ in
+                self?.coordinator.coordinateToLogin()
+            })
+            .asDriver(onErrorDriveWith: .never())
         
-        let signUpButtonTap = input.signUpButtonTap.map { _ in
-            if let url = URL(string: "https://www.themoviedb.org/signup") {
-                UIApplication.shared.open(url)
-            }
-        }.asDriver(onErrorDriveWith: .never())
+        let signUpButtonTap = input.signUpButtonTap
+            .do(onNext: { _ in
+                if let url = URL(string: "https://www.themoviedb.org/signup") {
+                    UIApplication.shared.open(url)
+                }
+            })
+            .asDriver(onErrorDriveWith: .never())
         
         return Output(signInButtonTap: signIpButtonTap,
                       signUpButtonTap: signUpButtonTap)

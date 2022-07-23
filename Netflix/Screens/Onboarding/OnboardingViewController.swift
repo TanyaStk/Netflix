@@ -13,7 +13,6 @@ import RxCocoa
 class OnboardingViewController: UIViewController {
     
     var viewModel: OnboardingViewModel?
-    var coordinator: OnboardingCoordinator?
     
     private let disposeBag = DisposeBag()
     
@@ -55,11 +54,8 @@ class OnboardingViewController: UIViewController {
         let output = viewModel.transform(OnboardingViewModel.Input(
             signInButtonTap: signInButton.rx.tap.asObservable(),
             signUpButtonTap: secondPageViewController.signUpButton.rx.tap.asObservable()))
-        
-        output.signInButtonTap.drive(onNext: { [weak self] _ in
-            self?.coordinator?.coordinateToLogin()
-        }).disposed(by: disposeBag)
-        
+
+        output.signInButtonTap.drive().disposed(by: disposeBag)
         output.signUpButtonTap.drive().disposed(by: disposeBag)
     }
     

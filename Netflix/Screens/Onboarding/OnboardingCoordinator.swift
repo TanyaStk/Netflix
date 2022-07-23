@@ -18,6 +18,17 @@ class OnboardingCoordinator {
     
     func start() {
         let onboardingViewController = OnboardingViewController()
-        navigationController.pushViewController(onboardingViewController, animated: false)
+        let onboardingViewModel = OnboardingViewModel(coordinator: self)
+        onboardingViewController.viewModel = onboardingViewModel
+        onboardingViewController.modalPresentationStyle = .fullScreen
+        
+        navigationController.present(onboardingViewController, animated: false)
+    }
+    
+    func coordinateToLogin() {
+        navigationController.dismiss(animated: false)
+        
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController)
+        loginCoordinator.start()
     }
 }
