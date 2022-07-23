@@ -7,8 +7,17 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
-class OnboardingViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class OnboardingViewController: UIViewController {
+    
+    var viewModel: OnboardingViewModel?
+    
+    private let disposeBag = DisposeBag()
+    
+    private let firstPageViewController = FirstPageViewController()
+    private let secondPageViewController = SecondPageViewController()
     
     private lazy var pageController: UIPageViewController = {
         pageController = UIPageViewController(transitionStyle: .scroll,
@@ -18,8 +27,9 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         addChild(pageController)
         return pageController
     }()
-    var controllers = [UIViewController]()
-
+    
+    private var controllers = [UIViewController]()
+    
     private let backgroundImageView = UIImageView(image: UIImage(named: Asset.Assets.onboarding.name))
     
     private let signInButton: UIButton = {
@@ -27,23 +37,31 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         button.setTitle("SIGN IN", for: .normal)
         button.backgroundColor = Asset.Colors.onboardingButtons.color
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(OnboardingViewController.self, action: #selector(buttonTapped), for: .touchUpInside)
         return button
     }()
     
-    @objc func buttonTapped(sender: UIButton) {
-        print("Hello")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+    }
+    
+    private func bind(to viewModel: OnboardingViewModel) {
+        let output = viewModel.transform(OnboardingViewModel.Input(
+            signInButtonTap: signInButton.rx.tap.asObservable(),
+            signUpButtonTap: secondPageViewController.signUpButton.rx.tap.asObservable()))
+
+        output.signInButtonTap.drive().disposed(by: disposeBag)
+        output.signUpButtonTap.drive().disposed(by: disposeBag)
+    }
+    
+    private func setupUI() {
         backgroundImageView.alpha = 0.4
         addSubviews()
-
-        if let firstViewController = controllers.first {
-            pageController.setViewControllers([firstViewController], direction: .forward, animated: false)
-        }
         setConstraints()
     }
     
@@ -52,33 +70,15 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
         view.addSubview(signInButton)
         addChild(pageController)
         view.addSubview(pageController.view)
-        let firstPageViewController = FirstPageViewController()
-        let secondPageViewController = SecondPageViewController()
-
+        
         controllers.append(firstPageViewController)
         controllers.append(secondPageViewController)
-    }
-
-    func pageViewController(_ pageViewController: UIPageViewController,
-                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index =  controllers.firstIndex(of: viewController),
-              index > 0 else {
-            return nil
-        }
         
-        return controllers[index - 1]
-    }
-
-    func pageViewController(_ pageViewController: UIPageViewController,
-                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = controllers.firstIndex(of: viewController),
-              index < controllers.count - 1 else {
-            return nil
+        if let firstViewController = controllers.first {
+            pageController.setViewControllers([firstViewController], direction: .forward, animated: false)
         }
-        
-        return controllers[index + 1]
     }
-
+    
     func setConstraints() {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -95,5 +95,28 @@ class OnboardingViewController: UIViewController, UIPageViewControllerDataSource
             make.width.equalToSuperview()
             make.bottom.equalTo(signInButton.snp_topMargin)
         }
+    }
+}
+
+extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let index =  controllers.firstIndex(of: viewController),
+              index > 0 else {
+            return nil
+        }
+        
+        return controllers[index - 1]
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let index = controllers.firstIndex(of: viewController),
+              index < controllers.count - 1 else {
+            return nil
+        }
+        
+        return controllers[index + 1]
     }
 }

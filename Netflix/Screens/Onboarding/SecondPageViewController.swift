@@ -34,7 +34,7 @@ class SecondPageViewController: UIViewController {
         return label
     }()
     
-    private let signUpButton: UIButton = {
+    let signUpButton: UIButton = {
         let button = UIButton()
         button.setTitle("SIGN UP", for: .normal)
         button.backgroundColor = Asset.Colors.onboardingButtons.color
@@ -42,7 +42,7 @@ class SecondPageViewController: UIViewController {
         return button
     }()
 
-    let stackView: UIStackView = {
+    private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .equalSpacing
@@ -53,14 +53,18 @@ class SecondPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setConstraints()
+    }
+    
+    private func addSubviews() {
         view.addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(subtitleLabel)
         stackView.addArrangedSubview(signUpButton)
-        setConstraints()
     }
     
-    func setConstraints() {
+    private func setConstraints() {
         stackView.snp.makeConstraints { make in
             make.top.equalTo(view.center)
             make.width.equalToSuperview()
