@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class SplashViewModel {
+class SplashViewModel: ViewModel {
     
     struct Input {
         let isAppLoaded: Observable<Bool>
@@ -22,11 +22,14 @@ class SplashViewModel {
     
     private let errorRelay = PublishRelay<String>()
     
+    private let coordinator: SplashCoordinator
     private let loginService: UserInfoAPI
     private let keychainUseCase: KeychainUseCase
     
-    init(loginService: UserInfoAPI,
+    init(coordinator: SplashCoordinator,
+         loginService: UserInfoAPI,
          keychainUseCase: KeychainUseCase) {
+        self.coordinator = coordinator
         self.loginService = loginService
         self.keychainUseCase = keychainUseCase
     }
@@ -35,7 +38,9 @@ class SplashViewModel {
         let success = input.isAppLoaded
             .flatMapLatest { [unowned self] _ -> Driver<Void> in
                 guard let user = try self.keychainUseCase.getUser(),
-                      !self.isTokenExpired(expiring: user.token_expire_at) else {
+                      self.isTokenExpired(expiring: user.token_expire_at)
+                else {
+                    errorRelay.accept("Token expired")
                     return .never()
                 }
                 return self.createSession(for: user)
@@ -54,6 +59,9 @@ class SplashViewModel {
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
+            .do(onNext: { [weak self] _ in
+                self?.coordinator.coordinateToDashboard()
+            })
         
         let delayedError = Observable.zip(
             errorRelay.asObservable(),
@@ -62,6 +70,9 @@ class SplashViewModel {
                 return error
             })
             .asDriver(onErrorJustReturn: "Unknown Error")
+            .do(onNext: { [weak self] _ in
+                self?.coordinator.coordinateToOnboarding()
+            })
         
         return Output(success: delayedSuccess,
                       error: delayedError)
@@ -69,13 +80,13 @@ class SplashViewModel {
     
     private func isTokenExpired(expiring date: String) -> Bool {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
         guard let expiringDate = dateFormatter.date(from: date) else {
             print("Cannot convert date")
             return false
         }
-        return expiringDate > Date()
+        let currentDate = Date()        
+        return expiringDate > currentDate
     }
     
     private func createSession(for user: User) -> Driver<Void> {

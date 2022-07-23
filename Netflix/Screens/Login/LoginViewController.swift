@@ -13,7 +13,6 @@ import RxCocoa
 class LoginViewController: UIViewController {
     
     var viewModel: LoginViewModel?
-    var coordinator: LoginCoordinator?
     private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))
@@ -123,15 +122,7 @@ class LoginViewController: UIViewController {
             self?.showErrorAlert(with: error)
         }).disposed(by: disposeBag)
         
-        output.success.drive(onNext: { [weak self] _ in
-            self?.coordinator?.coordinateToDashboard()
-        }).disposed(by: disposeBag)
-    }
-    
-    private func showSuccessAlert() {
-        let alert = UIAlertController(title: "Logged in", message: "You're successfully logged in!.", preferredStyle: UIAlertController.Style.alert)
-        alert.addAction( UIAlertAction(title: "OK", style: .cancel, handler: nil))
-       self.present(alert, animated: true, completion: nil)
+        output.success.drive().disposed(by: disposeBag)
     }
     
     private func showErrorAlert(with error: String) {

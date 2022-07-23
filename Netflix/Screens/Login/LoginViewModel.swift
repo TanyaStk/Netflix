@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class LoginViewModel {
+class LoginViewModel: ViewModel {
     
     struct Input {
         let login: Observable<String>
@@ -28,11 +28,14 @@ class LoginViewModel {
     private let errorRelay = PublishRelay<String>()
     private let retryLoginRelay = PublishRelay<Void>()
     
+    private let coordinator: LoginCoordinator
     private let loginService: UserInfoAPI
     private let keychainUseCase: KeychainUseCase
     
-    init(loginService: UserInfoAPI,
+    init(coordinator: LoginCoordinator,
+         loginService: UserInfoAPI,
          keychainUseCase: KeychainUseCase) {
+        self.coordinator = coordinator
         self.loginService = loginService
         self.keychainUseCase = keychainUseCase
     }
@@ -57,8 +60,12 @@ class LoginViewModel {
             }
             .do(onNext: { [weak self] _ in
                 self?.loginLoadingBehaviorRelay.accept(false)
-            }).map { _ in }
+            })
+            .map { _ in }
             .asDriver(onErrorJustReturn: ())
+            .do(onNext: { [weak self] _ in
+                self?.coordinator.coordinateToDashboard()
+            })
         
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         let loginLoading = loginLoadingBehaviorRelay.asDriver()
@@ -81,6 +88,7 @@ class LoginViewModel {
             }
             .flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
                 token = sessionResponse.request_token
+                print(token)
                 tokenExpireAt = sessionResponse.expires_at
                 return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
             }

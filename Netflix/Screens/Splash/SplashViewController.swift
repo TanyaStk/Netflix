@@ -14,7 +14,6 @@ import RxCocoa
 class SplashViewController: UIViewController {
     
     var viewModel: SplashViewModel?
-    var coordinator: SplashCoordinator?
     
     private let disposeBag = DisposeBag()
     
@@ -27,17 +26,11 @@ class SplashViewController: UIViewController {
         bind(to: viewModel)
     }
     
-    func bind(to viewModel: SplashViewModel) {
+   private func bind(to viewModel: SplashViewModel) {
         let output = viewModel.transform(SplashViewModel.Input(isAppLoaded: Observable.just(true)))
 
-        output.error.drive(onNext: {[weak self] (error) in
-            print(error)
-            self?.coordinator?.coordinateToOnboarding()
-        }).disposed(by: disposeBag)
-        
-        output.success.drive(onNext: { [weak self] _ in
-            self?.coordinator?.coordinateToDashboard()
-        }).disposed(by: disposeBag)
+       output.error.drive().disposed(by: disposeBag)        
+       output.success.drive().disposed(by: disposeBag)
     }
     
     private func setupUI() {

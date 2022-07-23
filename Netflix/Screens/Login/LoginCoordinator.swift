@@ -18,11 +18,13 @@ class LoginCoordinator: Coordinator {
 
     func start() {
         let loginViewController = LoginViewController()
-        let loginViewModel = LoginViewModel(loginService: UserInfoAPI(), keychainUseCase: KeychainUseCase())
+        let loginViewModel = LoginViewModel(coordinator: self,
+                                            loginService: UserInfoAPI(),
+                                            keychainUseCase: KeychainUseCase())
         loginViewController.viewModel = loginViewModel
-        loginViewController.coordinator = self
+        loginViewController.modalPresentationStyle = .fullScreen
         
-        navigationController.pushViewController(loginViewController, animated: false)
+        navigationController.present(loginViewController, animated: false)
     }
     
     func coordinateToDashboard() {
