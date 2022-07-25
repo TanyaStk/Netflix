@@ -23,11 +23,11 @@ class SplashViewModel: ViewModel {
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: SplashCoordinator
-    private let loginService: UserInfoAPI
+    private let loginService: UserInfoProvider
     private let keychainUseCase: KeychainUseCase
     
     init(coordinator: SplashCoordinator,
-         loginService: UserInfoAPI,
+         loginService: UserInfoProvider,
          keychainUseCase: KeychainUseCase) {
         self.coordinator = coordinator
         self.loginService = loginService

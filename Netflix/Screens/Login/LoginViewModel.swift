@@ -29,11 +29,11 @@ class LoginViewModel: ViewModel {
     private let retryLoginRelay = PublishRelay<Void>()
     
     private let coordinator: LoginCoordinator
-    private let loginService: UserInfoAPI
+    private let loginService: UserInfoProvider
     private let keychainUseCase: KeychainUseCase
     
     init(coordinator: LoginCoordinator,
-         loginService: UserInfoAPI,
+         loginService: UserInfoProvider,
          keychainUseCase: KeychainUseCase) {
         self.coordinator = coordinator
         self.loginService = loginService

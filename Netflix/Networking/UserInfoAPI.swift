@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import Moya
 
-public enum TMDB {
+public enum UserInfoAPI {
     
     static private let apiKey = ""
     
@@ -18,7 +18,7 @@ public enum TMDB {
     case sessionWith(login: String, password: String, requestToken: String)
 }
 
-extension TMDB: TargetType {
+extension UserInfoAPI: TargetType {
     
     public var baseURL: URL {
         return URL(string: "https://api.themoviedb.org/3")!
@@ -48,16 +48,16 @@ extension TMDB: TargetType {
         switch self {
         case .token:
             return .requestParameters(
-                parameters: ["api_key": "\(TMDB.apiKey)"],
+                parameters: ["api_key": "\(UserInfoAPI.apiKey)"],
                 encoding: URLEncoding.queryString)
         case .session(let requestToken):
             return .requestParameters(
-                parameters: ["api_key": "\(TMDB.apiKey)",
+                parameters: ["api_key": "\(UserInfoAPI.apiKey)",
                              "request_token": "\(requestToken)"],
                 encoding: URLEncoding.queryString)
         case let .sessionWith(username, password, requestToken):
             let parameters = [
-                "api_key": "\(TMDB.apiKey)",
+                "api_key": "\(UserInfoAPI.apiKey)",
                 "username": username,
                 "password": password,
                 "request_token": requestToken

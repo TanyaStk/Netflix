@@ -19,7 +19,7 @@ class LoginCoordinator: Coordinator {
     func start() {
         let loginViewController = LoginViewController()
         let loginViewModel = LoginViewModel(coordinator: self,
-                                            loginService: UserInfoAPI(),
+                                            loginService: UserInfoProvider(),
                                             keychainUseCase: KeychainUseCase())
         loginViewController.viewModel = loginViewModel
         loginViewController.modalPresentationStyle = .fullScreen

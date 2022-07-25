@@ -18,9 +18,9 @@ protocol UserInfo {
                                 requestToken: String) -> Single<AuthenticationTokenResponse>
 }
 
-final class UserInfoAPI: UserInfo {
+final class UserInfoProvider: UserInfo {
     
-    let provider = MoyaProvider<TMDB>()
+    let provider = MoyaProvider<UserInfoAPI>()
     
     func createRequestToken() -> Single<AuthenticationTokenResponse> {
         return provider.rx.request(.token)

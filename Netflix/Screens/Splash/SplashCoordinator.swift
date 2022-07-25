@@ -19,7 +19,7 @@ class SplashCoordinator: Coordinator {
     func start() {
         let splashViewController = SplashViewController()
         let splashViewModel = SplashViewModel(coordinator: self,
-                                              loginService: UserInfoAPI(),
+                                              loginService: UserInfoProvider(),
                                               keychainUseCase: KeychainUseCase())
         splashViewController.viewModel = splashViewModel
         
