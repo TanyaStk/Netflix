@@ -16,11 +16,12 @@ protocol UserInfo {
     func createSessionWithLogin(username: String,
                                 password: String,
                                 requestToken: String) -> Single<AuthenticationTokenResponse>
+    func getFavoriteMovies(for sessionId: String) -> Single<MoviesResultsResponse>
 }
 
 final class UserInfoProvider: UserInfo {
     
-    let provider = MoyaProvider<UserInfoAPI>()
+    private let provider = MoyaProvider<UserInfoAPI>()
     
     func createRequestToken() -> Single<AuthenticationTokenResponse> {
         return provider.rx.request(.token)
@@ -38,6 +39,12 @@ final class UserInfoProvider: UserInfo {
         return provider.rx.request(.sessionWith(login: username, password: password, requestToken: requestToken))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(AuthenticationTokenResponse.self)
+    }
+    
+    func getFavoriteMovies(for sessionId: String) -> Single<MoviesResultsResponse> {
+        return provider.rx.request(.favoriteMovies(accountId: sessionId))
+            .catchResponseError(NetworkingErrorResponse.self)
+            .map(MoviesResultsResponse.self)
     }
 }
 
