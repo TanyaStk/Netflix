@@ -14,7 +14,7 @@ protocol Movies {
     func getPopular() -> Single<MoviesListResponse>
     func getUpcoming() -> Single<MoviesListResponse>
     func getDetails(movieId: String) -> Single<MovieDetailsResponse>
-    func search(for movie: String) -> Single<SearchResultResponse>
+    func search(for movie: String) -> Single<MoviesResultsResponse>
 }
 
 final class MoviesProvider: Movies {
@@ -45,9 +45,9 @@ final class MoviesProvider: Movies {
             .map(MovieDetailsResponse.self)
     }
     
-    func search(for movie: String) -> Single<SearchResultResponse> {
+    func search(for movie: String) -> Single<MoviesResultsResponse> {
         return provider.rx.request(.search(query: movie))
             .catchResponseError(NetworkingErrorResponse.self)
-            .map(SearchResultResponse.self)
+            .map(MoviesResultsResponse.self)
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RxSwift
 import Moya
 
 public enum UserInfoAPI {
@@ -16,28 +15,31 @@ public enum UserInfoAPI {
     case token
     case session(requestToken: String)
     case sessionWith(login: String, password: String, requestToken: String)
+    case favoriteMovies(accountId: String)
 }
 
 extension UserInfoAPI: TargetType {
     
     public var baseURL: URL {
-        return URL(string: "https://api.themoviedb.org/3")!
+        return URL(string: "https://api.themoviedb.org/3/")!
     }
     
     public var path: String {
         switch self {
         case .token:
-            return "/authentication/token/new"
+            return "authentication/token/new"
         case .session:
-            return "/authentication/session/new"
+            return "authentication/session/new"
         case .sessionWith:
-            return "/authentication/token/validate_with_login"
+            return "authentication/token/validate_with_login"
+        case .favoriteMovies(let accountId):
+            return "account/\(accountId)/favorite/movies"
         }
     }
     
     public var method: Moya.Method {
         switch self {
-        case .token:
+        case .token, .favoriteMovies:
             return .get
         case .sessionWith, .session:
             return .post
@@ -46,7 +48,7 @@ extension UserInfoAPI: TargetType {
     
     public var task: Task {
         switch self {
-        case .token:
+        case .token, .favoriteMovies:
             return .requestParameters(
                 parameters: ["api_key": "\(UserInfoAPI.apiKey)"],
                 encoding: URLEncoding.queryString)
