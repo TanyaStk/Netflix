@@ -11,7 +11,7 @@ import Moya
 
 public enum UserInfoAPI {
     
-    static private let apiKey = ""
+    static private let apiKey = "7ce563134c101dab6bb4df8a68a6d3bf"
     
     case token
     case session(requestToken: String)
