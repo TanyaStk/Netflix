@@ -16,6 +16,7 @@ public enum UserInfoAPI {
     case session(requestToken: String)
     case sessionWith(login: String, password: String, requestToken: String)
     case favoriteMovies(accountId: String)
+    case accountDetails(sessionId: String)
 }
 
 extension UserInfoAPI: TargetType {
@@ -34,12 +35,14 @@ extension UserInfoAPI: TargetType {
             return "authentication/token/validate_with_login"
         case .favoriteMovies(let accountId):
             return "account/\(accountId)/favorite/movies"
+        case .accountDetails:
+            return "account"
         }
     }
     
     public var method: Moya.Method {
         switch self {
-        case .token, .favoriteMovies:
+        case .token, .favoriteMovies, .accountDetails:
             return .get
         case .sessionWith, .session:
             return .post
@@ -66,6 +69,11 @@ extension UserInfoAPI: TargetType {
             ]
             return .requestParameters(parameters: parameters,
                                       encoding: URLEncoding.queryString)
+        case .accountDetails(let sessionId):
+            return .requestParameters(
+                parameters: ["api_key": "\(UserInfoAPI.apiKey)",
+                             "session_id": "\(sessionId)"],
+                encoding: URLEncoding.queryString)
         }
     }
     
