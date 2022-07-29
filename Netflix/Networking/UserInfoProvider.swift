@@ -47,6 +47,12 @@ final class UserInfoProvider: UserInfo {
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
     }
+    
+    func getAccountDetails(with sessionId: String) -> Single<AccountDetailsResponse> {
+        return provider.rx.request(.accountDetails(sessionId: sessionId))
+            .catchResponseError(NetworkingErrorResponse.self)
+            .map(AccountDetailsResponse.self)
+    }
 }
 
 extension PrimitiveSequence where Trait == SingleTrait, Element == Response {

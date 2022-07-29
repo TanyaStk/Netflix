@@ -43,7 +43,7 @@ class ProfileViewModel: ViewModel {
                     errorRelay.accept("No user exists")
                     return .never()
                 }
-                return service.getAccountDetails(with: user.session_id)
+                return self.service.getAccountDetails(with: user.session_id)
             }
             .do(onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)

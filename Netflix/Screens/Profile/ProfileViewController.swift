@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class ProfileViewController: UIViewController {
     
@@ -196,7 +198,6 @@ class ProfileViewController: UIViewController {
         output.error.drive().disposed(by: disposeBag)
      }
 
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2.0

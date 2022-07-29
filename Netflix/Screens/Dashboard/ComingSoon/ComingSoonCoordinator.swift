@@ -21,8 +21,8 @@ class ComingSoonCoordinator: Coordinator {
         navigationController?.pushViewController(comingSoonViewController, animated: false)
     }
     
-    func coordinateToMovieDetails() {
-        let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
-        movieDetailsCoordinator.start()
-    }
+//    func coordinateToMovieDetails() {
+//        let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
+//        movieDetailsCoordinator.start()
+//    }
 }
