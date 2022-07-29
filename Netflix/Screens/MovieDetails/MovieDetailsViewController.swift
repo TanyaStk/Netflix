@@ -7,14 +7,20 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import SDWebImage
 
 class MovieDetailsViewController: UIViewController {
+    
+    var viewModel: MovieDetailsViewModel?
+    
+    private let disposeBag = DisposeBag()
     
     private lazy var movieCoverImageView = LatestFilmView()
     
     private let movieTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Never Have I Ever"
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = .white
@@ -74,7 +80,6 @@ class MovieDetailsViewController: UIViewController {
     
     private let runtimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "30 minutes"
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -103,7 +108,7 @@ class MovieDetailsViewController: UIViewController {
     
     private let ratingLabel: UILabel = {
         let label = UILabel()
-        label.text = "7.8 (IMDb)"
+//        label.text = ""
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -138,7 +143,7 @@ class MovieDetailsViewController: UIViewController {
     
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "April 27, 2020"
+        label.text = "..."
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -173,7 +178,7 @@ class MovieDetailsViewController: UIViewController {
     private let synopsisDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = """
-                    The complicated life of a modern-day first generation Indian American teenage girl, inspired by Mindy Kaling's own childhood.
+                    ...
                     """
         label.backgroundColor = .clear
         label.textAlignment = .left
@@ -196,8 +201,58 @@ class MovieDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
+        navigationController?.navigationBar.isHidden = true
         addSubviews()
         setConstraints()
+        
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+    }
+    
+    private func bind(to viewModel: MovieDetailsViewModel) {
+        let output = viewModel.transform(MovieDetailsViewModel.Input(
+            isViewLoaded: Observable.just(true),
+            backButtonTap: backButton.rx.tap.asObservable(),
+            likeButtonTap: likeButton.rx.tap.asObservable()))
+        
+        output.movieDetails.drive(onNext: { [weak self] movie in
+            self?.movieTitleLabel.text = movie.title
+            self?.runtimeLabel.text = "\(movie.runtime) minutes"
+            self?.ratingLabel.text = "\(movie.vote_average) (IMDb)"
+            self?.releaseDateLabel.text = movie.release_date
+            self?.synopsisDescriptionLabel.text = movie.overview
+            
+            guard let url = URL(
+                string: "https://image.tmdb.org/t/p/original\(movie.poster_path ?? "")"
+            ) else { return }
+            
+            self?.movieCoverImageView.filmCoverImageView.sd_setImage(with: url)
+
+        })
+        .disposed(by: disposeBag)
+        
+        output.addToFavorites.drive().disposed(by: disposeBag)
+        
+        output.isFavorite.drive(onNext: { [weak self] status in
+            self?.isFavorite(status: status)
+        })
+        .disposed(by: disposeBag)
+        
+        output.dismissDetails.drive().disposed(by: disposeBag)
+        
+        output.error.drive(onNext: { error in
+            print(error)
+        })
+        .disposed(by: disposeBag)
+    }
+    
+    private func isFavorite(status: Bool) {
+        let imageName = status ? "heart.fill" : "heart"
+        likeButton.setImage(UIImage(systemName: imageName), for: .normal)
+        likeButton.tintColor = status ? Asset.Colors.loginButton.color : .white
     }
     
     private func addSubviews() {
@@ -215,7 +270,7 @@ class MovieDetailsViewController: UIViewController {
         movieCoverImageView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.4)
+            make.height.equalToSuperview().multipliedBy(0.5)
         }
         
         navigationButtonsStackView.snp.makeConstraints { make in
@@ -245,7 +300,7 @@ class MovieDetailsViewController: UIViewController {
         
         ratingStackView.snp.makeConstraints { make in
             make.height.equalToSuperview().multipliedBy(0.02)
-            make.left.equalTo(runtimeStackView.snp.right).offset(8)
+            make.left.equalTo(view.snp.centerX)
             make.top.equalTo(movieTitleLabel.snp.bottom)
         }
             
