@@ -92,9 +92,8 @@ class MovieDetailsViewController: UIViewController {
     lazy var runtimeStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.alignment = .fill
-        stack.spacing = -60
-        stack.distribution = .equalSpacing
+        stack.alignment = .trailing
+        stack.distribution = .fillProportionally
         [self.runtimeIcon,
          self.runtimeLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -108,7 +107,6 @@ class MovieDetailsViewController: UIViewController {
     
     private let ratingLabel: UILabel = {
         let label = UILabel()
-//        label.text = ""
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -121,9 +119,8 @@ class MovieDetailsViewController: UIViewController {
     lazy var ratingStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.alignment = .fill
-        stack.spacing = -50
-        stack.distribution = .equalSpacing
+        stack.alignment = .trailing
+        stack.distribution = .fillProportionally
         [self.ratingIcon,
          self.ratingLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -143,7 +140,6 @@ class MovieDetailsViewController: UIViewController {
     
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "..."
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -177,9 +173,6 @@ class MovieDetailsViewController: UIViewController {
     
     private let synopsisDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = """
-                    ...
-                    """
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -295,12 +288,14 @@ class MovieDetailsViewController: UIViewController {
         runtimeStackView.snp.makeConstraints { make in
             make.height.equalToSuperview().multipliedBy(0.02)
             make.left.equalToSuperview().offset(8)
+            make.right.equalTo(view.snp.centerX)
             make.top.equalTo(movieTitleLabel.snp.bottom)
         }
         
         ratingStackView.snp.makeConstraints { make in
             make.height.equalToSuperview().multipliedBy(0.02)
             make.left.equalTo(view.snp.centerX)
+            make.right.equalToSuperview()
             make.top.equalTo(movieTitleLabel.snp.bottom)
         }
             
