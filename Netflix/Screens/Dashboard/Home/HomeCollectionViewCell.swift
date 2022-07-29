@@ -12,9 +12,9 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HomeTableViewCell"
     
-    let filmCoverImageView: UIImageView = {
+    var filmCoverImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: Asset.Assets.filmCover.name)
+        imageView.image = UIImage()
         imageView.layer.cornerRadius = 8
         imageView.clipsToBounds = true
         return imageView

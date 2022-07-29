@@ -9,7 +9,7 @@ import UIKit
 
 class LatestFilmView: UIView {
     
-    private let filmCoverImageView = UIImageView(image: UIImage(named: Asset.Assets.filmCover.name))
+    var filmCoverImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

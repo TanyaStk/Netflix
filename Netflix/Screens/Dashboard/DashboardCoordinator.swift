@@ -17,36 +17,33 @@ class DashboardCoordinator: Coordinator {
     }
     
     func start() {
-        let tabBarController = UITabBarController()
+        let dashboardController = DashboardViewController()
+        dashboardController.coordinator = self
         
-        let homeNavigationController = UINavigationController(rootViewController: HomeViewController())
-        let homeCoordinator = HomeCoordinator(navigationController: navigationController)
-        
-        let comingSoonNavigationController = UINavigationController(rootViewController: ComingSoonViewController())
-        let comingSoonCoordinator = ComingSoonCoordinator(navigationController: navigationController)
-        
-        let favoritesNavigationController =  UINavigationController(rootViewController: FavoritesViewController())
-        let favoritesCoordinator = FavoritesCoordinator(navigationController: navigationController)
-        
+        let homeNavigationController = UINavigationController()
         homeNavigationController.tabBarItem = UITabBarItem(title: "Home",
                                                            image: UIImage(systemName: "house"),
                                                            tag: 0)
+        let homeCoordinator = HomeCoordinator(navigationController: homeNavigationController)
+        
+        let comingSoonNavigationController = UINavigationController()
         comingSoonNavigationController.tabBarItem = UITabBarItem(title: "Coming Soon",
                                                                  image: UIImage(systemName: "film"),
                                                                  tag: 1)
+        let comingSoonCoordinator = ComingSoonCoordinator(navigationController: comingSoonNavigationController)
+        
+        let favoritesNavigationController =  UINavigationController()
         favoritesNavigationController.tabBarItem = UITabBarItem(title: "Favorites",
                                                                 image: UIImage(systemName: "heart"),
                                                                 tag: 2)
+        let favoritesCoordinator = FavoritesCoordinator(navigationController: favoritesNavigationController)
         
-        tabBarController.tabBar.tintColor = .white
-        tabBarController.tabBar.barStyle = .black
+        dashboardController.viewControllers = [homeNavigationController,
+                                                       comingSoonNavigationController,
+                                                       favoritesNavigationController]
         
-        tabBarController.viewControllers = [homeNavigationController,
-                                            comingSoonNavigationController,
-                                            favoritesNavigationController]
-        
-        tabBarController.modalPresentationStyle = .fullScreen
-        navigationController.present(tabBarController, animated: false)
+        dashboardController.modalPresentationStyle = .fullScreen
+        navigationController.present(dashboardController, animated: false)
         
         homeCoordinator.start()
         comingSoonCoordinator.start()

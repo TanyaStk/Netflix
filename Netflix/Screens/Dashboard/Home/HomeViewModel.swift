@@ -35,6 +35,7 @@ class HomeViewModel: ViewModel {
     
     private let coordinator: HomeCoordinator
     private let service: MoviesProvider
+    private var popularMovies = [MovieResponse]()
     
     init(coordinator: HomeCoordinator, service: MoviesProvider) {
         self.coordinator = coordinator
@@ -53,7 +54,7 @@ class HomeViewModel: ViewModel {
                 print("Like me")
                 self?.isFavoriteBehaviorRelay.accept(!(self?.isFavoriteBehaviorRelay.value ?? false))
             })
-                .asDriver(onErrorDriveWith: .never())
+            .asDriver(onErrorDriveWith: .never())
                     
         let isFavorite = isFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
                     
@@ -67,6 +68,7 @@ class HomeViewModel: ViewModel {
                 case let .next((getLatestResponse, moviesListResponse)):
                     self.showLatestMovieSubject.onNext(getLatestResponse)
                     self.showPopularMoviesSubject.onNext(moviesListResponse.results)
+                    self.popularMovies = moviesListResponse.results
                 case let .error(error):
                     self.errorRelay.accept(error.localizedDescription)
                 case .completed:
@@ -83,11 +85,11 @@ class HomeViewModel: ViewModel {
             .asDriver(onErrorJustReturn: [MovieResponse]())
         
         let showMovieDetails = input.movieCoverTap
-            .do(onNext: { [weak self] _ in
-                self?.coordinator.coordinateToMovieDetails()
+            .do(onNext: { [weak self] index in
+                self?.coordinator.coordinateToMovieDetails(of: self?.popularMovies[index.item].id ?? 0)
             })
-                .map { _ in }
-                .asDriver(onErrorDriveWith: .never())
+            .map { _ in }
+            .asDriver(onErrorDriveWith: .never())
         
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
         

@@ -136,7 +136,7 @@ class HomeViewController: UIViewController {
         bind(to: viewModel)
     }
     
-    func bind(to viewModel: HomeViewModel) {
+    private func bind(to viewModel: HomeViewModel) {
         let output = viewModel.transform(HomeViewModel.Input(
             profileButtonTap: profileButton.rx.tap.asObservable(),
             likeButtonTap: likeButton.rx.tap.asObservable(),
@@ -160,12 +160,9 @@ class HomeViewController: UIViewController {
                 self?.latestFilmTitle.text = movie.title
                 
                 guard let url = URL(
-                    string: "https://image.tmdb.org/t/p/original\(movie.poster_path ?? "")")
-                else {
-                    self?.latestFilmImageView.filmCoverImageView.image = UIImage(systemName: "eye.slash")
-                    self?.latestFilmImageView.filmCoverImageView.tintColor = .white
-                    return
-                }
+                    string: "https://image.tmdb.org/t/p/original\(movie.poster_path ?? "")"
+                ) else { return }
+                
                 self?.latestFilmImageView.filmCoverImageView.sd_setImage(with: url)
             })
             .disposed(by: disposeBag)
@@ -176,12 +173,9 @@ class HomeViewController: UIViewController {
                 cellType: HomeCollectionViewCell.self)
             ) { _, data, cell in
                 guard let url = URL(
-                    string: "https://image.tmdb.org/t/p/original\(data.poster_path ?? "")")
-                else {
-                    cell.filmCoverImageView.image = UIImage(systemName: "eye.slash")
-                    cell.filmCoverImageView.tintColor = .white
-                    return
-                }
+                    string: "https://image.tmdb.org/t/p/original\(data.poster_path ?? "")"
+                ) else { return }
+                
                 cell.filmCoverImageView.sd_setImage(with: url)
             }
             .disposed(by: disposeBag)
@@ -192,12 +186,11 @@ class HomeViewController: UIViewController {
             print(error)
         })
         .disposed(by: disposeBag)
-        
     }
     
     private func isFavorite(status: Bool) {
-        status ? likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal) :
-        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        let imageName = status ? "heart.fill" : "heart"
+        likeButton.setImage(UIImage(systemName: imageName), for: .normal)
         likeButton.tintColor = status ? Asset.Colors.loginButton.color : .white
     }
     
