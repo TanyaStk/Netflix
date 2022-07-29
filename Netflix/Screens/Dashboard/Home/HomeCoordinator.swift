@@ -17,7 +17,11 @@ class HomeCoordinator: Coordinator {
     }
     
     func start() {
+        let homeViewModel = HomeViewModel(coordinator: self,
+                                          service: MoviesProvider())
         let homeViewController = HomeViewController()
+        homeViewController.viewModel = homeViewModel
+        
         navigationController?.pushViewController(homeViewController, animated: false)
     }
     
@@ -26,8 +30,10 @@ class HomeCoordinator: Coordinator {
         profileCoordinator.start()
     }
     
-    func coordinateToMovieDetails() {
-        let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
+    func coordinateToMovieDetails(of movie: Int) {
+        let movieDetailsCoordinator = MovieDetailsCoordinator(
+            navigationController: navigationController!,
+            movieId: movie)
         movieDetailsCoordinator.start()
     }
 }

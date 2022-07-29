@@ -10,7 +10,7 @@ import Foundation
 struct MovieDetailsResponse: Codable {
     let id: Int
     let overview: String
-    let poster_path: String
+    let poster_path: String?
     let release_date: String
     let runtime: Int
     let title: String
