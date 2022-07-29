@@ -9,5 +9,5 @@ import Foundation
 
 struct MovieResponse: Codable {
     let id: Int
-    let poster_path: String
+    let poster_path: String?
 }
