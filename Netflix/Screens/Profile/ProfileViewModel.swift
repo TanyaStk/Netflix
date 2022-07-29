@@ -13,11 +13,13 @@ class ProfileViewModel: ViewModel {
     struct Input {
         let isViewLoaded: Observable<Bool>
         let backButtonTap: Observable<Void>
+        let logoutButtonTap: Observable<Void>
     }
     
     struct Output {
         let userDetails: Driver<AccountDetailsResponse>
         let dismissProfile: Driver<Void>
+        let logout: Driver<Void>
         let error: Driver<String>
     }
     
@@ -56,10 +58,18 @@ class ProfileViewModel: ViewModel {
             }
             .asDriver(onErrorJustReturn: ())
         
+        let logout = input.logoutButtonTap
+            .do { [weak self] _ in
+                try self?.keychainUseCase.deleteUser()
+                self?.coordinator.dismiss()
+            }
+            .asDriver(onErrorJustReturn: ())
+        
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         
         return Output(userDetails: userDetails,
                       dismissProfile: dismissProfile,
+                      logout: logout,
                       error: error)
     }
 }

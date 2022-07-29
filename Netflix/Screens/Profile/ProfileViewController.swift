@@ -57,7 +57,6 @@ class ProfileViewController: UIViewController {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Tanya Samostroyenko"
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = .white
@@ -92,7 +91,6 @@ class ProfileViewController: UIViewController {
 
     private let emailLabel: UILabel = {
         let label = UILabel()
-        label.text = "tanyasamastr@gmail.com"
         label.backgroundColor = .clear
         label.textAlignment = .left
         label.textColor = Asset.Colors.loginTexts.color
@@ -172,7 +170,7 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .black
         addSubviews()
         setConstraints()
         
@@ -185,7 +183,8 @@ class ProfileViewController: UIViewController {
     private func bind(to viewModel: ProfileViewModel) {
         let output = viewModel.transform(ProfileViewModel.Input(
             isViewLoaded: Observable.just(true),
-            backButtonTap: closeButton.rx.tap.asObservable()))
+            backButtonTap: closeButton.rx.tap.asObservable(),
+            logoutButtonTap: logoutButton.rx.tap.asObservable()))
         
         output.userDetails.drive(onNext: { [weak self] user in
             self?.nameLabel.text = user.name
@@ -194,7 +193,9 @@ class ProfileViewController: UIViewController {
         .disposed(by: disposeBag)
         
         output.dismissProfile.drive().disposed(by: disposeBag)
-
+        
+        output.logout.drive().disposed(by: disposeBag)
+        
         output.error.drive().disposed(by: disposeBag)
      }
 
