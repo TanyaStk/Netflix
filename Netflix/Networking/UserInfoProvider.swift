@@ -17,6 +17,7 @@ protocol UserInfo {
                                 password: String,
                                 requestToken: String) -> Single<AuthenticationTokenResponse>
     func getFavoriteMovies(for sessionId: String) -> Single<MoviesResultsResponse>
+    func getAccountDetails(with sessionId: String) -> Single<AccountDetailsResponse>
 }
 
 final class UserInfoProvider: UserInfo {
