@@ -9,9 +9,17 @@
 /* Begin PBXBuildFile section */
 		5A07C7A228698FE300669682 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A07C7A128698FE300669682 /* User.swift */; };
 		5A0E9862283FAFB700BACC1F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E9861283FAFB700BACC1F /* Colors.xcassets */; };
+<<<<<<< HEAD
+		5A1C0D4C2893D2B700C5BC6F /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C0D4B2893D2B700C5BC6F /* ProfileViewModel.swift */; };
+		5A1C0D4E2893D64B00C5BC6F /* AccountDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C0D4D2893D64B00C5BC6F /* AccountDetailsResponse.swift */; };
+=======
 		5A1764342892847300DDBCD2 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1764332892847300DDBCD2 /* DashboardViewController.swift */; };
 		5A1764362892848C00DDBCD2 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1764352892848C00DDBCD2 /* HomeViewModel.swift */; };
+<<<<<<< HEAD
 		5A1DEBCE2893E9E900DF7AE2 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1DEBCD2893E9E900DF7AE2 /* ProfileViewModel.swift */; };
+=======
+>>>>>>> origin/develop
+>>>>>>> f8572d353f1cea4b48f615fc47c94fd7205e0995
 		5A1F4F262869A87A00765DF6 /* UserInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1F4F252869A87A00765DF6 /* UserInfoProvider.swift */; };
 		5A2F509D2892BD4E0074524E /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2F509C2892BD4E0074524E /* MovieDetailsViewModel.swift */; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
@@ -99,9 +107,17 @@
 		58D10686B668806F7C4D3E12 /* Pods_Netflix_NetflixUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Netflix_NetflixUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A07C7A128698FE300669682 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5A0E9861283FAFB700BACC1F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+<<<<<<< HEAD
+		5A1C0D4B2893D2B700C5BC6F /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		5A1C0D4D2893D64B00C5BC6F /* AccountDetailsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsResponse.swift; sourceTree = "<group>"; };
+=======
 		5A1764332892847300DDBCD2 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		5A1764352892848C00DDBCD2 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		5A1DEBCD2893E9E900DF7AE2 /* ProfileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+=======
+>>>>>>> origin/develop
+>>>>>>> f8572d353f1cea4b48f615fc47c94fd7205e0995
 		5A1F4F252869A87A00765DF6 /* UserInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoProvider.swift; sourceTree = "<group>"; };
 		5A2F509C2892BD4E0074524E /* MovieDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewModel.swift; sourceTree = "<group>"; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
@@ -216,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				5AE171442872DB7200202F6A /* NetworkingErrorResponse.swift */,
+				5A1C0D4D2893D64B00C5BC6F /* AccountDetailsResponse.swift */,
 				5A6DA036286C7218002D9D3A /* AuthenticationTokenResponse.swift */,
 				5A6DA038286C77AD002D9D3A /* CreateSessionResponse.swift */,
 				5AA0136D288E8EA0007C0E59 /* GetLatestResponse.swift */,
@@ -292,6 +309,7 @@
 				5A1DEBCD2893E9E900DF7AE2 /* ProfileViewModel.swift */,
 				5ACDE36D287DE39100209D4C /* ProfileViewController.swift */,
 				5A736D302880AD270031CC10 /* ProfileCoordinator.swift */,
+				5A1C0D4B2893D2B700C5BC6F /* ProfileViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -762,6 +780,7 @@
 				5A1DEBCE2893E9E900DF7AE2 /* ProfileViewModel.swift in Sources */,
 				5AEE13692872E45500D539B4 /* KeychainUseCase.swift in Sources */,
 				5ACDE365287D6EBD00209D4C /* SearchViewController.swift in Sources */,
+				5A1C0D4C2893D2B700C5BC6F /* ProfileViewModel.swift in Sources */,
 				5AA01378288EA538007C0E59 /* MovieResponse.swift in Sources */,
 				5AA01374288E98B6007C0E59 /* MovieDetailsResponse.swift in Sources */,
 				5A6778E42889586E0005A9C0 /* ViewModel.swift in Sources */,
@@ -777,6 +796,7 @@
 				5A736D2928806D6F0031CC10 /* DashboardCoordinator.swift in Sources */,
 				5A736D312880AD270031CC10 /* ProfileCoordinator.swift in Sources */,
 				5AA01370288E9471007C0E59 /* MoviesProvider.swift in Sources */,
+				5A1C0D4E2893D64B00C5BC6F /* AccountDetailsResponse.swift in Sources */,
 				5A736D342880B15C0031CC10 /* MovieDetailsCoordinator.swift in Sources */,
 				5A736D2D2880AA960031CC10 /* ComingSoonCoordinator.swift in Sources */,
 				5AE171432872DB6500202F6A /* NetworkingError.swift in Sources */,

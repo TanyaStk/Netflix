@@ -10,6 +10,10 @@ import SnapKit
 
 class ProfileViewController: UIViewController {
     
+    var viewModel: ProfileViewModel?
+    
+    private let disposeBag = DisposeBag()
+    
     private let profileLabel: UILabel = {
         let label = UILabel()
         label.text = "Profile"
@@ -169,7 +173,29 @@ class ProfileViewController: UIViewController {
         
         addSubviews()
         setConstraints()
+        
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
     }
+    
+    private func bind(to viewModel: ProfileViewModel) {
+        let output = viewModel.transform(ProfileViewModel.Input(
+            isViewLoaded: Observable.just(true),
+            backButtonTap: closeButton.rx.tap.asObservable()))
+        
+        output.userDetails.drive(onNext: { [weak self] user in
+            self?.nameLabel.text = user.name
+            self?.emailLabel.text = user.username
+        })
+        .disposed(by: disposeBag)
+        
+        output.dismissProfile.drive().disposed(by: disposeBag)
+
+        output.error.drive().disposed(by: disposeBag)
+     }
+
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()

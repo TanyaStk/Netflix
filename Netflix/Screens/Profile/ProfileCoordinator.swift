@@ -17,7 +17,18 @@ class ProfileCoordinator: Coordinator {
     }
     
     func start() {
+        let profileViewModel = ProfileViewModel(
+            coordinator: self,
+            service: UserInfoProvider(),
+            keychainUseCase: KeychainUseCase())
         let profileViewController = ProfileViewController()
+        profileViewController.viewModel = profileViewModel
+        profileViewController.modalPresentationStyle = .fullScreen
+        
         navigationController.present(profileViewController, animated: false)
+    }
+    
+    func dismiss() {
+        navigationController.dismiss(animated: true)
     }
 }
