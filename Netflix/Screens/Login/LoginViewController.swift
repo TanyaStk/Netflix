@@ -32,6 +32,7 @@ class LoginViewController: UIViewController {
         textField.textColor = Asset.Colors.loginTexts.color
         textField.font = .boldSystemFont(ofSize: 16)
         textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.attributedPlaceholder = NSAttributedString(
             string: "E-mail/Phone",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])
@@ -45,6 +46,7 @@ class LoginViewController: UIViewController {
         textField.textColor = Asset.Colors.loginTexts.color
         textField.font = .boldSystemFont(ofSize: 16)
         textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.attributedPlaceholder = NSAttributedString(
             string: "Password",
             attributes: [NSAttributedString.Key.foregroundColor: Asset.Colors.loginTexts.color.withAlphaComponent(0.6)])

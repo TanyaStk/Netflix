@@ -88,7 +88,6 @@ class LoginViewModel: ViewModel {
             }
             .flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
                 token = sessionResponse.request_token
-                print(token)
                 tokenExpireAt = sessionResponse.expires_at
                 return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
             }
@@ -98,7 +97,6 @@ class LoginViewModel: ViewModel {
                                 request_token: token,
                                 token_expire_at: tokenExpireAt,
                                 session_id: result.session_id)
-                try self.keychainUseCase.deleteUser()
                 try self.keychainUseCase.save(user: user)
             }, onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)

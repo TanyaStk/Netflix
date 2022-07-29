@@ -37,7 +37,9 @@ final class UserInfoProvider: UserInfo {
     }
     
     func createSessionWithLogin(username: String, password: String, requestToken: String) -> Single<AuthenticationTokenResponse> {
-        return provider.rx.request(.sessionWith(login: username, password: password, requestToken: requestToken))
+        return provider.rx.request(.sessionWith(login: username,
+                                                password: password,
+                                                requestToken: requestToken))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(AuthenticationTokenResponse.self)
     }

@@ -28,6 +28,8 @@ class LoginCoordinator: Coordinator {
     }
     
     func coordinateToDashboard() {
+        navigationController.dismiss(animated: true)
+        
         let dashboardCoordinator = DashboardCoordinator(navigationController: navigationController)
         dashboardCoordinator.start()
     }

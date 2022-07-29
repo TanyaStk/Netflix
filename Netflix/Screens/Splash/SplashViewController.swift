@@ -20,6 +20,7 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
         guard let viewModel = viewModel else {
             return
         }
@@ -29,12 +30,14 @@ class SplashViewController: UIViewController {
    private func bind(to viewModel: SplashViewModel) {
         let output = viewModel.transform(SplashViewModel.Input(isAppLoaded: Observable.just(true)))
 
-       output.error.drive().disposed(by: disposeBag)        
+       output.error.drive(onNext: { error in
+            print(error)
+       }).disposed(by: disposeBag)
        output.success.drive().disposed(by: disposeBag)
     }
     
     private func setupUI() {
-        navigationController?.navigationBar.barTintColor = .clear
+        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .black
         let logoImageView = UIImageView(image: Asset.Assets.logoNetflixShort.image)
         view.addSubview(logoImageView)

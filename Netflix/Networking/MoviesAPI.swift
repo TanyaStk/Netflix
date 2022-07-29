@@ -10,7 +10,7 @@ import Moya
 
 public enum MoviesAPI {
 
-    static private let apiKey = ""
+    static private let apiKey = "7ce563134c101dab6bb4df8a68a6d3bf"
     
     case latest
     case popular
