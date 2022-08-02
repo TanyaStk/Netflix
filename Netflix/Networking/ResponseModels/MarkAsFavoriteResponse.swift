@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct MarkAsFavoriteResponse: Codable {
+    let status_code: Int
+    let status_message: String
+}
