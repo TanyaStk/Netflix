@@ -12,11 +12,15 @@ class UpcomingMoviesCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "UpcomingMoviesCollectionViewCell"
     
-    let filmCoverImageView = UIImageView(image: Asset.Assets.filmCover.image)
+    let filmCoverImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         contentView.addSubview(filmCoverImageView)
+        filmCoverImageView.clipsToBounds = true
+        filmCoverImageView.contentMode = .scaleAspectFill
+        
         setConstraints()
         addGlow()
     }

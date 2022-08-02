@@ -18,11 +18,17 @@ class ComingSoonCoordinator: Coordinator {
     
     func start() {
         let comingSoonViewController = ComingSoonViewController()
+        let comingSoonViewModel = ComingSoonViewModel(coordinator: self,
+                                                      service: MoviesProvider())
+        comingSoonViewController.viewModel = comingSoonViewModel
+        
         navigationController?.pushViewController(comingSoonViewController, animated: false)
     }
     
-//    func coordinateToMovieDetails() {
-//        let movieDetailsCoordinator = MovieDetailsCoordinator(navigationController: navigationController!)
-//        movieDetailsCoordinator.start()
-//    }
+    func coordinateToMovieDetails(of movie: Int) {
+        let movieDetailsCoordinator = MovieDetailsCoordinator(
+            navigationController: navigationController!,
+            movieId: movie)
+        movieDetailsCoordinator.start()
+    }
 }

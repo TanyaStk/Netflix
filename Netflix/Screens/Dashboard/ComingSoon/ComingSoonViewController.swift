@@ -7,8 +7,15 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import SDWebImage
 
 class ComingSoonViewController: UIViewController {
+    
+    var viewModel: ComingSoonViewModel?
+    
+    private let disposeBag = DisposeBag()
     
     private let searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: SearchViewController())
@@ -19,8 +26,6 @@ class ComingSoonViewController: UIViewController {
     
     private lazy var upcomingMoviesCollection: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.delegate = self
-        collectionView.dataSource = self
         collectionView.register(UpcomingMoviesCollectionViewCell.self,
                                 forCellWithReuseIdentifier: UpcomingMoviesCollectionViewCell.identifier)
         return collectionView
@@ -35,6 +40,48 @@ class ComingSoonViewController: UIViewController {
         
         addSubviews()
         setConstraints()
+        
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+    }
+    
+    private func bind(to viewModel: ComingSoonViewModel) {
+        let output = viewModel.transform(ComingSoonViewModel.Input(
+            isViewLoaded: Observable.just(true),
+            searchQuery: self.navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
+            movieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable()
+        ))
+        
+        output.loadMovies.subscribe().disposed(by: disposeBag)
+        
+        output.showUpcomingMovies.drive(self.upcomingMoviesCollection.rx.items(
+            cellIdentifier: UpcomingMoviesCollectionViewCell.identifier,
+            cellType: UpcomingMoviesCollectionViewCell.self)
+        ) { _, data, cell in
+            guard let url = URL(string: data.posterPath) else { return }
+            cell.filmCoverImageView.sd_setImage(with: url)
+        }
+        .disposed(by: disposeBag)
+        
+        output.showSearchingResults.drive().disposed(by: disposeBag)
+        
+//        output.showSearchingResults.drive(self.upcomingMoviesCollection.rx.items(
+//            cellIdentifier: UpcomingMoviesCollectionViewCell.identifier,
+//            cellType: UpcomingMoviesCollectionViewCell.self)
+//        ) { _, data, cell in
+//            guard let url = URL(string: data.posterPath) else { return }
+//            cell.filmCoverImageView.sd_setImage(with: url)
+//        }
+//        .disposed(by: disposeBag)
+        
+        output.showMovieDetails.drive().disposed(by: disposeBag)
+        
+        output.error.drive(onNext: { error in
+            print(error)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func addSubviews() {
@@ -67,22 +114,5 @@ class ComingSoonViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
 
-    }
-}
-
-extension ComingSoonViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: UpcomingMoviesCollectionViewCell.identifier,
-            for: indexPath) as? UpcomingMoviesCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        return cell
     }
 }
