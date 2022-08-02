@@ -10,13 +10,14 @@ import Moya
 
 public enum UserInfoAPI {
     
-    static private let apiKey = "7ce563134c101dab6bb4df8a68a6d3bf"
+    static private let apiKey = ""
     
     case token
     case session(requestToken: String)
     case sessionWith(login: String, password: String, requestToken: String)
     case favoriteMovies(accountId: String)
     case accountDetails(sessionId: String)
+    case markAsFavorite(accountId: String, mediaType: String, mediaId: Int, favorite: Bool)
 }
 
 extension UserInfoAPI: TargetType {
@@ -37,6 +38,8 @@ extension UserInfoAPI: TargetType {
             return "account/\(accountId)/favorite/movies"
         case .accountDetails:
             return "account"
+        case .markAsFavorite(let accountId, _, _, _):
+            return "account/\(accountId)/favorite"
         }
     }
     
@@ -44,14 +47,14 @@ extension UserInfoAPI: TargetType {
         switch self {
         case .token, .favoriteMovies, .accountDetails:
             return .get
-        case .sessionWith, .session:
+        case .sessionWith, .session, .markAsFavorite:
             return .post
         }
     }
     
     public var task: Task {
         switch self {
-        case .token, .favoriteMovies:
+        case .token:
             return .requestParameters(
                 parameters: ["api_key": "\(UserInfoAPI.apiKey)"],
                 encoding: URLEncoding.queryString)
@@ -69,11 +72,21 @@ extension UserInfoAPI: TargetType {
             ]
             return .requestParameters(parameters: parameters,
                                       encoding: URLEncoding.queryString)
-        case .accountDetails(let sessionId):
+        case .accountDetails(let sessionId), .favoriteMovies(let sessionId):
             return .requestParameters(
                 parameters: ["api_key": "\(UserInfoAPI.apiKey)",
                              "session_id": "\(sessionId)"],
                 encoding: URLEncoding.queryString)
+        case .markAsFavorite(let sessionId, let mediaType, let mediaId, let favorite):
+            let parameters = [
+                "api_key": "\(UserInfoAPI.apiKey)",
+                "session_id": sessionId,
+                "media_type": mediaType,
+                "media_id": "\(mediaId)",
+                "favorite": "\(favorite)"
+            ]
+            return .requestParameters(parameters: parameters,
+                                      encoding: URLEncoding.queryString)
         }
     }
     
