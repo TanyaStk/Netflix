@@ -7,8 +7,15 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import SDWebImage
 
 class FavoritesViewController: UIViewController {
+
+    var viewModel: FavoritesViewModel?
+    
+    private let disposeBag = DisposeBag()
     
     private let favoritesTable: UITableView = {
         let table = UITableView()
@@ -56,13 +63,13 @@ class FavoritesViewController: UIViewController {
         return button
     }()
     
-    let stackView: UIStackView = {
+    let ifFavoritesEmptyStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
         stackView.axis = .vertical
-//        stackView.isHidden = true
+        stackView.isHidden = true
         return stackView
     }()
     
@@ -72,18 +79,61 @@ class FavoritesViewController: UIViewController {
         addSubviews()
         setConstraints()
         
-        favoritesTable.delegate = self
-        favoritesTable.dataSource = self
+        navigationController?.navigationBar.isHidden = true
         
-        navigationController?.navigationBar.barTintColor = .clear
+        guard let viewModel = viewModel else {
+            return
+        }
+        bind(to: viewModel)
+    }
+
+    private func bind(to viewModel: FavoritesViewModel) {
+        let output = viewModel.transform(FavoritesViewModel.Input(
+            isViewLoaded: Observable.just(true),
+            switchButtonTap: switchButton.rx.tap.asObservable(),
+            deleteFromFavorites: favoritesTable.rx.itemDeleted.asObservable(),
+            movieCoverTap: favoritesTable.rx.itemSelected.asObservable()
+        ))
+        
+        favoritesTable.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        output.showingTrigger.subscribe().disposed(by: disposeBag)
+        
+        output.showFavoriteMovies
+            .drive(self.favoritesTable.rx.items(
+            cellIdentifier: FavoritesTableViewCell.identifier,
+            cellType: FavoritesTableViewCell.self)
+        ) { _, data, cell in
+            guard let url = URL(string: data.posterPath) else { return }
+            
+            cell.filmCoverImageView.sd_setImage(with: url)
+        }
+        .disposed(by: disposeBag)
+        
+        output.isFavoritesEmpty.drive(onNext: { [weak self] status in
+            self?.isFavoritesEmpty(status: status)
+        })
+        .disposed(by: disposeBag)
+        
+        output.switchToComingSoon.drive().disposed(by: disposeBag)
+        
+        output.error.drive(onNext: { error in
+            print(error)
+        })
+        .disposed(by: disposeBag)
+    }
+    
+    private func isFavoritesEmpty(status: Bool) {
+        ifFavoritesEmptyStackView.isHidden = !status
+        favoritesTable.isHidden = status
     }
     
     private func addSubviews() {
         view.addSubview(favoritesTable)
-        view.addSubview(stackView)
-        stackView.addArrangedSubview(emptyTitleListLabel)
-        stackView.addArrangedSubview(emptySubtitleListLabel)
-        stackView.addArrangedSubview(switchButton)
+        view.addSubview(ifFavoritesEmptyStackView)
+        ifFavoritesEmptyStackView.addArrangedSubview(emptyTitleListLabel)
+        ifFavoritesEmptyStackView.addArrangedSubview(emptySubtitleListLabel)
+        ifFavoritesEmptyStackView.addArrangedSubview(switchButton)
     }
     
     private func setConstraints() {
@@ -92,7 +142,7 @@ class FavoritesViewController: UIViewController {
             make.center.equalToSuperview()
         }
         
-        stackView.snp.makeConstraints { make in
+        ifFavoritesEmptyStackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.25)
@@ -114,42 +164,17 @@ class FavoritesViewController: UIViewController {
     }
 }
 
-extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
+extension FavoritesViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: FavoritesTableViewCell.identifier,
-            for: indexPath) as? FavoritesTableViewCell else {
-            return UITableViewCell()
-        }
-        
-        return cell
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 256
     }
     
     func tableView(_ tableView: UITableView,
-                   heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        .delete
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableView.beginUpdates()
-            
-            // remove element from list at indexPath.row
-            
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.endUpdates()
+            favoritesTable.deleteRows(at: [indexPath], with: .fade)
         }
     }
 }
