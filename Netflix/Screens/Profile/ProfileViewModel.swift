@@ -39,7 +39,7 @@ class ProfileViewModel: ViewModel {
     }
     
     func transform(_ input: Input) -> Output {
-        let userDetails = input.isViewLoaded
+        let accountDetails = input.isViewLoaded
             .flatMapLatest { [keychainUseCase, errorRelay, service] _ -> Single<AccountDetailsResponse> in
                 guard let user = try keychainUseCase.getUser()
                 else {
@@ -47,6 +47,7 @@ class ProfileViewModel: ViewModel {
                     return .never()
                 }
                 return service.getAccountDetails(with: user.session_id)
+                
             }
             .do(onError: { [errorRelay] error in
                 errorRelay.accept(error.localizedDescription)
@@ -57,7 +58,7 @@ class ProfileViewModel: ViewModel {
                                username: response.username)
             }
             .asDriver(onErrorJustReturn: AccountDetails(id: 0, name: "", username: ""))
-            
+        
         let dismissProfile = input.backButtonTap
             .do { [coordinator] _ in
                 coordinator.dismiss()
@@ -65,15 +66,15 @@ class ProfileViewModel: ViewModel {
             .asDriver(onErrorJustReturn: ())
         
         let logout = input.logoutButtonTap
-            .do { [coordinator, keychainUseCase] _ in
+            .do { [keychainUseCase, coordinator] _ in
                 try keychainUseCase.deleteUser()
-                coordinator.coordinateToOnboarding()
+                coordinator.dismiss()
             }
             .asDriver(onErrorJustReturn: ())
         
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         
-        return Output(accountDetails: userDetails,
+        return Output(accountDetails: accountDetails,
                       dismissProfile: dismissProfile,
                       logout: logout,
                       error: error)
