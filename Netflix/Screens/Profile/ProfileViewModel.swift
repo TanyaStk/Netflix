@@ -10,6 +10,7 @@ import RxCocoa
 import RxSwift
 
 class ProfileViewModel: ViewModel {
+    
     struct Input {
         let isViewLoaded: Observable<Bool>
         let backButtonTap: Observable<Void>
@@ -17,7 +18,7 @@ class ProfileViewModel: ViewModel {
     }
     
     struct Output {
-        let userDetails: Driver<AccountDetailsResponse>
+        let accountDetails: Driver<AccountDetails>
         let dismissProfile: Driver<Void>
         let logout: Driver<Void>
         let error: Driver<String>
@@ -39,35 +40,40 @@ class ProfileViewModel: ViewModel {
     
     func transform(_ input: Input) -> Output {
         let userDetails = input.isViewLoaded
-            .flatMapLatest { [unowned self] _ -> Single<AccountDetailsResponse> in
-                guard let user = try self.keychainUseCase.getUser()
+            .flatMapLatest { [keychainUseCase, errorRelay, service] _ -> Single<AccountDetailsResponse> in
+                guard let user = try keychainUseCase.getUser()
                 else {
                     errorRelay.accept("No user exists")
                     return .never()
                 }
-                return self.service.getAccountDetails(with: user.session_id)
+                return service.getAccountDetails(with: user.session_id)
             }
-            .do(onError: { [weak self] error in
-                self?.errorRelay.accept(error.localizedDescription)
+            .do(onError: { [errorRelay] error in
+                errorRelay.accept(error.localizedDescription)
             })
-            .asDriver(onErrorJustReturn: AccountDetailsResponse(id: 0, name: "", username: ""))
-        
+            .map { response in
+                AccountDetails(id: response.id,
+                               name: response.name,
+                               username: response.username)
+            }
+            .asDriver(onErrorJustReturn: AccountDetails(id: 0, name: "", username: ""))
+            
         let dismissProfile = input.backButtonTap
-            .do { [weak self] _ in
-                self?.coordinator.dismiss()
+            .do { [coordinator] _ in
+                coordinator.dismiss()
             }
             .asDriver(onErrorJustReturn: ())
         
         let logout = input.logoutButtonTap
-            .do { [weak self] _ in
-                try self?.keychainUseCase.deleteUser()
-                self?.coordinator.dismiss()
+            .do { [coordinator, keychainUseCase] _ in
+                try keychainUseCase.deleteUser()
+                coordinator.coordinateToOnboarding()
             }
             .asDriver(onErrorJustReturn: ())
         
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         
-        return Output(userDetails: userDetails,
+        return Output(accountDetails: userDetails,
                       dismissProfile: dismissProfile,
                       logout: logout,
                       error: error)

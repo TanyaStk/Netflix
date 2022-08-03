@@ -21,14 +21,22 @@ class ProfileCoordinator: Coordinator {
             coordinator: self,
             service: UserInfoProvider(),
             keychainUseCase: KeychainUseCase())
-        let profileViewController = ProfileViewController()
-        profileViewController.viewModel = profileViewModel
-        profileViewController.modalPresentationStyle = .fullScreen
         
-        navigationController.present(profileViewController, animated: false)
+        let profileViewController = ProfileViewController()
+        profileViewController.viewModel = profileViewModel        
+        profileViewController.modalPresentationStyle = .fullScreen
+
+        navigationController.present(profileViewController, animated: true)
     }
     
     func dismiss() {
         navigationController.dismiss(animated: true)
+    }
+    
+    func coordinateToOnboarding() {
+        navigationController.dismiss(animated: true)
+        
+        let onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
+        onboardingCoordinator.start()
     }
 }
