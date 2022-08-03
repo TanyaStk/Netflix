@@ -53,8 +53,7 @@ class FavoritesViewModel: ViewModel {
                 }
                 return service.getFavoriteMovies(for: user.session_id)
             }
-            .asObservable()
-            .materialize()
+            .asObservable().materialize()
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
                 case let .next(moviesResultsResponse):
@@ -105,8 +104,8 @@ class FavoritesViewModel: ViewModel {
         let isFavoritesEmpty = isFavoritesEmptyRelay.asDriver(onErrorJustReturn: true)
         
         let showMovieDetails = input.movieCoverTap
-            .do(onNext: { [weak self] index in
-                self?.coordinator.coordinateToMovieDetails(of: self?.favoriteMovies[index.item].id ?? 0)
+            .do(onNext: { index in
+                self.coordinator.coordinateToMovieDetails(of: self.favoriteMovies[index.row].id)
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())

@@ -111,10 +111,10 @@ class HomeViewController: UIViewController {
             subitem: item,
             count: 1)
         group.contentInsets = NSDirectionalEdgeInsets(
-            top: 5,
-            leading: 5,
-            bottom: 5,
-            trailing: 5)
+            top: 4,
+            leading: 4,
+            bottom: 4,
+            trailing: 4)
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging

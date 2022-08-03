@@ -8,15 +8,19 @@
 import UIKit
 import SnapKit
 
-class UpcomingMoviesCollectionViewCell: UICollectionViewCell {
+class MoviesCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = "UpcomingMoviesCollectionViewCell"
+    static let identifier = "MoviesCollectionViewCell"
     
-    let filmCoverImageView = UIImageView(image: Asset.Assets.filmCover.image)
+    let filmCoverImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         contentView.addSubview(filmCoverImageView)
+        filmCoverImageView.clipsToBounds = true
+        filmCoverImageView.contentMode = .scaleAspectFill
+        
         setConstraints()
         addGlow()
     }
