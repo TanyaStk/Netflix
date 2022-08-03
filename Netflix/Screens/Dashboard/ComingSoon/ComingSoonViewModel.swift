@@ -14,6 +14,7 @@ class ComingSoonViewModel: ViewModel {
     struct Input {
         let isViewLoaded: Observable<Bool>
         let searchQuery: Observable<String>
+        let cancelSearching: Observable<Void>
         let movieCoverTap: Observable<IndexPath>
     }
 
@@ -22,11 +23,13 @@ class ComingSoonViewModel: ViewModel {
         let showUpcomingMovies: Driver<[Movie]>
         let showSearchingResults: Driver<[Movie]>
         let showMovieDetails: Driver<Void>
+        let isHiddenUpcoming: Driver<Bool>
         let error: Driver<String>
     }
 
     private let upcomingMoviesSubject = PublishSubject<[Movie]>()
     private let searchingResultsSubject = PublishSubject<[Movie]>()
+    private let isHiddenUpcomingBehaviorRelay = BehaviorRelay(value: false)
     private let errorRelay = PublishRelay<String>()
 
     private let coordinator: ComingSoonCoordinator
@@ -39,7 +42,8 @@ class ComingSoonViewModel: ViewModel {
     }
 
     func transform(_ input: Input) -> Output {
-        let loadUpcomingMovies = input.isViewLoaded
+        let loadUpcomingMovies = Observable
+            .merge(input.isViewLoaded, input.cancelSearching.map { _ in true })
             .flatMap { [service] _ in
                 service.getUpcoming()
             }
@@ -47,6 +51,7 @@ class ComingSoonViewModel: ViewModel {
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
                 case let .next(moviesResultsResponse):
+                    self.isHiddenUpcomingBehaviorRelay.accept(false)
                     self.upcomingMovies = moviesResultsResponse.results.map { movie in
                         Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
                     }
@@ -72,6 +77,7 @@ class ComingSoonViewModel: ViewModel {
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
                 case let .next(searchingResultsResponse):
+                    self.isHiddenUpcomingBehaviorRelay.accept(true)
                     let searchingResults = searchingResultsResponse.results.map { movie in
                         Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
                     }
@@ -96,6 +102,8 @@ class ComingSoonViewModel: ViewModel {
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
+        
+        let isHiddenUpcoming = isHiddenUpcomingBehaviorRelay.asDriver()
 
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
 
@@ -103,6 +111,7 @@ class ComingSoonViewModel: ViewModel {
                       showUpcomingMovies: showUpcomingMovies,
                       showSearchingResults: showSearchingResults,
                       showMovieDetails: showMovieDetails,
+                      isHiddenUpcoming: isHiddenUpcoming,
                       error: error)
     }
 }

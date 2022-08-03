@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class UpcomingMoviesCollectionViewCell: UICollectionViewCell {
+class MoviesCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = "UpcomingMoviesCollectionViewCell"
+    static let identifier = "MoviesCollectionViewCell"
     
     let filmCoverImageView = UIImageView()
     

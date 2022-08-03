@@ -18,16 +18,24 @@ class ComingSoonViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private let searchController: UISearchController = {
-        let controller = UISearchController(searchResultsController: SearchViewController())
+        let controller = UISearchController()
         controller.searchBar.placeholder = "Search"
         controller.searchBar.barStyle = .black
         return controller
     }()
     
+    private lazy var searchResultsCollection: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.register(MoviesCollectionViewCell.self,
+                                forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.isHidden = true
+        return collectionView
+    }()
+
     private lazy var upcomingMoviesCollection: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.register(UpcomingMoviesCollectionViewCell.self,
-                                forCellWithReuseIdentifier: UpcomingMoviesCollectionViewCell.identifier)
+        collectionView.register(MoviesCollectionViewCell.self,
+                                forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
         return collectionView
     }()
 
@@ -50,31 +58,36 @@ class ComingSoonViewController: UIViewController {
     private func bind(to viewModel: ComingSoonViewModel) {
         let output = viewModel.transform(ComingSoonViewModel.Input(
             isViewLoaded: Observable.just(true),
-            searchQuery: self.navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
+            searchQuery: navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
+            cancelSearching: navigationItem.searchController!.searchBar.rx.cancelButtonClicked.asObservable(),
             movieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable()
         ))
         
         output.loadMovies.subscribe().disposed(by: disposeBag)
         
         output.showUpcomingMovies.drive(self.upcomingMoviesCollection.rx.items(
-            cellIdentifier: UpcomingMoviesCollectionViewCell.identifier,
-            cellType: UpcomingMoviesCollectionViewCell.self)
+            cellIdentifier: MoviesCollectionViewCell.identifier,
+            cellType: MoviesCollectionViewCell.self)
         ) { _, data, cell in
             guard let url = URL(string: data.posterPath) else { return }
             cell.filmCoverImageView.sd_setImage(with: url)
         }
         .disposed(by: disposeBag)
         
-        output.showSearchingResults.drive().disposed(by: disposeBag)
-        
-//        output.showSearchingResults.drive(self.upcomingMoviesCollection.rx.items(
-//            cellIdentifier: UpcomingMoviesCollectionViewCell.identifier,
-//            cellType: UpcomingMoviesCollectionViewCell.self)
-//        ) { _, data, cell in
-//            guard let url = URL(string: data.posterPath) else { return }
-//            cell.filmCoverImageView.sd_setImage(with: url)
-//        }
-//        .disposed(by: disposeBag)
+        output.isHiddenUpcoming.drive(onNext: { [weak self] status in
+            self?.changeVisibility(isUpcomingHidden: status,
+                                   isSearchingResultsHidden: !status)
+        })
+        .disposed(by: disposeBag)
+
+        output.showSearchingResults.drive(self.searchResultsCollection.rx.items(
+            cellIdentifier: MoviesCollectionViewCell.identifier,
+            cellType: MoviesCollectionViewCell.self)
+        ) { _, data, cell in
+            guard let url = URL(string: data.posterPath) else { return }
+            cell.filmCoverImageView.sd_setImage(with: url)
+        }
+        .disposed(by: disposeBag)
         
         output.showMovieDetails.drive().disposed(by: disposeBag)
         
@@ -84,12 +97,22 @@ class ComingSoonViewController: UIViewController {
         .disposed(by: disposeBag)
     }
     
+    private func changeVisibility(isUpcomingHidden: Bool, isSearchingResultsHidden: Bool) {
+        upcomingMoviesCollection.isHidden = isUpcomingHidden
+        searchResultsCollection.isHidden = isSearchingResultsHidden
+    }
+    
     private func addSubviews() {
         view.addSubview(upcomingMoviesCollection)
+        view.addSubview(searchResultsCollection)
     }
     
     private func setConstraints() {
         upcomingMoviesCollection.snp.makeConstraints { make in
+            make.width.height.equalToSuperview()
+        }
+        
+        searchResultsCollection.snp.makeConstraints { make in
             make.width.height.equalToSuperview()
         }
     }
@@ -113,6 +136,5 @@ class ComingSoonViewController: UIViewController {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
-
     }
 }
