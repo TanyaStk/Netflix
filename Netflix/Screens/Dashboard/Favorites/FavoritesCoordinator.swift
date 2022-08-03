@@ -18,6 +18,24 @@ class FavoritesCoordinator: Coordinator {
     
     func start() {
         let favoritesViewController = FavoritesViewController()
+        let favoritesViewModel = FavoritesViewModel(coordinator: self,
+                                                    service: UserInfoProvider(),
+                                                    keychainUseCase: KeychainUseCase())
+        favoritesViewController.viewModel = favoritesViewModel
+        
         navigationController?.pushViewController(favoritesViewController, animated: true)
     }
+    
+    func coordinateToComingSoon() {
+        let comingSoonCoordinator = ComingSoonCoordinator(navigationController: navigationController!)
+        comingSoonCoordinator.start()
+    }
+    
+    func coordinateToMovieDetails(of movie: Int) {
+        let movieDetailsCoordinator = MovieDetailsCoordinator(
+            navigationController: navigationController!,
+            movieId: movie)
+        movieDetailsCoordinator.start()
+    }
+
 }

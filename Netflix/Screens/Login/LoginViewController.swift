@@ -13,6 +13,7 @@ import RxCocoa
 class LoginViewController: UIViewController {
     
     var viewModel: LoginViewModel?
+    
     private let disposeBag = DisposeBag()
     
     private let logoImage = UIImageView(image: UIImage(named: Asset.Assets.logoNetflixLong.name))

@@ -23,6 +23,8 @@ class LatestFilmView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         filmCoverImageView.frame = bounds
+        filmCoverImageView.clipsToBounds = true
+        filmCoverImageView.contentMode = .scaleAspectFill
         addGradient()
     }
     

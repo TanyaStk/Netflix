@@ -67,7 +67,10 @@ class MovieDetailsViewController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         button.tintColor = .black
         button.backgroundColor = .white
-        button.contentMode = .scaleAspectFill
+        button.imageView?.snp.makeConstraints({ make in
+            make.centerX.equalToSuperview().multipliedBy(0.6)
+            make.centerY.equalToSuperview()
+        })
         button.layer.cornerRadius = 8
         return button
     }()
@@ -153,7 +156,7 @@ class MovieDetailsViewController: UIViewController {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .leading
-        stack.distribution = .fillProportionally
+        stack.distribution = .fillEqually
         [self.releaseDateHeaderLabel,
          self.releaseDateLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -212,18 +215,7 @@ class MovieDetailsViewController: UIViewController {
             likeButtonTap: likeButton.rx.tap.asObservable()))
         
         output.movieDetails.drive(onNext: { [weak self] movie in
-            self?.movieTitleLabel.text = movie.title
-            self?.runtimeLabel.text = "\(movie.runtime) minutes"
-            self?.ratingLabel.text = "\(movie.vote_average) (IMDb)"
-            self?.releaseDateLabel.text = movie.release_date
-            self?.synopsisDescriptionLabel.text = movie.overview
-            
-            guard let url = URL(
-                string: "https://image.tmdb.org/t/p/original\(movie.poster_path ?? "")"
-            ) else { return }
-            
-            self?.movieCoverImageView.filmCoverImageView.sd_setImage(with: url)
-
+            self?.setupUI(for: movie)
         })
         .disposed(by: disposeBag)
         
@@ -240,6 +232,18 @@ class MovieDetailsViewController: UIViewController {
             print(error)
         })
         .disposed(by: disposeBag)
+    }
+    
+    private func setupUI(for movie: MovieDetails) {
+        movieTitleLabel.text = movie.title
+        runtimeLabel.text = "\(movie.runtime) minutes"
+        ratingLabel.text = "\(movie.voteAverage) (IMDb)"
+        releaseDateLabel.text = movie.releaseDate
+        synopsisDescriptionLabel.text = movie.overview
+        
+        guard let url = URL(string: movie.posterPath) else { return }
+        
+        movieCoverImageView.filmCoverImageView.sd_setImage(with: url)
     }
     
     private func isFavorite(status: Bool) {
@@ -263,12 +267,12 @@ class MovieDetailsViewController: UIViewController {
         movieCoverImageView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.5)
+            make.height.equalToSuperview().multipliedBy(0.55)
         }
         
         navigationButtonsStackView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-8)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.centerX.equalToSuperview()
         }
         
@@ -307,6 +311,7 @@ class MovieDetailsViewController: UIViewController {
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(releaseDateStackView.snp.bottom).offset(16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
