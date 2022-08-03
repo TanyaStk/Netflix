@@ -15,6 +15,7 @@ class FavoritesTableViewCell: UITableViewCell {
         let imageView = UIImageView(image: Asset.Assets.filmCover.image)
         imageView.layer.cornerRadius = 8
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     

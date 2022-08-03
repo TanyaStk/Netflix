@@ -47,7 +47,7 @@ class HomeViewModel: ViewModel {
             .do(onNext: { [weak self] _ in
                 self?.coordinator.coordinateToProfile()
             })
-                .asDriver(onErrorDriveWith: .never())
+            .asDriver(onErrorDriveWith: .never())
                 
         let addToFavorites = input.likeButtonTap
             .do(onNext: { [weak self] _ in
@@ -65,10 +65,10 @@ class HomeViewModel: ViewModel {
             .flatMap { _ in zippedRequests.materialize() }
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
-                case let .next((getLatestResponse, moviesListResponse)):
+                case let .next((getLatestResponse, moviesResultsResponse)):
                     self.showLatestMovieSubject.onNext(getLatestResponse)
-                    self.showPopularMoviesSubject.onNext(moviesListResponse.results)
-                    self.popularMovies = moviesListResponse.results
+                    self.showPopularMoviesSubject.onNext(moviesResultsResponse.results)
+                    self.popularMovies = moviesResultsResponse.results
                 case let .error(error):
                     self.errorRelay.accept(error.localizedDescription)
                 case .completed:

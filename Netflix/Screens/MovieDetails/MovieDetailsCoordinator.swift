@@ -21,13 +21,16 @@ class MovieDetailsCoordinator: Coordinator {
     
     func start() {
         let movieDetailsViewModel = MovieDetailsViewModel(coordinator: self,
-                                                          service: MoviesProvider(),
+                                                          movieService: MoviesProvider(),
+                                                          userService: UserInfoProvider(),
+                                                          keychainUseCase: KeychainUseCase(),
                                                           movieId: movieId)
+        
         let movieDetailsViewController = MovieDetailsViewController()
         movieDetailsViewController.viewModel = movieDetailsViewModel
         movieDetailsViewController.modalPresentationStyle = .fullScreen
         
-        navigationController.present(movieDetailsViewController, animated: false)
+        navigationController.present(movieDetailsViewController, animated: true)
     }
     
     func dismiss() {
