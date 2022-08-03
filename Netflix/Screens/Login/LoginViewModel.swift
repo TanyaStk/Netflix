@@ -15,16 +15,20 @@ class LoginViewModel: ViewModel {
         let login: Observable<String>
         let password: Observable<String>
         let loginButtonTap: Observable<Void>
+        let showPasswordButtonTap: Observable<Void>
     }
     
     struct Output {
         let isLoginButtonEnabled: Driver<Bool>
+        let changePasswordVisibility: Driver<Void>
+        let isPasswordHidden: Driver<Bool>
         let loginLoading: Driver<Bool>
         let success: Driver<Void>
         let error: Driver<String>
     }
     
     private let loginLoadingBehaviorRelay = BehaviorRelay<Bool>(value: false)
+    private let isPasswordHiddenBehaviorRelay = BehaviorRelay<Bool>(value: true)
     private let errorRelay = PublishRelay<String>()
     private let retryLoginRelay = PublishRelay<Void>()
     
@@ -67,10 +71,19 @@ class LoginViewModel: ViewModel {
                 self?.coordinator.coordinateToDashboard()
             })
         
+        let showPassword = input.showPasswordButtonTap
+            .do { [isPasswordHiddenBehaviorRelay] _ in
+                    isPasswordHiddenBehaviorRelay.accept(!isPasswordHiddenBehaviorRelay.value)
+            }
+            .asDriver(onErrorJustReturn: ())
+        
+        let isPasswordHidden = isPasswordHiddenBehaviorRelay.asDriver()
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown Error")
         let loginLoading = loginLoadingBehaviorRelay.asDriver()
         
         return Output(isLoginButtonEnabled: isCredentialsValid,
+                      changePasswordVisibility: showPassword,
+                      isPasswordHidden: isPasswordHidden,
                       loginLoading: loginLoading,
                       success: successfullyLoggedIn,
                       error: error)
