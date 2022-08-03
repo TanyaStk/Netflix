@@ -1,7 +1,7 @@
 # 1
-input_dir: Netflix/
+input_dir: Netflix/Resources/
 # 2
-output_dir: Netflix/Generated/
+output_dir: Netflix/Resources/Generated/
 ## XCAssets
 xcassets:
   inputs:
