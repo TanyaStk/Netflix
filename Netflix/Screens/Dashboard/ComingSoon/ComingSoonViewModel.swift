@@ -15,14 +15,16 @@ class ComingSoonViewModel: ViewModel {
         let isViewLoaded: Observable<Bool>
         let searchQuery: Observable<String>
         let cancelSearching: Observable<Void>
-        let movieCoverTap: Observable<IndexPath>
+        let upcomingMovieCoverTap: Observable<IndexPath>
+        let searchingResultsMovieCoverTap: Observable<IndexPath>
     }
 
     struct Output {
         let loadMovies: Observable<Void>
         let showUpcomingMovies: Driver<[Movie]>
         let showSearchingResults: Driver<[Movie]>
-        let showMovieDetails: Driver<Void>
+        let showUpcomingMovieDetails: Driver<Void>
+        let showSearchingMovieDetails: Driver<Void>
         let isHiddenUpcoming: Driver<Bool>
         let error: Driver<String>
     }
@@ -35,6 +37,7 @@ class ComingSoonViewModel: ViewModel {
     private let coordinator: ComingSoonCoordinator
     private let service: MoviesProvider
     private var upcomingMovies = [Movie]()
+    private var searchingResults = [Movie]()
 
     init(coordinator: ComingSoonCoordinator, service: MoviesProvider) {
         self.coordinator = coordinator
@@ -78,10 +81,10 @@ class ComingSoonViewModel: ViewModel {
                 switch materializedEvent {
                 case let .next(searchingResultsResponse):
                     self.isHiddenUpcomingBehaviorRelay.accept(true)
-                    let searchingResults = searchingResultsResponse.results.map { movie in
+                    self.searchingResults = searchingResultsResponse.results.map { movie in
                         Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
                     }
-                    self.searchingResultsSubject.onNext(searchingResults)
+                    self.searchingResultsSubject.onNext(self.searchingResults)
                 case let .error(error):
                     self.errorRelay.accept(error.localizedDescription)
                 case .completed:
@@ -96,9 +99,16 @@ class ComingSoonViewModel: ViewModel {
         let loadMovies = Observable.merge(loadUpcomingMovies.asObservable(),
                                           loadSearchResults.asObservable())
         
-        let showMovieDetails = input.movieCoverTap
+        let showUpcomingMovieDetails = input.upcomingMovieCoverTap
             .do(onNext: { index in
                 self.coordinator.coordinateToMovieDetails(of: self.upcomingMovies[index.item].id)
+            })
+            .map { _ in }
+            .asDriver(onErrorDriveWith: .never())
+        
+        let showSearchingMovieDetails = input.searchingResultsMovieCoverTap
+            .do(onNext: { index in
+                self.coordinator.coordinateToMovieDetails(of: self.searchingResults[index.item].id)
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
@@ -110,7 +120,8 @@ class ComingSoonViewModel: ViewModel {
         return Output(loadMovies: loadMovies,
                       showUpcomingMovies: showUpcomingMovies,
                       showSearchingResults: showSearchingResults,
-                      showMovieDetails: showMovieDetails,
+                      showUpcomingMovieDetails: showUpcomingMovieDetails,
+                      showSearchingMovieDetails: showSearchingMovieDetails,
                       isHiddenUpcoming: isHiddenUpcoming,
                       error: error)
     }

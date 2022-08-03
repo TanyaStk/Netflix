@@ -60,7 +60,8 @@ class ComingSoonViewController: UIViewController {
             isViewLoaded: Observable.just(true),
             searchQuery: navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
             cancelSearching: navigationItem.searchController!.searchBar.rx.cancelButtonClicked.asObservable(),
-            movieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable()
+            upcomingMovieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable(),
+            searchingResultsMovieCoverTap: searchResultsCollection.rx.itemSelected.asObservable()
         ))
         
         output.loadMovies.subscribe().disposed(by: disposeBag)
@@ -89,7 +90,10 @@ class ComingSoonViewController: UIViewController {
         }
         .disposed(by: disposeBag)
         
-        output.showMovieDetails.drive().disposed(by: disposeBag)
+        Driver.merge(output.showUpcomingMovieDetails,
+                     output.showSearchingMovieDetails)
+        .drive()
+        .disposed(by: disposeBag)
         
         output.error.drive(onNext: { error in
             print(error)
