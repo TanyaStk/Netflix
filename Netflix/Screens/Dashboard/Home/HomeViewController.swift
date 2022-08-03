@@ -159,10 +159,7 @@ class HomeViewController: UIViewController {
             .drive(onNext: { [weak self] movie in
                 self?.latestFilmTitle.text = movie.title
                 
-                guard let url = URL(
-                    string: "https://image.tmdb.org/t/p/original\(movie.poster_path ?? "")"
-                ) else { return }
-                
+                guard let url = URL(string: movie.posterPath) else { return }
                 self?.latestFilmImageView.filmCoverImageView.sd_setImage(with: url)
             })
             .disposed(by: disposeBag)
@@ -172,9 +169,7 @@ class HomeViewController: UIViewController {
                 cellIdentifier: HomeCollectionViewCell.identifier,
                 cellType: HomeCollectionViewCell.self)
             ) { _, data, cell in
-                guard let url = URL(
-                    string: "https://image.tmdb.org/t/p/original\(data.poster_path ?? "")"
-                ) else { return }
+                guard let url = URL(string: data.posterPath) else { return }
                 
                 cell.filmCoverImageView.sd_setImage(with: url)
             }
