@@ -141,7 +141,6 @@ class HomeViewController: UIViewController {
         let output = viewModel.transform(HomeViewModel.Input(
             profileButtonTap: profileButton.rx.tap.asObservable(),
             likeButtonTap: likeButton.rx.tap.asObservable(),
-            isAppLoaded: Observable.just(true),
             movieCoverTap: popularMoviesCollection.rx.itemSelected.asObservable())
         )
         
@@ -172,9 +171,7 @@ class HomeViewController: UIViewController {
             ) { _, data, cell in
                 guard let url = URL(string: data.posterPath) else { return }
                 cell.filmCoverImageView.sd_setImage(with: url)
-                if data.isFavorite {
-                    cell.addGlow()
-                }
+                data.isFavorite ? cell.addGlow() : cell.hideGlow()
             }
             .disposed(by: disposeBag)
         

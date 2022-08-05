@@ -14,7 +14,6 @@ class HomeViewModel: ViewModel {
     struct Input {
         let profileButtonTap: Observable<Void>
         let likeButtonTap: Observable<Void>
-        let isAppLoaded: Observable<Bool>
         let movieCoverTap: Observable<IndexPath>
     }
     

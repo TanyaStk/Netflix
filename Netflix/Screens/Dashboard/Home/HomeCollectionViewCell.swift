@@ -53,4 +53,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
         contentView.layer.shadowRadius = 4.0
         contentView.layer.shadowOpacity = 0.7
     }
+    
+    func hideGlow() {
+        contentView.layer.shadowColor = UIColor.clear.cgColor
+    }
 }
