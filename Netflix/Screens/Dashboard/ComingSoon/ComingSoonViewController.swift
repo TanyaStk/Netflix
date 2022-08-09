@@ -28,6 +28,7 @@ class ComingSoonViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(MoviesCollectionViewCell.self,
                                 forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.backgroundColor = .clear
         collectionView.isHidden = true
         return collectionView
     }()
@@ -36,6 +37,7 @@ class ComingSoonViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(MoviesCollectionViewCell.self,
                                 forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
 
@@ -60,6 +62,8 @@ class ComingSoonViewController: UIViewController {
             isViewLoaded: Observable.just(true),
             searchQuery: navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
             cancelSearching: navigationItem.searchController!.searchBar.rx.cancelButtonClicked.asObservable(),
+            loadUpcomingNextPage: upcomingMoviesCollection.rx.willDisplayCell.asObservable(),
+            loadSearchingNextPage: searchResultsCollection.rx.willDisplayCell.asObservable(),
             upcomingMovieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable(),
             searchingResultsMovieCoverTap: searchResultsCollection.rx.itemSelected.asObservable()
         ))
@@ -101,6 +105,11 @@ class ComingSoonViewController: UIViewController {
         .disposed(by: disposeBag)
     }
     
+    func scrollToTop() {
+        upcomingMoviesCollection.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        searchResultsCollection.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    }
+    
     private func changeVisibility(isUpcomingHidden: Bool, isSearchingResultsHidden: Bool) {
         upcomingMoviesCollection.isHidden = isUpcomingHidden
         searchResultsCollection.isHidden = isSearchingResultsHidden
@@ -140,5 +149,14 @@ class ComingSoonViewController: UIViewController {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+}
+
+extension ComingSoonViewController: UITabBarControllerDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if item.title == "Coming Soon" {
+            print("Coming soon selected")
+//            scrollToTop()
+        }
     }
 }
