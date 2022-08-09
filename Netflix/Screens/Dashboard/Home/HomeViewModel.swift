@@ -12,9 +12,11 @@ import RxCocoa
 class HomeViewModel: ViewModel {
     
     struct Input {
+        let viewDidLoad: Observable<Void>
         let profileButtonTap: Observable<Void>
         let likeButtonTap: Observable<Void>
         let movieCoverTap: Observable<IndexPath>
+        let loadNextPage: Observable<(cell: UICollectionViewCell, at: IndexPath)>
     }
     
     struct Output {
@@ -40,6 +42,7 @@ class HomeViewModel: ViewModel {
     private let userService: UserInfoProvider
     private let keychainUseCase: KeychainUseCase
 
+    private var popularMoviesPage = 1
     private var popularMovies = [Movie]()
     private var latestMovieId = 0
     
@@ -82,11 +85,14 @@ class HomeViewModel: ViewModel {
                     
         let loadLatestMovie = movieService.getLatest()
             .do { getLatestResponse in
-                let latestMovie = LatestMovie(genres: getLatestResponse.genres,
-                            id: getLatestResponse.id,
-                            imagePath: getLatestResponse.poster_path,
-                            title: getLatestResponse.title,
-                            isFavorite: false)
+                let latestMovie = LatestMovie(
+                    genres: getLatestResponse.genres.map({ genre in
+                        genre.name
+                    }),
+                    id: getLatestResponse.id,
+                    imagePath: getLatestResponse.poster_path,
+                    title: getLatestResponse.title,
+                    isFavorite: false)
                 self.latestMovieId = getLatestResponse.id
                 self.showLatestMovieRelay.accept(latestMovie)
             } onError: { [errorRelay] error in
@@ -95,31 +101,23 @@ class HomeViewModel: ViewModel {
             .map { _ in }
             .asObservable()
 
-        let loadPopularMovies = movieService.getPopular().asObservable()
-            .flatMap { moviesResultsResponse -> Observable<Void> in
-                self.popularMovies = moviesResultsResponse.results.map({ response in
-                    Movie(id: response.id,
-                          imagePath: response.poster_path,
-                          isFavorite: false)
-                })
+        let loadFirstPagePopularMovies = self.loadPopularMovies(on: 1)
                 
-                return Observable.from(moviesResultsResponse.results)
-                    .flatMap { movieResponse -> Driver<Void> in
-                        guard let user = try self.keychainUseCase.getUser()
-                        else {
-                            return .never()
-                        }
-                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
-                    }
+        let loadNextPage = input.loadNextPage
+            .flatMap { [popularMovies] (_, indexPath) -> Observable<Void> in
+                if !popularMovies.isEmpty &&
+                    popularMovies[indexPath.row].id ==
+                    popularMovies[popularMovies.count - 2].id {
+                    return self.loadPopularMovies(on: self.popularMoviesPage)
+                } else {
+                    return Observable.just(())
+                }
             }
-            .do(onError: { [errorRelay] error in
-                errorRelay.accept(error.localizedDescription)
-            })
-            .asObservable()
                 
-        let loadMovies = Observable.zip(loadLatestMovie, loadPopularMovies)
-            .map { _ in }
-            .asDriver(onErrorJustReturn: ())
+        let loadMovies = Observable
+                .zip(loadLatestMovie, loadFirstPagePopularMovies, loadNextPage)
+                .map { _ in }
+                .asDriver(onErrorJustReturn: ())
         
         let showLatestMovie = showLatestMovieRelay
             .asDriver(onErrorJustReturn: LatestMovie(genres: [], id: 0, imagePath: "", title: "", isFavorite: false))
@@ -144,6 +142,38 @@ class HomeViewModel: ViewModel {
                       showPopularMovies: showPopularMovies,
                       showMovieDetails: showMovieDetails,
                       error: error)
+    }
+    
+    private func loadPopularMovies(on page: Int) -> Observable<Void> {
+       return self.movieService.getPopular(page: self.popularMoviesPage)
+            .asObservable()
+            .flatMap { moviesResultsResponse -> Observable<Void> in
+                let transformedResults = moviesResultsResponse.results.map({ response in
+                    Movie(id: response.id,
+                          imagePath: response.poster_path,
+                          isFavorite: false)
+                })
+                self.popularMovies += transformedResults
+
+                if moviesResultsResponse.page < moviesResultsResponse.total_pages {
+                    self.popularMoviesPage += 1
+                } else {
+                    self.popularMoviesPage = 1
+                }
+                
+                return Observable.from(moviesResultsResponse.results)
+                    .flatMap { movieResponse -> Driver<Void> in
+                        guard let user = try self.keychainUseCase.getUser()
+                        else {
+                            return .never()
+                        }
+                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
+                    }
+            }
+            .do(onError: { [errorRelay] error in
+                errorRelay.accept(error.localizedDescription)
+            })
+            .asObservable()
     }
 
     private func getStatus(for userId: String, movieId: Int) -> Driver<Void> {
