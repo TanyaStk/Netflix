@@ -18,6 +18,7 @@ public enum UserInfoAPI {
     case favoriteMovies(accountId: String)
     case accountDetails(sessionId: String)
     case markAsFavorite(accountId: String, mediaType: String, mediaId: Int, favorite: Bool)
+    case isFavorite(sessionId: String, movieId: Int)
 }
 
 extension UserInfoAPI: TargetType {
@@ -40,12 +41,14 @@ extension UserInfoAPI: TargetType {
             return "account"
         case .markAsFavorite(let accountId, _, _, _):
             return "account/\(accountId)/favorite"
+        case .isFavorite(_, let movieId):
+            return "movie/\(movieId)/account_states"
         }
     }
     
     public var method: Moya.Method {
         switch self {
-        case .token, .favoriteMovies, .accountDetails:
+        case .token, .favoriteMovies, .accountDetails, .isFavorite:
             return .get
         case .sessionWith, .session, .markAsFavorite:
             return .post
@@ -72,7 +75,7 @@ extension UserInfoAPI: TargetType {
             ]
             return .requestParameters(parameters: parameters,
                                       encoding: URLEncoding.queryString)
-        case .accountDetails(let sessionId), .favoriteMovies(let sessionId):
+        case .accountDetails(let sessionId), .favoriteMovies(let sessionId), .isFavorite(let sessionId, _):
             return .requestParameters(
                 parameters: ["api_key": "\(UserInfoAPI.apiKey)",
                              "session_id": "\(sessionId)"],

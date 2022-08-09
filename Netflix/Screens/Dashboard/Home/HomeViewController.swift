@@ -93,6 +93,7 @@ class HomeViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(HomeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
     
@@ -140,7 +141,6 @@ class HomeViewController: UIViewController {
         let output = viewModel.transform(HomeViewModel.Input(
             profileButtonTap: profileButton.rx.tap.asObservable(),
             likeButtonTap: likeButton.rx.tap.asObservable(),
-            isAppLoaded: Observable.just(true),
             movieCoverTap: popularMoviesCollection.rx.itemSelected.asObservable())
         )
         
@@ -153,8 +153,6 @@ class HomeViewController: UIViewController {
         })
         .disposed(by: disposeBag)
         
-        output.loadMovies.drive().disposed(by: disposeBag)
-        
         output.showLatestMovie
             .drive(onNext: { [weak self] movie in
                 self?.latestFilmTitle.text = movie.title
@@ -164,14 +162,16 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        output.loadMovies.drive().disposed(by: disposeBag)
+        
         output.showPopularMovies
             .drive(self.popularMoviesCollection.rx.items(
                 cellIdentifier: HomeCollectionViewCell.identifier,
                 cellType: HomeCollectionViewCell.self)
             ) { _, data, cell in
                 guard let url = URL(string: data.posterPath) else { return }
-                
                 cell.filmCoverImageView.sd_setImage(with: url)
+                data.isFavorite ? cell.addGlow() : cell.hideGlow()
             }
             .disposed(by: disposeBag)
         

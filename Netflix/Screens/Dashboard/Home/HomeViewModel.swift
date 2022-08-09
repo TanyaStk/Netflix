@@ -10,10 +10,10 @@ import RxSwift
 import RxCocoa
 
 class HomeViewModel: ViewModel {
+    
     struct Input {
         let profileButtonTap: Observable<Void>
         let likeButtonTap: Observable<Void>
-        let isAppLoaded: Observable<Bool>
         let movieCoverTap: Observable<IndexPath>
     }
     
@@ -28,9 +28,11 @@ class HomeViewModel: ViewModel {
         let error: Driver<String>
     }
     
-    private let showLatestMovieSubject = PublishSubject<LatestMovie>()
-    private let showPopularMoviesSubject = PublishSubject<[Movie]>()
-    private let isFavoriteBehaviorRelay = BehaviorRelay(value: false)
+    private let showLatestMovieRelay = BehaviorRelay<LatestMovie>(value: LatestMovie(
+        genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
+    )
+    private let showPopularMoviesRelay = BehaviorRelay<[Movie]>(value: [Movie]())
+    private let isLatestFavoriteBehaviorRelay = BehaviorRelay(value: false)
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: HomeCoordinator
@@ -39,7 +41,7 @@ class HomeViewModel: ViewModel {
     private let keychainUseCase: KeychainUseCase
 
     private var popularMovies = [Movie]()
-    private var movieId = 0
+    private var latestMovieId = 0
     
     init(coordinator: HomeCoordinator,
          movieService: MoviesProvider,
@@ -59,61 +61,75 @@ class HomeViewModel: ViewModel {
             .asDriver(onErrorDriveWith: .never())
                 
         let addToFavorites = input.likeButtonTap
-            .flatMap { [userService, movieId, isFavoriteBehaviorRelay] _ -> Single<MarkAsFavoriteResponse> in
-                isFavoriteBehaviorRelay.accept(!(isFavoriteBehaviorRelay.value))
-                guard let user = try self.keychainUseCase.getUser()
+            .flatMap { [userService, keychainUseCase, isLatestFavoriteBehaviorRelay] _ -> Single<MarkAsFavoriteResponse> in
+                isLatestFavoriteBehaviorRelay.accept(!(isLatestFavoriteBehaviorRelay.value))
+                guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
                 return userService.markAsFavorite(for: user.session_id,
                                                   mediaType: "movie",
-                                                  mediaId: movieId,
-                                                  favorite: isFavoriteBehaviorRelay.value)
+                                                  mediaId: self.latestMovieId,
+                                                  favorite: isLatestFavoriteBehaviorRelay.value)
             }
-            .do(onError: { error in
-                self.errorRelay.accept(error.localizedDescription)
+            .do(onError: { [errorRelay] error in
+                errorRelay.accept(error.localizedDescription)
             })
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
                     
-        let isFavorite = isFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
+        let isLatestMovieFavorite = isLatestFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
                     
-        let zippedRequests = Observable.zip(movieService.getLatest().asObservable(),
-                                            movieService.getPopular().asObservable())
-                    
-        let loadMovies = input.isAppLoaded
-            .flatMap { _ in zippedRequests.materialize() }
-            .do { [unowned self] materializedEvent in
-                switch materializedEvent {
-                case let .next((getLatestResponse, moviesResultsResponse)):
-                    let latestMovie = LatestMovie(id: getLatestResponse.id,
-                                                  imagePath: getLatestResponse.poster_path,
-                                                  title: getLatestResponse.title,
-                                                  isFavorite: isFavoriteBehaviorRelay.value)
-                    self.movieId = latestMovie.id
-                    self.showLatestMovieSubject.onNext(latestMovie)
-                    self.popularMovies = moviesResultsResponse.results.map({ movie in
-                        Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
-                    })
-                    self.showPopularMoviesSubject.onNext(self.popularMovies)
-                case let .error(error):
-                    self.errorRelay.accept(error.localizedDescription)
-                case .completed:
-                    break
-                }
+        let loadLatestMovie = movieService.getLatest()
+            .do { getLatestResponse in
+                let latestMovie = LatestMovie(genres: getLatestResponse.genres,
+                            id: getLatestResponse.id,
+                            imagePath: getLatestResponse.poster_path,
+                            title: getLatestResponse.title,
+                            isFavorite: false)
+                self.latestMovieId = getLatestResponse.id
+                self.showLatestMovieRelay.accept(latestMovie)
+            } onError: { [errorRelay] error in
+                errorRelay.accept(error.localizedDescription)
             }
+            .map { _ in }
+            .asObservable()
+
+        let loadPopularMovies = movieService.getPopular().asObservable()
+            .flatMap { moviesResultsResponse -> Observable<Void> in
+                self.popularMovies = moviesResultsResponse.results.map({ response in
+                    Movie(id: response.id,
+                          imagePath: response.poster_path,
+                          isFavorite: false)
+                })
+                
+                return Observable.from(moviesResultsResponse.results)
+                    .flatMap { movieResponse -> Driver<Void> in
+                        guard let user = try self.keychainUseCase.getUser()
+                        else {
+                            return .never()
+                        }
+                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
+                    }
+            }
+            .do(onError: { [errorRelay] error in
+                errorRelay.accept(error.localizedDescription)
+            })
+            .asObservable()
+                
+        let loadMovies = Observable.zip(loadLatestMovie, loadPopularMovies)
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
         
-        let showLatestMovie = showLatestMovieSubject
-            .asDriver(onErrorJustReturn: LatestMovie(id: 0, imagePath: "", title: "", isFavorite: false))
+        let showLatestMovie = showLatestMovieRelay
+            .asDriver(onErrorJustReturn: LatestMovie(genres: [], id: 0, imagePath: "", title: "", isFavorite: false))
         
-        let showPopularMovies =  showPopularMoviesSubject
+        let showPopularMovies =  showPopularMoviesRelay
             .asDriver(onErrorJustReturn: [Movie]())
         
         let showMovieDetails = input.movieCoverTap
-            .do(onNext: { [weak self] index in
-                self?.coordinator.coordinateToMovieDetails(of: self?.popularMovies[index.item].id ?? 0)
+            .do(onNext: { [coordinator] index in
+                coordinator.coordinateToMovieDetails(of: self.popularMovies[index.row].id)
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
@@ -122,11 +138,27 @@ class HomeViewModel: ViewModel {
         
         return Output(openProfile: openProfile,
                       addLatestToFavorites: addToFavorites,
-                      isLatestMovieFavorite: isFavorite,
+                      isLatestMovieFavorite: isLatestMovieFavorite,
                       loadMovies: loadMovies,
                       showLatestMovie: showLatestMovie,
                       showPopularMovies: showPopularMovies,
                       showMovieDetails: showMovieDetails,
                       error: error)
+    }
+
+    private func getStatus(for userId: String, movieId: Int) -> Driver<Void> {
+        return userService.isFavorite(for: userId, movieId: movieId)
+            .do {  [showPopularMoviesRelay] response in
+                guard let movieIndex = self.popularMovies.firstIndex(where: {$0.id == response.id})
+                else {
+                    return
+                }
+                var updatedMovie = self.popularMovies[movieIndex]
+                updatedMovie.markAs(favorite: response.favorite)
+                self.popularMovies[movieIndex] = updatedMovie
+                showPopularMoviesRelay.accept(self.popularMovies)
+            }
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
     }
 }
