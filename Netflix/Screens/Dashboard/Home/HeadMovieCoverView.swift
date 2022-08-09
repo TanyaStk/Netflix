@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LatestFilmView: UIView {
+class HeadMovieCoverView: UIView {
     
     var filmCoverImageView = UIImageView()
     

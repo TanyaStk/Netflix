@@ -17,16 +17,27 @@ class HomeViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    private lazy var latestFilmImageView = LatestFilmView()
+    private lazy var latestMovieImageView = HeadMovieCoverView()
     
-    private let latestFilmTitle: UILabel = {
+    private let latestMovieTitle: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont(name: FontFamily.Mansalva.regular.name, size: 48)
+        label.font = UIFont(name: FontFamily.Mansalva.regular.name, size: 36)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
+        return label
+    }()
+    
+    private let latestMovieGenres: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         return label
     }()
     
@@ -94,6 +105,7 @@ class HomeViewController: UIViewController {
         collectionView.register(HomeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = false
         return collectionView
     }()
     
@@ -139,9 +151,11 @@ class HomeViewController: UIViewController {
     
     private func bind(to viewModel: HomeViewModel) {
         let output = viewModel.transform(HomeViewModel.Input(
+            viewDidLoad: Observable.just(()),
             profileButtonTap: profileButton.rx.tap.asObservable(),
             likeButtonTap: likeButton.rx.tap.asObservable(),
-            movieCoverTap: popularMoviesCollection.rx.itemSelected.asObservable())
+            movieCoverTap: popularMoviesCollection.rx.itemSelected.asObservable(),
+            loadNextPage: popularMoviesCollection.rx.willDisplayCell.asObservable())
         )
         
         output.openProfile.drive().disposed(by: disposeBag)
@@ -155,10 +169,7 @@ class HomeViewController: UIViewController {
         
         output.showLatestMovie
             .drive(onNext: { [weak self] movie in
-                self?.latestFilmTitle.text = movie.title
-                
-                guard let url = URL(string: movie.posterPath) else { return }
-                self?.latestFilmImageView.filmCoverImageView.sd_setImage(with: url)
+                self?.setupLatestMovieUI(for: movie)
             })
             .disposed(by: disposeBag)
         
@@ -170,7 +181,13 @@ class HomeViewController: UIViewController {
                 cellType: HomeCollectionViewCell.self)
             ) { _, data, cell in
                 guard let url = URL(string: data.posterPath) else { return }
-                cell.filmCoverImageView.sd_setImage(with: url)
+                cell.filmCoverImageView.sd_cancelCurrentImageLoad()
+                cell.filmCoverImageView.sd_setImage(
+                    with: url,
+                    placeholderImage: nil,
+                    options: .highPriority,
+                    context: nil
+                )
                 data.isFavorite ? cell.addGlow() : cell.hideGlow()
             }
             .disposed(by: disposeBag)
@@ -189,9 +206,23 @@ class HomeViewController: UIViewController {
         likeButton.tintColor = status ? Asset.Colors.loginButton.color : .white
     }
     
+    private func setupLatestMovieUI(for movie: LatestMovie) {
+        latestMovieTitle.text = movie.title
+        latestMovieGenres.text = movie.genres.joined(separator: " \u{2022} ")
+        
+        guard let url = URL(string: movie.posterPath) else { return }
+        latestMovieImageView.filmCoverImageView.sd_setImage(
+            with: url,
+            placeholderImage: nil,
+            options: .continueInBackground,
+            context: nil
+        )
+    }
+    
     private func addSubviews() {
-        view.addSubview(latestFilmImageView)
-        view.addSubview(latestFilmTitle)
+        view.addSubview(latestMovieImageView)
+        view.addSubview(latestMovieTitle)
+        view.addSubview(latestMovieGenres)
         view.addSubview(netflixButton)
         view.addSubview(profileButton)
         view.addSubview(likeButton)
@@ -201,16 +232,10 @@ class HomeViewController: UIViewController {
     }
     
     private func setConstraints() {
-        latestFilmImageView.snp.makeConstraints { make in
+        latestMovieImageView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.6)
-        }
-        
-        latestFilmTitle.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.7)
-            make.height.equalToSuperview().multipliedBy(0.2)
-            make.center.equalToSuperview()
         }
         
         netflixButton.snp.makeConstraints { make in
@@ -226,18 +251,31 @@ class HomeViewController: UIViewController {
             make.right.equalToSuperview().offset(-8)
         }
         
+        latestMovieTitle.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.7)
+            make.height.equalToSuperview().multipliedBy(0.1)
+            make.center.equalToSuperview()
+        }
+        
         likeButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.centerY.equalTo(latestFilmImageView.snp.bottom)
+            make.centerY.equalTo(latestMovieImageView.snp.bottom)
             make.left.equalToSuperview().multipliedBy(0.2)
         }
         
         playButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.centerY.equalTo(latestFilmImageView.snp.bottom)
+            make.centerY.equalTo(latestMovieImageView.snp.bottom)
             make.centerX.equalToSuperview()
+        }
+        
+        latestMovieGenres.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(latestMovieTitle.snp.bottom).offset(-8)
+            make.bottom.equalTo(playButton.snp.top).offset(-8)
         }
         
         popularMoviesLabel.snp.makeConstraints { make in
@@ -254,3 +292,11 @@ class HomeViewController: UIViewController {
         }
     }
 }
+
+//extension HomeViewController: UICollectionViewDelegate {
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//            if indexPath.row == movies.count - 2 {
+//                loadMovies()
+//            }
+//        }
+//}
