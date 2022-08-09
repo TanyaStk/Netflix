@@ -10,12 +10,16 @@ import Foundation
 struct Movie: Codable {
     var id: Int
     var posterPath: String
-    var isFavorite: Bool?
+    var isFavorite: Bool
     
     init(id: Int, imagePath: String?, isFavorite: Bool?) {
         self.id = id
         let imagePath = imagePath ?? ""
         self.posterPath = "https://image.tmdb.org/t/p/original\(imagePath)"
         self.isFavorite = isFavorite ?? false
+    }
+    
+    mutating func markAs(favorite: Bool) {
+        self.isFavorite = favorite
     }
 }

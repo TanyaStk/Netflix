@@ -22,6 +22,7 @@ protocol UserInfo {
                         mediaType: String,
                         mediaId: Int,
                         favorite: Bool) -> Single<MarkAsFavoriteResponse>
+    func isFavorite(for sessionId: String, movieId: Int) -> Single<IsFavoriteResponse>
 }
 
 final class UserInfoProvider: UserInfo {
@@ -72,6 +73,12 @@ final class UserInfoProvider: UserInfo {
         )
         .catchResponseError(NetworkingErrorResponse.self)
         .map(MarkAsFavoriteResponse.self)
+    }
+    
+    func isFavorite(for sessionId: String, movieId: Int) -> Single<IsFavoriteResponse> {
+        return provider.rx.request(.isFavorite(sessionId: sessionId, movieId: movieId))
+            .catchResponseError(NetworkingErrorResponse.self)
+            .map(IsFavoriteResponse.self)
     }
 }
 
