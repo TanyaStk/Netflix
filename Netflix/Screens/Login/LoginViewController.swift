@@ -28,6 +28,11 @@ class LoginViewController: UIViewController {
     
     private let loginField: UITextField = {
         let textField = UITextField()
+        
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: textField.frame.height))
+        textField.leftView = paddingView
+        textField.leftViewMode = UITextField.ViewMode.always
+        
         textField.backgroundColor = Asset.Colors.inputFields.color
         textField.layer.cornerRadius = 8
         textField.textColor = Asset.Colors.loginTexts.color
@@ -40,8 +45,22 @@ class LoginViewController: UIViewController {
         return textField
     }()
     
+    private let showPasswordButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Show", for: .normal)
+        button.setTitleColor(Asset.Colors.loginTexts.color, for: .normal)
+        button.tintColor = .clear
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -16, bottom: 0, right: 8)
+        return button
+    }()
+    
     private let passwordField: UITextField = {
         let textField = UITextField()
+        
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: textField.frame.height))
+        textField.leftView = paddingView
+        textField.leftViewMode = UITextField.ViewMode.always
+
         textField.backgroundColor = Asset.Colors.inputFields.color
         textField.layer.cornerRadius = 8
         textField.textColor = Asset.Colors.loginTexts.color
@@ -110,8 +129,16 @@ class LoginViewController: UIViewController {
         let output = viewModel.transform(LoginViewModel.Input(
             login: loginField.rx.text.orEmpty.asObservable(),
             password: passwordField.rx.text.orEmpty.asObservable(),
-            loginButtonTap: loginButton.rx.tap.asObservable()
+            loginButtonTap: loginButton.rx.tap.asObservable(),
+            showPasswordButtonTap: showPasswordButton.rx.tap.asObservable()
         ))
+              
+        output.changePasswordVisibility.drive().disposed(by: disposeBag)
+        
+        output.isPasswordHidden.drive { [weak self] status in
+            self?.passwordField.isSecureTextEntry = status
+        }
+        .disposed(by: disposeBag)
         
         output.isLoginButtonEnabled
             .drive(loginButton.rx.isEnabled)
@@ -186,6 +213,9 @@ class LoginViewController: UIViewController {
         view.addSubview(logoImage)
         view.addSubview(stackView)
         view.addSubview(animationView)
+        
+        passwordField.rightView = showPasswordButton
+        passwordField.rightViewMode = .always
         
         stackView.addArrangedSubview(loginField)
         stackView.addArrangedSubview(passwordField)
