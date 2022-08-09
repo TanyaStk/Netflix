@@ -186,7 +186,7 @@ class ProfileViewController: UIViewController {
             backButtonTap: closeButton.rx.tap.asObservable(),
             logoutButtonTap: logoutButton.rx.tap.asObservable()))
         
-        output.userDetails.drive(onNext: { [weak self] user in
+        output.accountDetails.drive(onNext: { [weak self] user in
             self?.nameLabel.text = user.name
             self?.emailLabel.text = user.username
         })

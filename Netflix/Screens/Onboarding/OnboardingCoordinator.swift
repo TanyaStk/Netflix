@@ -26,7 +26,7 @@ class OnboardingCoordinator {
     }
     
     func coordinateToLogin() {
-        navigationController.dismiss(animated: false)
+        navigationController.dismiss(animated: true)
         
         let loginCoordinator = LoginCoordinator(navigationController: navigationController)
         loginCoordinator.start()
