@@ -104,10 +104,10 @@ class HomeViewModel: ViewModel {
         let loadFirstPagePopularMovies = self.loadPopularMovies(on: 1)
                 
         let loadNextPage = input.loadNextPage
-            .flatMap { [popularMovies] (_, indexPath) -> Observable<Void> in
+            .flatMapLatest { [popularMovies] (_, indexPath) -> Observable<Void> in
                 if !popularMovies.isEmpty &&
                     popularMovies[indexPath.row].id ==
-                    popularMovies[popularMovies.count - 2].id {
+                    popularMovies[popularMovies.count - 1].id {
                     return self.loadPopularMovies(on: self.popularMoviesPage)
                 } else {
                     return Observable.just(())
