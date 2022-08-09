@@ -17,7 +17,7 @@ class MovieDetailsViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    private lazy var movieCoverImageView = LatestFilmView()
+    private lazy var movieCoverImageView = HeadMovieCoverView()
     
     private let movieTitleLabel: UILabel = {
         let label = UILabel()
