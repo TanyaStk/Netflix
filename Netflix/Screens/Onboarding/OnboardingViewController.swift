@@ -20,14 +20,21 @@ class OnboardingViewController: UIViewController {
     private let secondPageViewController = SecondPageViewController()
     
     private lazy var pageController: UIPageViewController = {
-        pageController = UIPageViewController(transitionStyle: .scroll,
+        let pageController = UIPageViewController(transitionStyle: .scroll,
                                               navigationOrientation: .horizontal, options: nil)
         pageController.dataSource = self
         pageController.delegate = self
-        addChild(pageController)
         return pageController
     }()
     
+    private lazy var pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.numberOfPages = controllers.count
+        pageControl.currentPageIndicatorTintColor = Asset.Colors.onboardingButtons.color
+        pageControl.pageIndicatorTintColor = Asset.Colors.loginTexts.color
+        return pageControl
+    }()
+
     private var controllers = [UIViewController]()
     
     private let backgroundImageView = UIImageView(image: UIImage(named: Asset.Assets.onboarding.name))
@@ -54,7 +61,7 @@ class OnboardingViewController: UIViewController {
         let output = viewModel.transform(OnboardingViewModel.Input(
             signInButtonTap: signInButton.rx.tap.asObservable(),
             signUpButtonTap: secondPageViewController.signUpButton.rx.tap.asObservable()))
-
+        
         output.signInButtonTap.drive().disposed(by: disposeBag)
         output.signUpButtonTap.drive().disposed(by: disposeBag)
     }
@@ -68,11 +75,12 @@ class OnboardingViewController: UIViewController {
     private func addSubviews() {
         view.addSubview(backgroundImageView)
         view.addSubview(signInButton)
-        addChild(pageController)
         view.addSubview(pageController.view)
         
         controllers.append(firstPageViewController)
         controllers.append(secondPageViewController)
+        
+        view.addSubview(pageControl)
         
         if let firstViewController = controllers.first {
             pageController.setViewControllers([firstViewController], direction: .forward, animated: false)
@@ -87,13 +95,19 @@ class OnboardingViewController: UIViewController {
         signInButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.bottom.equalToSuperview().offset(-60)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         pageController.view.snp.makeConstraints { make in
             make.top.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.8)
             make.width.equalToSuperview()
-            make.bottom.equalTo(signInButton.snp_topMargin)
+        }
+        
+        pageControl.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalTo(pageController.view.snp.bottom)
+            make.bottom.equalTo(signInButton.snp.top)
         }
     }
 }
@@ -106,7 +120,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
               index > 0 else {
             return nil
         }
-        
+
         return controllers[index - 1]
     }
     
@@ -116,7 +130,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
               index < controllers.count - 1 else {
             return nil
         }
-        
+
         return controllers[index + 1]
     }
 }
