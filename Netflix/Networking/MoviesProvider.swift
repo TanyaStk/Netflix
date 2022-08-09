@@ -11,13 +11,8 @@ import Moya
 
 protocol Movies {
     func getLatest() -> Single<GetLatestResponse>
-<<<<<<< HEAD
-    func getPopular() -> Single<MoviesResultsResponse>
     func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
-=======
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
-    func getUpcoming() -> Single<MoviesResultsResponse>
->>>>>>> develop
     func getDetails(movieId: String) -> Single<MovieDetailsResponse>
     func search(for movie: String) -> Single<MoviesResultsResponse>
 }
