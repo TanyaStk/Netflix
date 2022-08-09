@@ -14,15 +14,13 @@
 		5A2F509D2892BD4E0074524E /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2F509C2892BD4E0074524E /* MovieDetailsViewModel.swift */; };
 		5A31D909283E138D006AEEAA /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5A31D908283E138D006AEEAA /* swiftgen.yml */; };
 		5A3A1685289A8EF200FE6D34 /* LatestMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A1684289A8EF200FE6D34 /* LatestMovie.swift */; };
-<<<<<<< HEAD
-		5A3A168A289AC83800FE6D34 /* AccountDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A1689289AC83800FE6D34 /* AccountDetails.swift */; };
-=======
-		5A3A168C289B9C7600FE6D34 /* IsFavoriteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A168B289B9C7600FE6D34 /* IsFavoriteResponse.swift */; };
->>>>>>> home_pagination
 		5A3DE84B28883E1C001B7080 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3DE84A28883E1C001B7080 /* OnboardingViewModel.swift */; };
 		5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276B2840D01C00694205 /* FirstPageViewController.swift */; };
 		5A51276E2840D05500694205 /* SecondPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A51276D2840D05500694205 /* SecondPageViewController.swift */; };
 		5A61192F283FA6EA00F4A86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */; };
+		5A6666A628A29EF900232FCA /* IsFavoriteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6666A528A29EF900232FCA /* IsFavoriteResponse.swift */; };
+		5A6666A828A29F2400232FCA /* AccountDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6666A728A29F2400232FCA /* AccountDetails.swift */; };
+		5A6666AA28A29F4500232FCA /* HeadMovieCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6666A928A29F4500232FCA /* HeadMovieCoverView.swift */; };
 		5A6778E42889586E0005A9C0 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6778E32889586E0005A9C0 /* ViewModel.swift */; };
 		5A6DA037286C7218002D9D3A /* AuthenticationTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DA036286C7218002D9D3A /* AuthenticationTokenResponse.swift */; };
 		5A6DA039286C77AD002D9D3A /* CreateSessionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DA038286C77AD002D9D3A /* CreateSessionResponse.swift */; };
@@ -114,15 +112,13 @@
 		5A2F509C2892BD4E0074524E /* MovieDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewModel.swift; sourceTree = "<group>"; };
 		5A31D908283E138D006AEEAA /* swiftgen.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = swiftgen.yml; sourceTree = "<group>"; };
 		5A3A1684289A8EF200FE6D34 /* LatestMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestMovie.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		5A3A1689289AC83800FE6D34 /* AccountDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetails.swift; sourceTree = "<group>"; };
-=======
-		5A3A168B289B9C7600FE6D34 /* IsFavoriteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsFavoriteResponse.swift; sourceTree = "<group>"; };
->>>>>>> home_pagination
 		5A3DE84A28883E1C001B7080 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		5A51276B2840D01C00694205 /* FirstPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
 		5A51276D2840D05500694205 /* SecondPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageViewController.swift; sourceTree = "<group>"; };
 		5A61192E283FA6EA00F4A86F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5A6666A528A29EF900232FCA /* IsFavoriteResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsFavoriteResponse.swift; sourceTree = "<group>"; };
+		5A6666A728A29F2400232FCA /* AccountDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetails.swift; sourceTree = "<group>"; };
+		5A6666A928A29F4500232FCA /* HeadMovieCoverView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeadMovieCoverView.swift; sourceTree = "<group>"; };
 		5A6778E32889586E0005A9C0 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		5A6DA036286C7218002D9D3A /* AuthenticationTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTokenResponse.swift; sourceTree = "<group>"; };
 		5A6DA038286C77AD002D9D3A /* CreateSessionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSessionResponse.swift; sourceTree = "<group>"; };
@@ -256,8 +252,8 @@
 				5AA01373288E98B6007C0E59 /* MovieDetailsResponse.swift */,
 				5AA01375288EA50C007C0E59 /* MoviesResultsResponse.swift */,
 				5AA01377288EA538007C0E59 /* MovieResponse.swift */,
+				5A6666A528A29EF900232FCA /* IsFavoriteResponse.swift */,
 				5AE521EC2897BB2B00B4EC74 /* MarkAsFavoriteResponse.swift */,
-				5A3A168B289B9C7600FE6D34 /* IsFavoriteResponse.swift */,
 			);
 			path = ResponseModels;
 			sourceTree = "<group>";
@@ -325,7 +321,7 @@
 		5ACDE36C287DE37000209D4C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				5A3A1689289AC83800FE6D34 /* AccountDetails.swift */,
+				5A6666A728A29F2400232FCA /* AccountDetails.swift */,
 				5ACDE36D287DE39100209D4C /* ProfileViewController.swift */,
 				5A736D302880AD270031CC10 /* ProfileCoordinator.swift */,
 				5AE29EB22893F5B50030333B /* ProfileViewModel.swift */,
@@ -357,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				5AB33C0D28479B240027F483 /* HomeCollectionViewCell.swift */,
+				5A6666A928A29F4500232FCA /* HeadMovieCoverView.swift */,
 				5A3A1684289A8EF200FE6D34 /* LatestMovie.swift */,
 				5AFAAFC52840DD5A00F11183 /* HomeViewController.swift */,
 				5AEACBC6284DD282005DAFEE /* HeadMovieCoverView.swift */,
@@ -803,10 +800,12 @@
 				5AA01374288E98B6007C0E59 /* MovieDetailsResponse.swift in Sources */,
 				5A6778E42889586E0005A9C0 /* ViewModel.swift in Sources */,
 				5AFAAFCC2840E29E00F11183 /* OnboardingCoordinator.swift in Sources */,
+				5A6666AA28A29F4500232FCA /* HeadMovieCoverView.swift in Sources */,
 				95210FD6283BA0F4003D059D /* AppDelegate.swift in Sources */,
 				5A07C7A228698FE300669682 /* User.swift in Sources */,
 				5A736D27288030370031CC10 /* Coordinator.swift in Sources */,
 				5A71C781283E462D00DA7B7C /* OnboardingViewController.swift in Sources */,
+				5A6666A828A29F2400232FCA /* AccountDetails.swift in Sources */,
 				5ACDE36B287D755000209D4C /* MovieDetailsViewController.swift in Sources */,
 				5A3DE84B28883E1C001B7080 /* OnboardingViewModel.swift in Sources */,
 				5AE171452872DB7200202F6A /* NetworkingErrorResponse.swift in Sources */,
@@ -814,7 +813,6 @@
 				5A736D312880AD270031CC10 /* ProfileCoordinator.swift in Sources */,
 				5AA01370288E9471007C0E59 /* MoviesProvider.swift in Sources */,
 				5A736D342880B15C0031CC10 /* MovieDetailsCoordinator.swift in Sources */,
-				5A3A168A289AC83800FE6D34 /* AccountDetails.swift in Sources */,
 				5A736D2D2880AA960031CC10 /* ComingSoonCoordinator.swift in Sources */,
 				5AE171432872DB6500202F6A /* NetworkingError.swift in Sources */,
 				5AB33C0E28479B240027F483 /* HomeCollectionViewCell.swift in Sources */,
@@ -827,7 +825,7 @@
 				5A6DA039286C77AD002D9D3A /* CreateSessionResponse.swift in Sources */,
 				5AE29EB12893F5990030333B /* AccountDetailsResponse.swift in Sources */,
 				95210FD8283BA0F4003D059D /* SceneDelegate.swift in Sources */,
-				5A3A168C289B9C7600FE6D34 /* IsFavoriteResponse.swift in Sources */,
+				5A6666A628A29EF900232FCA /* IsFavoriteResponse.swift in Sources */,
 				5AF42FB0286C4A970039174E /* UserInfoAPI.swift in Sources */,
 				5AE29EB9289401CC0030333B /* FavoritesViewModel.swift in Sources */,
 				5A51276C2840D01C00694205 /* FirstPageViewController.swift in Sources */,
