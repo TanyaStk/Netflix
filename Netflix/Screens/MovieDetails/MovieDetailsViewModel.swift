@@ -14,6 +14,7 @@ class MovieDetailsViewModel: ViewModel {
         let isViewLoaded: Observable<Bool>
         let backButtonTap: Observable<Void>
         let likeButtonTap: Observable<Void>
+        let playButtonTap: Observable<Void>
     }
     
     struct Output {
@@ -21,10 +22,13 @@ class MovieDetailsViewModel: ViewModel {
         let dismissDetails: Driver<Void>
         let addToFavorites: Driver<Void>
         let isFavorite: Driver<Bool>
+        let loadVideoKey: Driver<Void>
+        let videoKey: Driver<String>
         let error: Driver<String>
     }
     
     private let isFavoriteBehaviorRelay = BehaviorRelay(value: false)
+    private let movieVideoKeyRelay = BehaviorRelay(value: "")
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: MovieDetailsCoordinator
@@ -32,6 +36,8 @@ class MovieDetailsViewModel: ViewModel {
     private let userService: UserInfoProvider
     private let keychainUseCase: KeychainUseCase
     private let movieId: Int
+    
+    private var hasVideo = false
     
     init(coordinator: MovieDetailsCoordinator,
          movieService: MoviesProvider,
@@ -47,15 +53,15 @@ class MovieDetailsViewModel: ViewModel {
     
     func transform(_ input: Input) -> Output {
         let movieDetails = input.isViewLoaded
-            .flatMap { [unowned self] _ in
-                self.movieService.getDetails(movieId: String(self.movieId)).map { movie in
-                    MovieDetails(id: movie.id,
-                                 overview: movie.overview,
-                                 imagePath: movie.poster_path,
-                                 releaseDate: movie.release_date,
-                                 runtime: movie.runtime,
-                                 title: movie.title,
-                                 voteAverage: movie.vote_average)
+            .flatMapLatest { [movieService] _ in
+                movieService.getDetails(for: self.movieId).map { movie -> MovieDetails in
+                    return MovieDetails(id: movie.id,
+                                        overview: movie.overview,
+                                        imagePath: movie.poster_path,
+                                        releaseDate: movie.release_date,
+                                        runtime: movie.runtime,
+                                        title: movie.title,
+                                        voteAverage: movie.vote_average)
                 }
             }
             .do(onError: { [weak self] error in
@@ -68,6 +74,17 @@ class MovieDetailsViewModel: ViewModel {
                                                       runtime: 0,
                                                       title: "",
                                                       voteAverage: 0))
+                
+        let loadVideoKey = input.playButtonTap
+            .flatMapLatest { _ -> Driver<Void> in
+                self.getVideoKey()
+            }
+            .do(onError: { [weak self] error in
+                self?.errorRelay.accept(error.localizedDescription)
+            })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
+        
         let dismissDetails = input.backButtonTap
             .do { [weak self] _ in
                 self?.coordinator.dismiss()
@@ -93,6 +110,7 @@ class MovieDetailsViewModel: ViewModel {
             .asDriver(onErrorJustReturn: ())
 
         let isFavorite = isFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
+        let videoKey = movieVideoKeyRelay.asDriver(onErrorJustReturn: "")
         
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
         
@@ -100,6 +118,22 @@ class MovieDetailsViewModel: ViewModel {
                       dismissDetails: dismissDetails,
                       addToFavorites: addToFavorites,
                       isFavorite: isFavorite,
+                      loadVideoKey: loadVideoKey,
+                      videoKey: videoKey,
                       error: error)
+    }
+    
+    private func getVideoKey() -> Driver<Void> {
+        return movieService.getVideos(for: self.movieId)
+            .do(onSuccess: { getVideosResponse in
+                guard let videoKey = getVideosResponse.results.first?.key else {
+                    return
+                }
+                self.movieVideoKeyRelay.accept(videoKey)
+            }, onError: { error in
+                self.errorRelay.accept(error.localizedDescription)
+            })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
     }
 }
