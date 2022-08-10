@@ -13,17 +13,13 @@ protocol Movies {
     func getLatest() -> Single<GetLatestResponse>
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
     func getUpcoming() -> Single<MoviesResultsResponse>
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse>
+    func getDetails(for movieId: Int) -> Single<MovieDetailsResponse>
     func search(for movie: String) -> Single<MoviesResultsResponse>
+    func getVideos(for movieId: Int) -> Single<GetVideosResponse>
 }
 
 final class MoviesProvider: Movies {
-    
-//        let plugin: PluginType = NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))
-//
-//        lazy var provider = MoyaProvider<MoviesAPI>(plugins: [plugin])
-//
-    
+
     private let provider = MoyaProvider<MoviesAPI>()
 
     func getLatest() -> Single<GetLatestResponse> {
@@ -44,7 +40,7 @@ final class MoviesProvider: Movies {
             .map(MoviesResultsResponse.self)
     }
     
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse> {
+    func getDetails(for movieId: Int) -> Single<MovieDetailsResponse> {
         return provider.rx.request(.details(movieId: movieId))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MovieDetailsResponse.self)
@@ -54,5 +50,11 @@ final class MoviesProvider: Movies {
         return provider.rx.request(.search(query: movie))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
+    }
+    
+    func getVideos(for movieId: Int) -> Single<GetVideosResponse> {
+        return provider.rx.request(.videos(movieId: movieId))
+            .catchResponseError(NetworkingErrorResponse.self)
+            .map(GetVideosResponse.self)
     }
 }

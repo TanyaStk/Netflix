@@ -14,5 +14,6 @@ struct MovieDetailsResponse: Codable {
     let release_date: String
     let runtime: Int
     let title: String
+    let video: Bool
     let vote_average: Float
 }

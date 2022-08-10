@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+struct GetVideosResponse: Codable {
+    let id: Int
+    let results: [GetVideosResult]
+}
+
+struct GetVideosResult: Codable {
+    let key: String
+}
