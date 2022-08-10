@@ -22,7 +22,7 @@ class ComingSoonViewModel: ViewModel {
     }
 
     struct Output {
-        let loadMovies: Observable<Void>
+        let loadMovies: Driver<Void>
         let showUpcomingMovies: Driver<[Movie]>
         let showSearchingResults: Driver<[Movie]>
         let showUpcomingMovieDetails: Driver<Void>
@@ -31,8 +31,8 @@ class ComingSoonViewModel: ViewModel {
         let error: Driver<String>
     }
 
-    private let upcomingMoviesSubject = BehaviorRelay<[Movie]>(value: [Movie]())
-    private let searchingResultsSubject = BehaviorRelay<[Movie]>(value: [Movie]())
+    private let upcomingMoviesRelay = BehaviorRelay<[Movie]>(value: [Movie]())
+    private let searchingResultsRelay = BehaviorRelay<[Movie]>(value: [Movie]())
     private let isHiddenUpcomingBehaviorRelay = BehaviorRelay(value: false)
     private let errorRelay = PublishRelay<String>()
 
@@ -64,17 +64,15 @@ class ComingSoonViewModel: ViewModel {
             }
         
         let loadNextPageOfUpcomingMovies = input.loadUpcomingNextPage
-            .flatMapFirst {[upcomingMovies] (_, indexPath) -> Driver<Void> in
-                print(indexPath.row)
-                if !upcomingMovies.isEmpty &&
-                    upcomingMovies[indexPath.row].id == upcomingMovies[upcomingMovies.count - 1].id {
+            .flatMapFirst { (_, indexPath) -> Observable<Void> in
+                if !self.upcomingMovies.isEmpty &&
+                    self.upcomingMovies[indexPath.item].id ==
+                    self.upcomingMovies[self.upcomingMovies.count - 3].id {
                     return self.loadUpcoming(on: self.upcomingPage)
                 } else {
                     return .just(())
                 }
             }
-        
-        let showUpcomingMovies = upcomingMoviesSubject.asDriver(onErrorJustReturn: [Movie]())
         
         let loadSearchResults = input.searchQuery
             .distinctUntilChanged()
@@ -90,7 +88,7 @@ class ComingSoonViewModel: ViewModel {
                     self.searchingResults = searchingResultsResponse.results.map { movie in
                         Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
                     }
-                    self.searchingResultsSubject.accept(self.searchingResults)
+                    self.searchingResultsRelay.accept(self.searchingResults)
                 case let .error(error):
                     self.errorRelay.accept(error.localizedDescription)
                 case .completed:
@@ -100,22 +98,27 @@ class ComingSoonViewModel: ViewModel {
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
         
-        let showSearchingResults = searchingResultsSubject.asDriver(onErrorJustReturn: [Movie]())
+        let showSearchingResults = searchingResultsRelay.asDriver(onErrorJustReturn: [Movie]())
         
-        let loadMovies = Observable.merge(loadFirstPageOfUpcomingMovies.asObservable(),
-                                          loadNextPageOfUpcomingMovies.asObservable(),
-                                          loadSearchResults.asObservable())
+        let loadMovies = Observable
+            .zip(loadFirstPageOfUpcomingMovies.asObservable(),
+                 loadNextPageOfUpcomingMovies,
+                 loadSearchResults.asObservable())
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
+        
+        let showUpcomingMovies = upcomingMoviesRelay.asDriver(onErrorJustReturn: [Movie]())
         
         let showUpcomingMovieDetails = input.upcomingMovieCoverTap
             .do(onNext: { index in
-                self.coordinator.coordinateToMovieDetails(of: self.upcomingMovies[index.row].id)
+                self.coordinator.coordinateToMovieDetails(of: self.upcomingMovies[index.item].id)
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
         
         let showSearchingMovieDetails = input.searchingResultsMovieCoverTap
             .do(onNext: { index in
-                self.coordinator.coordinateToMovieDetails(of: self.searchingResults[index.row].id)
+                self.coordinator.coordinateToMovieDetails(of: self.searchingResults[index.item].id)
             })
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
@@ -143,7 +146,6 @@ class ComingSoonViewModel: ViewModel {
                           isFavorite: false)
                 })
                 self.upcomingMovies += transformedResults
-                self.upcomingMoviesSubject.accept(self.upcomingMovies)
                 
                 if moviesResultsResponse.page < moviesResultsResponse.total_pages {
                     self.upcomingPage += 1
@@ -152,17 +154,34 @@ class ComingSoonViewModel: ViewModel {
                 }
                 
                 return Observable.from(moviesResultsResponse.results)
-                    .flatMap { movieResponse -> Driver<Void> in
+                    .flatMap { movieResponse -> Observable<Void> in
                         guard let user = try self.keychainUseCase.getUser()
                         else {
                             return .never()
                         }
-//                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
+                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
                     }
             }
             .do(onError: { [errorRelay] error in
                 errorRelay.accept(error.localizedDescription)
             })
-                .asObservable()
+            .asObservable()
     }
+    
+    private func getStatus(for userId: String, movieId: Int) -> Observable<Void> {
+        return userService.isFavorite(for: userId, movieId: movieId)
+            .do {  [upcomingMoviesRelay] response in
+                guard let movieIndex = self.upcomingMovies.firstIndex(where: {$0.id == response.id})
+                else {
+                    return
+                }
+                var updatedMovie = self.upcomingMovies[movieIndex]
+                updatedMovie.markAs(favorite: response.favorite)
+                self.upcomingMovies[movieIndex] = updatedMovie
+                upcomingMoviesRelay.accept(self.upcomingMovies)
+            }
+            .map { _ in }
+            .asObservable()
+    }
+
 }

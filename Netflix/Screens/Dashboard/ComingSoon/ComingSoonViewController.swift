@@ -68,7 +68,7 @@ class ComingSoonViewController: UIViewController {
             searchingResultsMovieCoverTap: searchResultsCollection.rx.itemSelected.asObservable()
         ))
         
-        output.loadMovies.subscribe().disposed(by: disposeBag)
+        output.loadMovies.drive().disposed(by: disposeBag)
         
         output.showUpcomingMovies.drive(self.upcomingMoviesCollection.rx.items(
             cellIdentifier: MoviesCollectionViewCell.identifier,
@@ -76,6 +76,8 @@ class ComingSoonViewController: UIViewController {
         ) { _, data, cell in
             guard let url = URL(string: data.posterPath) else { return }
             cell.filmCoverImageView.sd_setImage(with: url)
+            
+            data.isFavorite ? cell.addGlow() : cell.hideGlow()
         }
         .disposed(by: disposeBag)
         
@@ -131,7 +133,7 @@ class ComingSoonViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 8
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
