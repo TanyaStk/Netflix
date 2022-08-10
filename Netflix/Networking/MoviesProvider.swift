@@ -14,16 +14,11 @@ protocol Movies {
     func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
     func getDetails(movieId: String) -> Single<MovieDetailsResponse>
-    func search(for movie: String) -> Single<MoviesResultsResponse>
+    func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse>
 }
 
 final class MoviesProvider: Movies {
-    
-//        let plugin: PluginType = NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))
-//
-//        lazy var provider = MoyaProvider<MoviesAPI>(plugins: [plugin])
-//
-    
+
     private let provider = MoyaProvider<MoviesAPI>()
 
     func getLatest() -> Single<GetLatestResponse> {
@@ -50,8 +45,8 @@ final class MoviesProvider: Movies {
             .map(MovieDetailsResponse.self)
     }
     
-    func search(for movie: String) -> Single<MoviesResultsResponse> {
-        return provider.rx.request(.search(query: movie))
+    func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse> {
+        return provider.rx.request(.search(query: movie, page: page))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
     }
