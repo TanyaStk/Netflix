@@ -19,7 +19,7 @@ class FavoritesViewModel: ViewModel {
     }
     
     struct Output {
-        let showingTrigger: Observable<Void>
+        let showingTrigger: Driver<Void>
         let showFavoriteMovies: Driver<[Movie]>
         let switchToComingSoon: Driver<Void>
         let isFavoritesEmpty: Driver<Bool>
@@ -82,6 +82,7 @@ class FavoritesViewModel: ViewModel {
             .asDriver(onErrorJustReturn: ())
                 
         var dislikedMovieId = 0
+                
         let deleteFromFavorites = input.deleteFromFavorites
             .flatMap { [service, keychainUseCase, showFavoriteMoviesRelay] movieIndex -> Single<AccountDetailsResponse> in
                 guard let user = try keychainUseCase.getUser()
@@ -90,6 +91,7 @@ class FavoritesViewModel: ViewModel {
                 }
                 dislikedMovieId = self.favoriteMovies[movieIndex.row].id
                 self.favoriteMovies.remove(at: movieIndex.row)
+                print(self.favoriteMovies)
                 showFavoriteMoviesRelay.accept(self.favoriteMovies)
                 return service.getAccountDetails(with: user.session_id)
             }
@@ -121,9 +123,7 @@ class FavoritesViewModel: ViewModel {
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
         
-        let showingTrigger = Observable.merge(loadFavoriteMovies.asObservable(),
-                                              deleteFromFavorites.asObservable(),
-                                              showMovieDetails.asObservable())
+        let showingTrigger = Driver.merge(loadFavoriteMovies, showMovieDetails, deleteFromFavorites)
                     
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
                     
