@@ -27,7 +27,7 @@ class FavoritesViewModel: ViewModel {
         let error: Driver<String>
     }
     
-    private let showFavoriteMoviesSubject = PublishSubject<[Movie]>()
+    private let showFavoriteMoviesRelay = BehaviorRelay(value: [Movie]())
     private let isFavoritesEmptyRelay = BehaviorRelay<Bool>(value: true)
     private let errorRelay = PublishRelay<String>()
     
@@ -60,7 +60,7 @@ class FavoritesViewModel: ViewModel {
                     self.favoriteMovies = moviesResultsResponse.results.map({ movie in
                         Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: true)
                     })
-                    self.showFavoriteMoviesSubject.onNext(self.favoriteMovies)
+                    self.showFavoriteMoviesRelay.accept(self.favoriteMovies)
                     if !self.favoriteMovies.isEmpty {
                         self.isFavoritesEmptyRelay.accept(false)
                     }
@@ -73,7 +73,7 @@ class FavoritesViewModel: ViewModel {
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
         
-        let showFavoriteMovies = showFavoriteMoviesSubject.asDriver(onErrorJustReturn: [Movie]())
+        let showFavoriteMovies = showFavoriteMoviesRelay.asDriver(onErrorJustReturn: [Movie]())
 
         let switchToComingSoon = input.switchButtonTap
             .do(onNext: { [coordinator] in
@@ -81,19 +81,30 @@ class FavoritesViewModel: ViewModel {
             })
             .asDriver(onErrorJustReturn: ())
                 
+        var dislikedMovieId = 0
         let deleteFromFavorites = input.deleteFromFavorites
-            .flatMap { [service] movieIndex -> Single<MarkAsFavoriteResponse> in
-                guard let user = try self.keychainUseCase.getUser()
+            .flatMap { [service, keychainUseCase, showFavoriteMoviesRelay] movieIndex -> Single<AccountDetailsResponse> in
+                guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
-                let dislikedMovieId = self.favoriteMovies[movieIndex.row].id
+                dislikedMovieId = self.favoriteMovies[movieIndex.row].id
                 self.favoriteMovies.remove(at: movieIndex.row)
-                self.showFavoriteMoviesSubject.onNext(self.favoriteMovies)
-                return service.markAsFavorite(for: user.session_id,
-                                              mediaType: "movie",
-                                              mediaId: dislikedMovieId,
-                                              favorite: false)
+                showFavoriteMoviesRelay.accept(self.favoriteMovies)
+                return service.getAccountDetails(with: user.session_id)
+            }
+            .flatMap { [service, keychainUseCase] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
+                guard let user = try keychainUseCase.getUser()
+                else {
+                    return .never()
+                }
+                return service.markAsFavorite(
+                    for: accountDetailsResponse.id,
+                    with: user.session_id,
+                    mediaType: "movie",
+                    mediaId: dislikedMovieId,
+                    favorite: false
+                )
             }
             .do(onError: { error in
                 self.errorRelay.accept(error.localizedDescription)
