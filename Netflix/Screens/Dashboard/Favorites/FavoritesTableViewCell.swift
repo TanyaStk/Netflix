@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import RxSwift
 
 class FavoritesTableViewCell: UITableViewCell {
     
     static let identifier = "FavoritesTableViewCell"
+    
+    var bag = DisposeBag()
     
     let filmCoverImageView: UIImageView = {
         let imageView = UIImageView(image: Asset.Assets.filmCover.image)
