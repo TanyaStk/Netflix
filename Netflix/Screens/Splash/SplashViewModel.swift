@@ -38,10 +38,7 @@ class SplashViewModel: ViewModel {
         let success = input.isAppLoaded
             .flatMapLatest { [unowned self] _ -> Driver<Void> in
                 guard let user = try self.keychainUseCase.getUser()
-//                        ,
-//                      self.isTokenExpired(expiring: user.token_expire_at)
                 else {
-                    errorRelay.accept("Token expired")
                     return .never()
                 }
                 return self.createSession(for: user)
@@ -78,21 +75,9 @@ class SplashViewModel: ViewModel {
         return Output(success: delayedSuccess,
                       error: delayedError)
     }
-    
-    private func isTokenExpired(expiring date: String) -> Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss zzz"
-        guard let expiringDate = dateFormatter.date(from: date) else {
-            print("Cannot convert date")
-            return false
-        }
-        let currentDate = Date()        
-        return expiringDate > currentDate
-    }
-    
+
     private func createSession(for user: User) -> Driver<Void> {
         var token = ""
-        var tokenExpireAt = ""
         return loginService.createRequestToken()
             .flatMap { [weak self] response -> Single<AuthenticationTokenResponse> in
                 return self?.loginService.createSessionWithLogin(
@@ -102,33 +87,17 @@ class SplashViewModel: ViewModel {
             }
             .flatMap { [weak self] sessionResponse -> Single<CreateSessionResponse> in
                 token = sessionResponse.request_token
-                tokenExpireAt = sessionResponse.expires_at
                 return self?.loginService.createSession(requestToken: sessionResponse.request_token) ?? .never()
             }
             .do(onSuccess: { result in
                 let updatedUser = User(login: user.login,
                                        password: user.password,
                                        request_token: token,
-                                       token_expire_at: tokenExpireAt,
                                        session_id: result.session_id)
                 try self.keychainUseCase.update(user: updatedUser)
             }, onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)
             }).map { _ in }
             .asDriver(onErrorDriveWith: .never())
-        
-//        loginService
-//            .createSession(requestToken: user.request_token)
-//            .do(onSuccess: { result in
-//                let updatedUser = User(login: user.login,
-//                                       password: user.password,
-//                                       request_token: user.request_token,
-//                                       token_expire_at: user.token_expire_at,
-//                                       session_id: result.session_id)
-//                try self.keychainUseCase.update(user: updatedUser)
-//            }, onError: { [weak self] error in
-//                self?.errorRelay.accept(error.localizedDescription)
-//            }).map { _ in }
-//            .asDriver(onErrorDriveWith: .never())
     }
 }
