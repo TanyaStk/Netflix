@@ -18,8 +18,12 @@ class ComingSoonCoordinator: Coordinator {
     
     func start() {
         let comingSoonViewController = ComingSoonViewController()
-        let comingSoonViewModel = ComingSoonViewModel(coordinator: self,
-                                                      service: MoviesProvider())
+        let comingSoonViewModel = ComingSoonViewModel(
+            coordinator: self,
+            movieService: MoviesProvider(),
+            userService: UserInfoProvider(),
+            keychainUseCase: KeychainUseCase()
+        )
         comingSoonViewController.viewModel = comingSoonViewModel
         
         navigationController?.pushViewController(comingSoonViewController, animated: false)
