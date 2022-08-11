@@ -17,7 +17,7 @@ public enum UserInfoAPI {
     case sessionWith(login: String, password: String, requestToken: String)
     case favoriteMovies(accountId: String)
     case accountDetails(sessionId: String)
-    case markAsFavorite(accountId: String, mediaType: String, mediaId: Int, favorite: Bool)
+    case markAsFavorite(accountId: Int, sessionId: String, mediaType: String, mediaId: Int, favorite: Bool)
     case isFavorite(sessionId: String, movieId: Int)
 }
 
@@ -39,7 +39,7 @@ extension UserInfoAPI: TargetType {
             return "account/\(accountId)/favorite/movies"
         case .accountDetails:
             return "account"
-        case .markAsFavorite(let accountId, _, _, _):
+        case .markAsFavorite(let accountId, _, _, _, _):
             return "account/\(accountId)/favorite"
         case .isFavorite(_, let movieId):
             return "movie/\(movieId)/account_states"
@@ -80,7 +80,7 @@ extension UserInfoAPI: TargetType {
                 parameters: ["api_key": "\(UserInfoAPI.apiKey)",
                              "session_id": "\(sessionId)"],
                 encoding: URLEncoding.queryString)
-        case .markAsFavorite(let sessionId, let mediaType, let mediaId, let favorite):
+        case .markAsFavorite(_, let sessionId, let mediaType, let mediaId, let favorite):
             let parameters = [
                 "api_key": "\(UserInfoAPI.apiKey)",
                 "session_id": sessionId,

@@ -177,8 +177,8 @@ class MovieDetailsViewController: UIViewController {
     lazy var releaseDateStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.alignment = .leading
-        stack.distribution = .fillEqually
+        stack.alignment = .fill
+        stack.distribution = .fill
         [self.releaseDateHeaderLabel,
          self.releaseDateLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -210,8 +210,9 @@ class MovieDetailsViewController: UIViewController {
     lazy var synopsisStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.alignment = .leading
-        stack.distribution = .fillProportionally
+        stack.alignment = .fill
+        stack.distribution = .fill
+        stack.spacing = 4
         [self.synopsisHeaderLabel,
          self.synopsisDescriptionLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -243,6 +244,7 @@ class MovieDetailsViewController: UIViewController {
         })
         .disposed(by: disposeBag)
         
+        output.loadFavoriteStatus.drive().disposed(by: disposeBag)
         output.loadVideoKey.drive().disposed(by: disposeBag)
         
         output.videoKey.drive { [weak self] videoKey in
@@ -335,7 +337,7 @@ class MovieDetailsViewController: UIViewController {
         playButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.centerY.equalTo(movieCoverImageView.snp.bottom)
+            make.top.equalTo(movieCoverImageView.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
@@ -375,7 +377,6 @@ class MovieDetailsViewController: UIViewController {
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(releaseDateStackView.snp.bottom).offset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
