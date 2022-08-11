@@ -68,7 +68,7 @@ class ProfileViewModel: ViewModel {
         let logout = input.logoutButtonTap
             .do { [keychainUseCase, coordinator] _ in
                 try keychainUseCase.deleteUser()
-                coordinator.dismiss()
+                coordinator.coordinateToOnboarding()
             }
             .asDriver(onErrorJustReturn: ())
         
