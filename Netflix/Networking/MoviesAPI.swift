@@ -13,11 +13,10 @@ public enum MoviesAPI {
     static private let apiKey = "7ce563134c101dab6bb4df8a68a6d3bf"
     
     case latest
+    case upcoming(page: Int)
     case popular(page: Int)
-    case upcoming
     case details(movieId: Int)
-    case search(query: String)
-    case videos(movieId: Int)
+    case search(query: String, page: Int)
 }
 
 extension MoviesAPI: TargetType {
@@ -38,8 +37,6 @@ extension MoviesAPI: TargetType {
             return "movie/\(movieId)"
         case .search:
             return "search/movie"
-        case .videos(let movieId):
-            return "/movie/\(movieId)/videos"
         }
     }
 
@@ -49,16 +46,17 @@ extension MoviesAPI: TargetType {
 
     public var task: Task {
         switch self {
-        case .latest, .upcoming, .details, .videos:
+        case .latest, .details:
             return .requestParameters(
                 parameters: ["api_key": "\(MoviesAPI.apiKey)"],
                 encoding: URLEncoding.queryString)
-        case .search(let query):
+        case .search(let query, let page):
             return .requestParameters(
-                parameters: ["query": query,
-                             "api_key": MoviesAPI.apiKey],
+                parameters: ["api_key": MoviesAPI.apiKey,
+                             "query": query,
+                             "page": "\(page)"],
                 encoding: URLEncoding.queryString)
-        case .popular(let page):
+        case .upcoming(let page), .popular(let page):
             return .requestParameters(
                 parameters: ["api_key": MoviesAPI.apiKey,
                              "page": "\(page)"],

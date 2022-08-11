@@ -55,7 +55,7 @@ class MovieDetailsViewModel: ViewModel {
     func transform(_ input: Input) -> Output {
         let movieDetails = input.isViewLoaded
             .flatMapLatest { [movieService] _ in
-                movieService.getDetails(for: self.movieId).map { movie -> MovieDetails in
+                movieService.getDetails(movieId: self.movieId).map { movie -> MovieDetails in
                     return MovieDetails(id: movie.id,
                                         overview: movie.overview,
                                         imagePath: movie.poster_path,

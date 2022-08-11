@@ -13,7 +13,7 @@ protocol Movies {
     func getLatest() -> Single<GetLatestResponse>
     func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse>
+    func getDetails(movieId: Int) -> Single<MovieDetailsResponse>
     func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse>
 }
 
@@ -39,7 +39,7 @@ final class MoviesProvider: Movies {
             .map(MoviesResultsResponse.self)
     }
     
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse> {
+    func getDetails(movieId: Int) -> Single<MovieDetailsResponse> {
         return provider.rx.request(.details(movieId: movieId))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MovieDetailsResponse.self)
