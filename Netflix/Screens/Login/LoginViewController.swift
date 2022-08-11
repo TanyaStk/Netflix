@@ -237,14 +237,12 @@ class LoginViewController: UIViewController {
     }
     
     private func showAnimation() {
-        print("Show animation")
         loginStackView.isHidden = true
         animationView.isHidden = false
         animationView.play()
     }
     
     private func hideAnimation() {
-        print("Hide animation")
         loginStackView.isHidden = false
         animationView.isHidden = true
         animationView.stop()

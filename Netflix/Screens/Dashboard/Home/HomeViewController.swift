@@ -292,11 +292,3 @@ class HomeViewController: UIViewController {
         }
     }
 }
-
-//extension HomeViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//            if indexPath.row == movies.count - 2 {
-//                loadMovies()
-//            }
-//        }
-//}

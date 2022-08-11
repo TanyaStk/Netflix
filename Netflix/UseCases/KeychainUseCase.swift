@@ -38,8 +38,6 @@ class KeychainUseCase {
         guard status == errSecSuccess else {
             throw KeychainError.unknown(status)
         }
-        
-        print("SAVED!!!")
     }
     
     func getUser() throws -> User? {
