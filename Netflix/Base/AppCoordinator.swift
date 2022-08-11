@@ -18,6 +18,7 @@ class AppCoordinator: Coordinator {
     
     func start() {
         let navigationController = UINavigationController()
+        navigationController.isNavigationBarHidden = true
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
