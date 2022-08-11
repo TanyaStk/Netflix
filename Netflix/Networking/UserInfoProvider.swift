@@ -18,7 +18,8 @@ protocol UserInfo {
                                 requestToken: String) -> Single<AuthenticationTokenResponse>
     func getFavoriteMovies(for sessionId: String) -> Single<MoviesResultsResponse>
     func getAccountDetails(with sessionId: String) -> Single<AccountDetailsResponse>
-    func markAsFavorite(for sessionId: String,
+    func markAsFavorite(for userId: Int,
+                        with sessionId: String,
                         mediaType: String,
                         mediaId: Int,
                         favorite: Bool) -> Single<MarkAsFavoriteResponse>
@@ -61,12 +62,14 @@ final class UserInfoProvider: UserInfo {
             .map(AccountDetailsResponse.self)
     }
     
-    func markAsFavorite(for sessionId: String,
+    func markAsFavorite(for userId: Int,
+                        with sessionId: String,
                         mediaType: String,
                         mediaId: Int,
                         favorite: Bool) -> Single<MarkAsFavoriteResponse> {
         return provider.rx.request(.markAsFavorite(
-            accountId: sessionId,
+            accountId: userId,
+            sessionId: sessionId,
             mediaType: mediaType,
             mediaId: mediaId,
             favorite: favorite)
