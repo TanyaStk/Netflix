@@ -11,8 +11,8 @@ import Moya
 
 protocol Movies {
     func getLatest() -> Single<GetLatestResponse>
+    func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
-    func getUpcoming() -> Single<MoviesResultsResponse>
     func getDetails(movieId: String) -> Single<MovieDetailsResponse>
     func search(for movie: String) -> Single<MoviesResultsResponse>
 }
@@ -38,8 +38,8 @@ final class MoviesProvider: Movies {
             .map(MoviesResultsResponse.self)
     }
     
-    func getUpcoming() -> Single<MoviesResultsResponse> {
-        return provider.rx.request(.upcoming)
+    func getUpcoming(page: Int) -> Single<MoviesResultsResponse> {
+        return provider.rx.request(.upcoming(page: page))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
     }

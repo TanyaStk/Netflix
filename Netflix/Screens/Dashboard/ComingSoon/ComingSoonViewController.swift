@@ -28,6 +28,7 @@ class ComingSoonViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(MoviesCollectionViewCell.self,
                                 forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.backgroundColor = .clear
         collectionView.isHidden = true
         return collectionView
     }()
@@ -36,6 +37,7 @@ class ComingSoonViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(MoviesCollectionViewCell.self,
                                 forCellWithReuseIdentifier: MoviesCollectionViewCell.identifier)
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
 
@@ -60,11 +62,13 @@ class ComingSoonViewController: UIViewController {
             isViewLoaded: Observable.just(true),
             searchQuery: navigationItem.searchController!.searchBar.rx.text.orEmpty.asObservable(),
             cancelSearching: navigationItem.searchController!.searchBar.rx.cancelButtonClicked.asObservable(),
+            loadUpcomingNextPage: upcomingMoviesCollection.rx.willDisplayCell.asObservable(),
+            loadSearchingNextPage: searchResultsCollection.rx.willDisplayCell.asObservable(),
             upcomingMovieCoverTap: upcomingMoviesCollection.rx.itemSelected.asObservable(),
             searchingResultsMovieCoverTap: searchResultsCollection.rx.itemSelected.asObservable()
         ))
         
-        output.loadMovies.subscribe().disposed(by: disposeBag)
+        output.loadMovies.drive().disposed(by: disposeBag)
         
         output.showUpcomingMovies.drive(self.upcomingMoviesCollection.rx.items(
             cellIdentifier: MoviesCollectionViewCell.identifier,
@@ -72,6 +76,8 @@ class ComingSoonViewController: UIViewController {
         ) { _, data, cell in
             guard let url = URL(string: data.posterPath) else { return }
             cell.filmCoverImageView.sd_setImage(with: url)
+            
+            data.isFavorite ? cell.addGlow() : cell.hideGlow()
         }
         .disposed(by: disposeBag)
         
@@ -101,6 +107,11 @@ class ComingSoonViewController: UIViewController {
         .disposed(by: disposeBag)
     }
     
+    func scrollToTop() {
+        upcomingMoviesCollection.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        searchResultsCollection.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    }
+    
     private func changeVisibility(isUpcomingHidden: Bool, isSearchingResultsHidden: Bool) {
         upcomingMoviesCollection.isHidden = isUpcomingHidden
         searchResultsCollection.isHidden = isSearchingResultsHidden
@@ -122,7 +133,7 @@ class ComingSoonViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 8
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0))
@@ -140,5 +151,14 @@ class ComingSoonViewController: UIViewController {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+}
+
+extension ComingSoonViewController: UITabBarControllerDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if item.title == "Coming Soon" {
+            print("Coming soon selected")
+//            scrollToTop()
+        }
     }
 }

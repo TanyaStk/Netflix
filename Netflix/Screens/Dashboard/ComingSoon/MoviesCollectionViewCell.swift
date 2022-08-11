@@ -22,7 +22,6 @@ class MoviesCollectionViewCell: UICollectionViewCell {
         filmCoverImageView.contentMode = .scaleAspectFill
         
         setConstraints()
-        addGlow()
     }
     
     required init?(coder: NSCoder) {
@@ -36,9 +35,14 @@ class MoviesCollectionViewCell: UICollectionViewCell {
     }
     
     func addGlow() {
-        filmCoverImageView.layer.shadowOffset = .zero
-        filmCoverImageView.layer.shadowColor = UIColor.systemOrange.cgColor
-        filmCoverImageView.layer.shadowRadius = 20
-        filmCoverImageView.layer.shadowOpacity = 0.5
+        contentView.clipsToBounds = false
+        contentView.layer.shadowOffset = .zero
+        contentView.layer.shadowColor = UIColor.systemOrange.cgColor
+        contentView.layer.shadowRadius = 16.0
+        contentView.layer.shadowOpacity = 0.8
+    }
+    
+    func hideGlow() {
+        contentView.layer.shadowColor = UIColor.clear.cgColor
     }
 }
