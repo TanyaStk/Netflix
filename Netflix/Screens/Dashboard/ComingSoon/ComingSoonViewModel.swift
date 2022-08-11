@@ -16,7 +16,6 @@ class ComingSoonViewModel: ViewModel {
         let searchQuery: Observable<String>
         let cancelSearching: Observable<Void>
         let loadUpcomingNextPage: Observable<(cell: UICollectionViewCell, at: IndexPath)>
-        let loadSearchingNextPage: Observable<(cell: UICollectionViewCell, at: IndexPath)>
         let upcomingMovieCoverTap: Observable<IndexPath>
         let searchingResultsMovieCoverTap: Observable<IndexPath>
     }
@@ -40,11 +39,11 @@ class ComingSoonViewModel: ViewModel {
     private let movieService: MoviesProvider
     private let userService: UserInfoProvider
     private let keychainUseCase: KeychainUseCase
-    
+   
+    private var favoriteMovies = [Int]()
     private var upcomingMovies = [Movie]()
     private var upcomingPage = 1
     private var searchingResults = [Movie]()
-    private var searchingPage = 1
 
     init(coordinator: ComingSoonCoordinator,
          movieService: MoviesProvider,
@@ -57,10 +56,36 @@ class ComingSoonViewModel: ViewModel {
     }
 
     func transform(_ input: Input) -> Output {
+        let loadFavorites = input.isViewLoaded
+            .flatMap { [userService] _ -> Single<MoviesResultsResponse> in
+                guard let user = try self.keychainUseCase.getUser()
+                else {
+                    return .never()
+                }
+                return userService.getFavoriteMovies(for: user.session_id)
+            }.asObservable().materialize()
+            .do { [unowned self] materializedEvent in
+                switch materializedEvent {
+                case let .next(moviesResultsResponse):
+                    self.favoriteMovies = moviesResultsResponse.results.map({ movie in
+                        movie.id
+                    })
+                case let .error(error):
+                    self.errorRelay.accept(error.localizedDescription)
+                case .completed:
+                    break
+                }
+            }
+            .map { _ in }
+            .asObservable()
+
         let loadFirstPageOfUpcomingMovies = Observable
             .merge(input.isViewLoaded, input.cancelSearching.map { _ in true })
-            .flatMap { _ in
-                self.loadUpcoming(on: 1)
+            .flatMap { _ -> Observable<Void> in
+                self.searchingResults = []
+                self.searchingResultsRelay.accept(self.searchingResults)
+                self.upcomingPage = 1
+                return self.loadUpcoming(on: self.upcomingPage)
             }
         
         let loadNextPageOfUpcomingMovies = input.loadUpcomingNextPage
@@ -73,21 +98,26 @@ class ComingSoonViewModel: ViewModel {
                     return .just(())
                 }
             }
-        
+                                        
         let loadSearchResults = input.searchQuery
             .distinctUntilChanged()
             .filter { !$0.isEmpty }
-            .flatMap { [movieService] query in
-                movieService.search(for: query)
+            .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
+            .flatMapLatest { [movieService] query in
+                movieService.search(for: query, on: 1)
             }
             .asObservable().materialize()
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
                 case let .next(searchingResultsResponse):
                     self.isHiddenUpcomingBehaviorRelay.accept(true)
-                    self.searchingResults = searchingResultsResponse.results.map { movie in
-                        Movie(id: movie.id, imagePath: movie.poster_path, isFavorite: false)
-                    }
+                    let transformedResults = searchingResultsResponse.results.map({ response -> Movie in
+                        let isFavoriteStatus = self.favoriteMovies.contains(response.id)
+                        return Movie(id: response.id,
+                                     imagePath: response.poster_path,
+                                     isFavorite: isFavoriteStatus)
+                    })
+                    self.searchingResults = transformedResults
                     self.searchingResultsRelay.accept(self.searchingResults)
                 case let .error(error):
                     self.errorRelay.accept(error.localizedDescription)
@@ -100,10 +130,13 @@ class ComingSoonViewModel: ViewModel {
         
         let showSearchingResults = searchingResultsRelay.asDriver(onErrorJustReturn: [Movie]())
         
+        let loadUpcomingAndSearchResults = Observable
+            .merge(loadFirstPageOfUpcomingMovies,
+                   loadNextPageOfUpcomingMovies,
+                   loadSearchResults.asObservable())
+        
         let loadMovies = Observable
-            .zip(loadFirstPageOfUpcomingMovies.asObservable(),
-                 loadNextPageOfUpcomingMovies,
-                 loadSearchResults.asObservable())
+            .concat(loadFavorites, loadUpcomingAndSearchResults)
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
         
@@ -138,50 +171,27 @@ class ComingSoonViewModel: ViewModel {
     
     private func loadUpcoming(on page: Int) -> Observable<Void> {
         return self.movieService.getUpcoming(page: page)
-            .asObservable()
-            .flatMap { moviesResultsResponse -> Observable<Void> in
-                let transformedResults = moviesResultsResponse.results.map({ response in
-                    Movie(id: response.id,
-                          imagePath: response.poster_path,
-                          isFavorite: false)
+            .do { moviesResultsResponse in
+                let transformedResults = moviesResultsResponse.results.map({ response -> Movie in
+                    let isFavoriteStatus = self.favoriteMovies.contains(response.id)
+                    return Movie(id: response.id,
+                                 imagePath: response.poster_path,
+                                 isFavorite: isFavoriteStatus)
                 })
                 self.upcomingMovies += transformedResults
+                self.upcomingMoviesRelay.accept(self.upcomingMovies)
+                self.isHiddenUpcomingBehaviorRelay.accept(false)
                 
                 if moviesResultsResponse.page < moviesResultsResponse.total_pages {
                     self.upcomingPage += 1
                 } else {
                     self.upcomingPage = 1
                 }
-                
-                return Observable.from(moviesResultsResponse.results)
-                    .flatMap { movieResponse -> Observable<Void> in
-                        guard let user = try self.keychainUseCase.getUser()
-                        else {
-                            return .never()
-                        }
-                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
-                    }
             }
-            .do(onError: { [errorRelay] error in
+            onError: { [errorRelay] error in
                 errorRelay.accept(error.localizedDescription)
-            })
-            .asObservable()
-    }
-    
-    private func getStatus(for userId: String, movieId: Int) -> Observable<Void> {
-        return userService.isFavorite(for: userId, movieId: movieId)
-            .do {  [upcomingMoviesRelay] response in
-                guard let movieIndex = self.upcomingMovies.firstIndex(where: {$0.id == response.id})
-                else {
-                    return
-                }
-                var updatedMovie = self.upcomingMovies[movieIndex]
-                updatedMovie.markAs(favorite: response.favorite)
-                self.upcomingMovies[movieIndex] = updatedMovie
-                upcomingMoviesRelay.accept(self.upcomingMovies)
             }
-            .map { _ in }
+            .map {_ in }
             .asObservable()
     }
-
 }
