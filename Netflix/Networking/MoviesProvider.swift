@@ -11,10 +11,11 @@ import Moya
 
 protocol Movies {
     func getLatest() -> Single<GetLatestResponse>
-    func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
     func getPopular(page: Int) -> Single<MoviesResultsResponse>
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse>
-    func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse>
+    func getUpcoming() -> Single<MoviesResultsResponse>
+    func getDetails(for movieId: Int) -> Single<MovieDetailsResponse>
+    func search(for movie: String) -> Single<MoviesResultsResponse>
+    func getVideos(for movieId: Int) -> Single<GetVideosResponse>
 }
 
 final class MoviesProvider: Movies {
@@ -33,21 +34,27 @@ final class MoviesProvider: Movies {
             .map(MoviesResultsResponse.self)
     }
     
-    func getUpcoming(page: Int) -> Single<MoviesResultsResponse> {
-        return provider.rx.request(.upcoming(page: page))
+    func getUpcoming() -> Single<MoviesResultsResponse> {
+        return provider.rx.request(.upcoming)
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
     }
     
-    func getDetails(movieId: String) -> Single<MovieDetailsResponse> {
+    func getDetails(for movieId: Int) -> Single<MovieDetailsResponse> {
         return provider.rx.request(.details(movieId: movieId))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MovieDetailsResponse.self)
     }
     
-    func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse> {
-        return provider.rx.request(.search(query: movie, page: page))
+    func search(for movie: String) -> Single<MoviesResultsResponse> {
+        return provider.rx.request(.search(query: movie))
             .catchResponseError(NetworkingErrorResponse.self)
             .map(MoviesResultsResponse.self)
+    }
+    
+    func getVideos(for movieId: Int) -> Single<GetVideosResponse> {
+        return provider.rx.request(.videos(movieId: movieId))
+            .catchResponseError(NetworkingErrorResponse.self)
+            .map(GetVideosResponse.self)
     }
 }

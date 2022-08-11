@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import SDWebImage
+import YouTubePlayer
 
 class MovieDetailsViewController: UIViewController {
     
@@ -18,6 +19,11 @@ class MovieDetailsViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private lazy var movieCoverImageView = HeadMovieCoverView()
+    private lazy var trailerPlayer: YouTubePlayerView = {
+        let player = YouTubePlayerView()
+        player.isHidden = true
+        return player
+    }()
     
     private let movieTitleLabel: UILabel = {
         let label = UILabel()
@@ -75,6 +81,22 @@ class MovieDetailsViewController: UIViewController {
         return button
     }()
     
+    private let stopPlayingButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "stop.fill"), for: .normal)
+        button.setTitle("Stop", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
+        button.backgroundColor = .white
+        button.imageView?.snp.makeConstraints({ make in
+            make.centerX.equalToSuperview().multipliedBy(0.6)
+            make.centerY.equalToSuperview()
+        })
+        button.layer.cornerRadius = 8
+        button.isHidden = true
+        return button
+    }()
+
     private let runtimeIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "clock"))
         imageView.tintColor = Asset.Colors.loginTexts.color
@@ -155,8 +177,8 @@ class MovieDetailsViewController: UIViewController {
     lazy var releaseDateStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.alignment = .leading
-        stack.distribution = .fillEqually
+        stack.alignment = .fill
+        stack.distribution = .fill
         [self.releaseDateHeaderLabel,
          self.releaseDateLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -188,8 +210,9 @@ class MovieDetailsViewController: UIViewController {
     lazy var synopsisStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.alignment = .leading
-        stack.distribution = .fillProportionally
+        stack.alignment = .fill
+        stack.distribution = .fill
+        stack.spacing = 4
         [self.synopsisHeaderLabel,
          self.synopsisDescriptionLabel].forEach { stack.addArrangedSubview($0) }
         return stack
@@ -212,12 +235,33 @@ class MovieDetailsViewController: UIViewController {
         let output = viewModel.transform(MovieDetailsViewModel.Input(
             isViewLoaded: Observable.just(true),
             backButtonTap: backButton.rx.tap.asObservable(),
-            likeButtonTap: likeButton.rx.tap.asObservable()))
+            likeButtonTap: likeButton.rx.tap.asObservable(),
+            playButtonTap: playButton.rx.tap.asObservable()
+        ))
         
         output.movieDetails.drive(onNext: { [weak self] movie in
             self?.setupUI(for: movie)
         })
         .disposed(by: disposeBag)
+        
+        output.loadFavoriteStatus.drive().disposed(by: disposeBag)
+        output.loadVideoKey.drive().disposed(by: disposeBag)
+        
+        output.videoKey.drive { [weak self] videoKey in
+            if !videoKey.isEmpty {
+                self?.changePlayerVisibility(on: false)
+                self?.trailerPlayer.loadVideoID(videoKey)
+            }
+        }
+        .disposed(by: disposeBag)
+        
+        stopPlayingButton.rx.tap
+            .asDriver()
+            .drive { [weak self] _ in
+                self?.changePlayerVisibility(on: true)
+                self?.trailerPlayer.stop()
+            }
+            .disposed(by: disposeBag)
         
         output.addToFavorites.drive().disposed(by: disposeBag)
         
@@ -232,6 +276,12 @@ class MovieDetailsViewController: UIViewController {
             print(error)
         })
         .disposed(by: disposeBag)
+    }
+    
+    private func changePlayerVisibility(on status: Bool) {
+        trailerPlayer.isHidden = status
+        playButton.isHidden = !status
+        stopPlayingButton.isHidden = status
     }
     
     private func setupUI(for movie: MovieDetails) {
@@ -257,14 +307,22 @@ class MovieDetailsViewController: UIViewController {
         view.addSubview(movieTitleLabel)
         view.addSubview(navigationButtonsStackView)
         view.addSubview(playButton)
+        view.addSubview(stopPlayingButton)
         view.addSubview(runtimeStackView)
         view.addSubview(ratingStackView)
         view.addSubview(releaseDateStackView)
         view.addSubview(synopsisStackView)
+        view.addSubview(trailerPlayer)
     }
     
     private func setConstraints() {
         movieCoverImageView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.55)
+        }
+        
+        trailerPlayer.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.55)
@@ -279,14 +337,21 @@ class MovieDetailsViewController: UIViewController {
         playButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.centerY.equalTo(movieCoverImageView.snp.bottom)
+            make.top.equalTo(movieCoverImageView.snp.bottom)
+            make.centerX.equalToSuperview()
+        }
+        
+        stopPlayingButton.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.3)
+            make.height.equalToSuperview().multipliedBy(0.05)
+            make.top.equalTo(trailerPlayer.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
         movieTitleLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.top.equalTo(playButton.snp.bottom).offset(8)
+            make.top.equalTo(stopPlayingButton.snp.bottom).offset(8)
         }
         
         runtimeStackView.snp.makeConstraints { make in
@@ -305,13 +370,13 @@ class MovieDetailsViewController: UIViewController {
             
         releaseDateStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.top.equalTo(ratingStackView.snp.bottom).offset(16)
+            make.height.equalToSuperview().multipliedBy(0.04)
+            make.top.equalTo(ratingStackView.snp.bottom).offset(8)
         }
         
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(releaseDateStackView.snp.bottom).offset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     

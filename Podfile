@@ -14,6 +14,7 @@ target 'Netflix' do
   pod 'lottie-ios'
   pod 'Moya/RxSwift', '~> 15.0'
   pod 'SDWebImage', '~> 5.0'
+  pod 'YouTubePlayer'
 
   target 'NetflixTests' do
     inherit! :search_paths

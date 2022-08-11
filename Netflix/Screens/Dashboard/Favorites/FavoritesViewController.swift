@@ -21,6 +21,7 @@ class FavoritesViewController: UIViewController {
         let table = UITableView()
         table.register(FavoritesTableViewCell.self,
                        forCellReuseIdentifier: FavoritesTableViewCell.identifier)
+        table.estimatedRowHeight = 256
         table.rowHeight = UITableView.automaticDimension
         table.backgroundColor = .clear
         table.isHidden = true
@@ -94,10 +95,10 @@ class FavoritesViewController: UIViewController {
             deleteFromFavorites: favoritesTable.rx.itemDeleted.asObservable(),
             movieCoverTap: favoritesTable.rx.itemSelected.asObservable()
         ))
-        
+                
         favoritesTable.rx.setDelegate(self).disposed(by: disposeBag)
         
-        output.showingTrigger.subscribe().disposed(by: disposeBag)
+        output.showingTrigger.drive().disposed(by: disposeBag)
         
         output.showFavoriteMovies
             .drive(self.favoritesTable.rx.items(
@@ -105,11 +106,10 @@ class FavoritesViewController: UIViewController {
             cellType: FavoritesTableViewCell.self)
         ) { _, data, cell in
             guard let url = URL(string: data.posterPath) else { return }
-            
             cell.filmCoverImageView.sd_setImage(with: url)
         }
         .disposed(by: disposeBag)
-        
+                
         output.isFavoritesEmpty.drive(onNext: { [weak self] status in
             self?.isFavoritesEmpty(status: status)
         })
@@ -170,26 +170,13 @@ extension FavoritesViewController: UITableViewDelegate {
         return 256
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive,
-                                              title: "Delete") { [weak self] _, _, complete in
-            self?.favoritesTable.deleteRows(at: [indexPath], with: .automatic)
-            complete(true)
-        }
-        deleteAction.backgroundColor = .red
-        
-        return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
-    
-    func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
     func tableView(_ tableView: UITableView,
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            favoritesTable.beginUpdates()
             favoritesTable.deleteRows(at: [indexPath], with: .fade)
+            favoritesTable.endUpdates()
         }
     }
 }
