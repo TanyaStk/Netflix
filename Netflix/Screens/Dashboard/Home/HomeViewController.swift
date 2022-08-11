@@ -281,7 +281,7 @@ class HomeViewController: UIViewController {
         latestMovieGenres.text = movie.genres.joined(separator: " \u{2022} ")
         
         if movie.adult {
-            latestMovieImageView.filmCoverImageView.image = Asset.Assets.adultContentTitle.image
+            latestMovieImageView.filmCoverImageView.image = Asset.Assets.adultContentImage.image
         } else {
             guard let url = URL(string: movie.posterPath) else { return }
             latestMovieImageView.filmCoverImageView.sd_setImage(
