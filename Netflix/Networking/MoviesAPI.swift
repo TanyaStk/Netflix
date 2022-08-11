@@ -49,7 +49,7 @@ extension MoviesAPI: TargetType {
 
     public var task: Task {
         switch self {
-        case .latest, .upcoming, .details, .videos:
+        case .latest, .details, .videos:
             return .requestParameters(
                 parameters: ["api_key": "\(MoviesAPI.apiKey)"],
                 encoding: URLEncoding.queryString)
