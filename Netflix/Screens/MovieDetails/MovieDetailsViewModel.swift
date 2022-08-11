@@ -19,6 +19,7 @@ class MovieDetailsViewModel: ViewModel {
     
     struct Output {
         let movieDetails: Driver<MovieDetails>
+        let loadFavoriteStatus: Driver<Void>
         let dismissDetails: Driver<Void>
         let addToFavorites: Driver<Void>
         let isFavorite: Driver<Bool>
@@ -75,6 +76,20 @@ class MovieDetailsViewModel: ViewModel {
                                                       title: "",
                                                       voteAverage: 0))
                 
+        let loadFavoriteStatus = input.isViewLoaded
+            .flatMapLatest { _ -> Driver<Void> in
+                guard let user = try self.keychainUseCase.getUser()
+                else {
+                    return .never()
+                }
+                return self.getStatus(for: user.session_id, movieId: self.movieId)
+            }
+            .do(onError: { [weak self] error in
+                self?.errorRelay.accept(error.localizedDescription)
+            })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
+                
         let loadVideoKey = input.playButtonTap
             .flatMapLatest { _ -> Driver<Void> in
                 self.getVideoKey()
@@ -92,16 +107,26 @@ class MovieDetailsViewModel: ViewModel {
             .asDriver(onErrorJustReturn: ())
         
         let addToFavorites = input.likeButtonTap
-            .flatMap { [userService, movieId, isFavoriteBehaviorRelay] _ -> Single<MarkAsFavoriteResponse> in
-                isFavoriteBehaviorRelay.accept(!(isFavoriteBehaviorRelay.value))
-                guard let user = try self.keychainUseCase.getUser()
+            .flatMapLatest { [userService, keychainUseCase] _ -> Single<AccountDetailsResponse> in
+                guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
-                return userService.markAsFavorite(for: user.session_id,
-                                                  mediaType: "movie",
-                                                  mediaId: movieId,
-                                                  favorite: isFavoriteBehaviorRelay.value)
+                return userService.getAccountDetails(with: user.session_id)
+            }
+            .flatMap { [userService, keychainUseCase, movieId, isFavoriteBehaviorRelay] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
+                isFavoriteBehaviorRelay.accept(!(isFavoriteBehaviorRelay.value))
+                guard let user = try keychainUseCase.getUser()
+                else {
+                    return .never()
+                }
+                return userService.markAsFavorite(
+                    for: accountDetailsResponse.id,
+                    with: user.session_id,
+                    mediaType: "movie",
+                    mediaId: movieId,
+                    favorite: isFavoriteBehaviorRelay.value
+                )
             }
             .do(onError: { error in
                 self.errorRelay.accept(error.localizedDescription)
@@ -111,10 +136,10 @@ class MovieDetailsViewModel: ViewModel {
 
         let isFavorite = isFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
         let videoKey = movieVideoKeyRelay.asDriver(onErrorJustReturn: "")
-        
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
         
         return Output(movieDetails: movieDetails,
+                      loadFavoriteStatus: loadFavoriteStatus,
                       dismissDetails: dismissDetails,
                       addToFavorites: addToFavorites,
                       isFavorite: isFavorite,
@@ -133,6 +158,15 @@ class MovieDetailsViewModel: ViewModel {
             }, onError: { error in
                 self.errorRelay.accept(error.localizedDescription)
             })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
+    }
+    
+    private func getStatus(for userId: String, movieId: Int) -> Driver<Void> {
+        return userService.isFavorite(for: userId, movieId: movieId)
+            .do {  [isFavoriteBehaviorRelay] response in
+                isFavoriteBehaviorRelay.accept(response.favorite)
+            }
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
     }
