@@ -64,19 +64,29 @@ class HomeViewModel: ViewModel {
             .asDriver(onErrorDriveWith: .never())
                 
         let addToFavorites = input.likeButtonTap
-            .flatMap { [userService, keychainUseCase, isLatestFavoriteBehaviorRelay] _ -> Single<MarkAsFavoriteResponse> in
+            .flatMapLatest { [userService, keychainUseCase] _ -> Single<AccountDetailsResponse> in
+                guard let user = try keychainUseCase.getUser()
+                else {
+                    return .never()
+                }
+                return userService.getAccountDetails(with: user.session_id)
+            }
+            .flatMap { [userService, keychainUseCase, latestMovieId, isLatestFavoriteBehaviorRelay] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
                 isLatestFavoriteBehaviorRelay.accept(!(isLatestFavoriteBehaviorRelay.value))
                 guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
-                return userService.markAsFavorite(for: user.session_id,
-                                                  mediaType: "movie",
-                                                  mediaId: self.latestMovieId,
-                                                  favorite: isLatestFavoriteBehaviorRelay.value)
+                return userService.markAsFavorite(
+                    for: accountDetailsResponse.id,
+                    with: user.session_id,
+                    mediaType: "movie",
+                    mediaId: latestMovieId,
+                    favorite: isLatestFavoriteBehaviorRelay.value
+                )
             }
-            .do(onError: { [errorRelay] error in
-                errorRelay.accept(error.localizedDescription)
+            .do(onError: { error in
+                self.errorRelay.accept(error.localizedDescription)
             })
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
