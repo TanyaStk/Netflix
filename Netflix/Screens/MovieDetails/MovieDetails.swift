@@ -26,6 +26,7 @@ struct MovieDetails {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-dd-MM"
         let date = dateFormatter.date(from: releaseDate) ?? Date()
+        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "MMMM d, yyyy"
         
         self.releaseDate = dateFormatter.string(from: date)

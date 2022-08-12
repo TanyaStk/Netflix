@@ -40,7 +40,8 @@ class MovieDetailsViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.imageView?.snp.makeConstraints({ make in
-            make.width.height.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(button.snp.width)
         })
         button.tintColor = .white
         return button
@@ -50,13 +51,14 @@ class MovieDetailsViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.imageView?.snp.makeConstraints({ make in
-            make.width.height.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(button.snp.width)
         })
         button.tintColor = .white
         return button
     }()
     
-    lazy var navigationButtonsStackView: UIStackView = {
+    private lazy var navigationButtonsStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .fill
@@ -114,7 +116,7 @@ class MovieDetailsViewController: UIViewController {
         return label
     }()
     
-    lazy var runtimeStackView: UIStackView = {
+    private lazy var runtimeStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .trailing
@@ -141,7 +143,7 @@ class MovieDetailsViewController: UIViewController {
         return label
     }()
     
-    lazy var ratingStackView: UIStackView = {
+    private lazy var ratingStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .trailing
@@ -174,7 +176,7 @@ class MovieDetailsViewController: UIViewController {
         return label
     }()
     
-    lazy var releaseDateStackView: UIStackView = {
+    private lazy var releaseDateStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
@@ -207,7 +209,7 @@ class MovieDetailsViewController: UIViewController {
         return label
     }()
     
-    lazy var synopsisStackView: UIStackView = {
+    private lazy var synopsisStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
@@ -322,16 +324,17 @@ class MovieDetailsViewController: UIViewController {
             make.height.equalToSuperview().multipliedBy(0.55)
         }
         
-        trailerPlayer.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.55)
-        }
-        
         navigationButtonsStackView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.9)
+            make.height.equalToSuperview().multipliedBy(0.03)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.centerX.equalToSuperview()
+        }
+        
+        trailerPlayer.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.top.equalTo(navigationButtonsStackView.snp.bottom)
+            make.height.equalToSuperview().multipliedBy(0.55)
         }
         
         playButton.snp.makeConstraints { make in
@@ -351,7 +354,7 @@ class MovieDetailsViewController: UIViewController {
         movieTitleLabel.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.top.equalTo(stopPlayingButton.snp.bottom).offset(8)
+            make.top.equalTo(playButton.snp.bottom).offset(8)
         }
         
         runtimeStackView.snp.makeConstraints { make in
@@ -370,13 +373,14 @@ class MovieDetailsViewController: UIViewController {
             
         releaseDateStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.04)
+            make.height.equalToSuperview().multipliedBy(0.05)
             make.top.equalTo(ratingStackView.snp.bottom).offset(8)
         }
         
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.top.equalTo(releaseDateStackView.snp.bottom).offset(16)
+            make.top.equalTo(releaseDateStackView.snp.bottom).offset(8)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
