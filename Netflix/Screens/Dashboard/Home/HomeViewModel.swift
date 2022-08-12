@@ -15,6 +15,7 @@ class HomeViewModel: ViewModel {
         let viewDidLoad: Observable<Void>
         let profileButtonTap: Observable<Void>
         let likeButtonTap: Observable<Void>
+        let playButtonTap: Observable<Void>
         let movieCoverTap: Observable<IndexPath>
         let loadNextPage: Observable<(cell: UICollectionViewCell, at: IndexPath)>
     }
@@ -25,6 +26,8 @@ class HomeViewModel: ViewModel {
         let isLatestMovieFavorite: Driver<Bool>
         let loadMovies: Driver<Void>
         let showLatestMovie: Driver<LatestMovie>
+        let loadVideoKey: Driver<Void>
+        let videoKey: Driver<String>
         let showPopularMovies: Driver<[Movie]>
         let showMovieDetails: Driver<Void>
         let error: Driver<String>
@@ -35,6 +38,7 @@ class HomeViewModel: ViewModel {
     )
     private let showPopularMoviesRelay = BehaviorRelay<[Movie]>(value: [Movie]())
     private let isLatestFavoriteBehaviorRelay = BehaviorRelay(value: false)
+    private let movieVideoKeyRelay = BehaviorRelay(value: "")
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: HomeCoordinator
@@ -110,6 +114,16 @@ class HomeViewModel: ViewModel {
             }
             .map { _ in }
             .asObservable()
+        
+        let loadVideoKey = input.playButtonTap
+            .flatMapLatest { _ -> Driver<Void> in
+                return self.getVideoKey()
+            }
+            .do(onError: { [weak self] error in
+                self?.errorRelay.accept(error.localizedDescription)
+            })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
 
         let loadFirstPagePopularMovies = self.loadPopularMovies(on: 1)
                 
@@ -142,6 +156,7 @@ class HomeViewModel: ViewModel {
             .map { _ in }
             .asDriver(onErrorDriveWith: .never())
         
+        let videoKey = movieVideoKeyRelay.skip(1).asDriver(onErrorJustReturn: "")
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
         
         return Output(openProfile: openProfile,
@@ -149,9 +164,26 @@ class HomeViewModel: ViewModel {
                       isLatestMovieFavorite: isLatestMovieFavorite,
                       loadMovies: loadMovies,
                       showLatestMovie: showLatestMovie,
+                      loadVideoKey: loadVideoKey,
+                      videoKey: videoKey,
                       showPopularMovies: showPopularMovies,
                       showMovieDetails: showMovieDetails,
                       error: error)
+    }
+    
+    private func getVideoKey() -> Driver<Void> {
+        return movieService.getVideos(for: self.latestMovieId)
+            .do(onSuccess: { getVideosResponse in
+                guard let videoKey = getVideosResponse.results.first?.key else {
+                    self.movieVideoKeyRelay.accept("")
+                    return
+                }
+                self.movieVideoKeyRelay.accept(videoKey)
+            }, onError: { error in
+                self.errorRelay.accept(error.localizedDescription)
+            })
+            .map { _ in }
+            .asDriver(onErrorJustReturn: ())
     }
     
     private func loadPopularMovies(on page: Int) -> Observable<Void> {
