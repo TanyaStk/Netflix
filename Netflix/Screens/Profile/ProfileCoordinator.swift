@@ -33,9 +33,10 @@ class ProfileCoordinator: Coordinator {
     }
     
     func coordinateToOnboarding() {
-            navigationController.dismiss(animated: true)
-            
-            let onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
-            onboardingCoordinator.start()
-        }
+        navigationController.dismiss(animated: true)
+        navigationController.viewControllers.removeAll()
+        
+        let onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
+        onboardingCoordinator.start()
+    }
 }

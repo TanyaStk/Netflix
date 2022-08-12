@@ -39,11 +39,10 @@ class DashboardCoordinator: Coordinator {
         let favoritesCoordinator = FavoritesCoordinator(navigationController: favoritesNavigationController)
         
         dashboardController.viewControllers = [homeNavigationController,
-                                                       comingSoonNavigationController,
-                                                       favoritesNavigationController]
+                                               comingSoonNavigationController,
+                                               favoritesNavigationController]
         
-        dashboardController.modalPresentationStyle = .fullScreen
-        navigationController.present(dashboardController, animated: false)
+        navigationController.pushViewController(dashboardController, animated: false)
         
         homeCoordinator.start()
         comingSoonCoordinator.start()
