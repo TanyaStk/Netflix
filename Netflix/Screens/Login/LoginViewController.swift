@@ -155,6 +155,8 @@ class LoginViewController: UIViewController {
             return
         }
         bind(to: viewModel)
+        
+        dismissKeyboard()
     }
     
     func bind(to viewModel: LoginViewModel) {

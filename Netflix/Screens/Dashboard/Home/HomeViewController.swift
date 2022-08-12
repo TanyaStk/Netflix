@@ -198,6 +198,8 @@ class HomeViewController: UIViewController {
             loadNextPage: popularMoviesCollection.rx.willDisplayCell.asObservable())
         )
         
+        output.loadMovies.drive().disposed(by: disposeBag)
+        
         output.openProfile.drive().disposed(by: disposeBag)
         
         output.addLatestToFavorites.drive().disposed(by: disposeBag)
@@ -236,21 +238,14 @@ class HomeViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.loadMovies.drive().disposed(by: disposeBag)
-        
         output.showPopularMovies
             .drive(self.popularMoviesCollection.rx.items(
                 cellIdentifier: HomeCollectionViewCell.identifier,
                 cellType: HomeCollectionViewCell.self)
             ) { _, data, cell in
                 guard let url = URL(string: data.posterPath) else { return }
-                cell.filmCoverImageView.sd_cancelCurrentImageLoad()
-                cell.filmCoverImageView.sd_setImage(
-                    with: url,
-                    placeholderImage: nil,
-                    options: .highPriority,
-                    context: nil
-                )
+                cell.filmCoverImageView.sd_setImage(with: url)
+                
                 data.isFavorite ? cell.addGlow() : cell.hideGlow()
             }
             .disposed(by: disposeBag)

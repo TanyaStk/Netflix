@@ -380,11 +380,11 @@ class MovieDetailsViewController: UIViewController {
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(releaseDateStackView.snp.bottom).offset(8)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         synopsisHeaderLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
         }
     }
-    
 }

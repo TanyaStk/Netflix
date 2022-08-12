@@ -21,10 +21,10 @@ class HomeViewModel: ViewModel {
     }
     
     struct Output {
+        let loadMovies: Driver<Void>
         let openProfile: Driver<Void>
         let addLatestToFavorites: Driver<Void>
         let isLatestMovieFavorite: Driver<Bool>
-        let loadMovies: Driver<Void>
         let showLatestMovie: Driver<LatestMovie>
         let loadVideoKey: Driver<Void>
         let videoKey: Driver<String>
@@ -140,6 +140,19 @@ class HomeViewModel: ViewModel {
             .map { _ in }
             .asObservable()
         
+        let loadFirstPageOfPopularMovies = self.loadPopularMovies(on: 1)
+                
+        let loadNextPageOfPopularMovies = input.loadNextPage
+            .flatMapLatest { (_, indexPath) -> Observable<Void> in
+                if !self.popularMovies.isEmpty &&
+                    self.popularMovies[indexPath.item].id ==
+                    self.popularMovies[self.popularMovies.count - 2].id {
+                    return self.loadPopularMovies(on: self.popularMoviesPage)
+                } else {
+                    return Observable.just(())
+                }
+            }
+        
         let loadVideoKey = input.playButtonTap
             .flatMapLatest { _ -> Driver<Void> in
                 return self.getVideoKey()
@@ -149,24 +162,11 @@ class HomeViewModel: ViewModel {
             })
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
-
-        let loadFirstPagePopularMovies = self.loadPopularMovies(on: 1)
-                
-        let loadNextPage = input.loadNextPage
-            .flatMapLatest { (_, indexPath) -> Observable<Void> in
-                if !self.popularMovies.isEmpty &&
-                    self.popularMovies[indexPath.row].id ==
-                    self.popularMovies[self.popularMovies.count - 2].id {
-                    return self.loadPopularMovies(on: self.popularMoviesPage)
-                } else {
-                    return Observable.just(())
-                }
-            }
                 
         let loadPopularAndLatest = Observable
             .merge(loadLatestMovie,
-                   loadFirstPagePopularMovies,
-                   loadNextPage)
+                   loadFirstPageOfPopularMovies,
+                   loadNextPageOfPopularMovies)
         
         let loadMovies = Observable
                 .concat(loadFavorites, loadPopularAndLatest)
@@ -191,10 +191,10 @@ class HomeViewModel: ViewModel {
         let videoKey = movieVideoKeyRelay.skip(1).asDriver(onErrorJustReturn: "")
         let error = errorRelay.asDriver(onErrorJustReturn: "Unknown error")
         
-        return Output(openProfile: openProfile,
+        return Output(loadMovies: loadMovies,
+                      openProfile: openProfile,
                       addLatestToFavorites: addToFavorites,
                       isLatestMovieFavorite: isLatestMovieFavorite,
-                      loadMovies: loadMovies,
                       showLatestMovie: showLatestMovie,
                       loadVideoKey: loadVideoKey,
                       videoKey: videoKey,
