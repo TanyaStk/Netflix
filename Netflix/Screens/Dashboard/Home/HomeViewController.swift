@@ -198,6 +198,8 @@ class HomeViewController: UIViewController {
             loadNextPage: popularMoviesCollection.rx.willDisplayCell.asObservable())
         )
         
+        popularMoviesCollection.rx.setDelegate(self).disposed(by: disposeBag)
+        
         output.loadMovies.drive().disposed(by: disposeBag)
         
         output.openProfile.drive().disposed(by: disposeBag)
@@ -382,5 +384,13 @@ class HomeViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             make.width.equalToSuperview()
         }
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+        let radius = cell.contentView.layer.cornerRadius
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
     }
 }

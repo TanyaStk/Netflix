@@ -17,18 +17,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
         imageView.image = UIImage()
         return imageView
     }()
-    
-    let borderView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(borderView)
-        borderView.addSubview(filmCoverImageView)
+        contentView.addSubview(filmCoverImageView)
+        backgroundColor = .clear
+        contentView.backgroundColor = .black
+        contentView.layer.cornerRadius = 8
         setConstraints()
     }
     
@@ -37,24 +32,20 @@ class HomeCollectionViewCell: UICollectionViewCell {
     }
     
     private func setConstraints() {
-        borderView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         filmCoverImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
     
     func addGlow() {
-        contentView.clipsToBounds = false
-        contentView.layer.shadowOffset = .zero
-        contentView.layer.shadowColor = UIColor.systemOrange.cgColor
-        contentView.layer.shadowRadius = 8.0
-        contentView.layer.shadowOpacity = 0.8
+        layer.masksToBounds = false
+        layer.shadowOffset = .zero
+        layer.shadowColor = UIColor.systemOrange.cgColor
+        layer.shadowOpacity = 0.8
+        layer.shadowRadius = 8.0
     }
     
     func hideGlow() {
-        contentView.layer.shadowColor = UIColor.clear.cgColor
+        layer.shadowOpacity = 0
     }
 }
