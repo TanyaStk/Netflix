@@ -46,6 +46,7 @@ class HomeViewModel: ViewModel {
     private let userService: UserInfoProvider
     private let keychainUseCase: Keychain
 
+    private var favoriteMovies = [Int]()
     private var popularMoviesPage = 1
     private var popularMovies = [Movie]()
     private var latestMovieId = 0
@@ -66,6 +67,29 @@ class HomeViewModel: ViewModel {
                 self?.coordinator.coordinateToProfile()
             })
             .asDriver(onErrorDriveWith: .never())
+                
+        let loadFavorites = input.viewDidLoad
+                .flatMap { [userService] _ -> Single<MoviesResultsResponse> in
+                    guard let user = try self.keychainUseCase.getUser()
+                    else {
+                        return .never()
+                    }
+                    return userService.getFavoriteMovies(for: user.session_id)
+                }.asObservable().materialize()
+            .do { [unowned self] materializedEvent in
+                switch materializedEvent {
+                case let .next(moviesResultsResponse):
+                    self.favoriteMovies = moviesResultsResponse.results.map({ movie in
+                        movie.id
+                    })
+                case let .error(error):
+                    self.errorRelay.accept(error.localizedDescription)
+                case .completed:
+                    break
+                }
+            }
+            .map { _ in }
+            .asObservable()
                 
         let addToFavorites = input.likeButtonTap
             .flatMapLatest { [userService, keychainUseCase] _ -> Single<AccountDetailsResponse> in
@@ -139,8 +163,13 @@ class HomeViewModel: ViewModel {
                 }
             }
                 
+        let loadPopularAndLatest = Observable
+            .merge(loadLatestMovie,
+                   loadFirstPagePopularMovies,
+                   loadNextPage)
+        
         let loadMovies = Observable
-                .zip(loadLatestMovie, loadFirstPagePopularMovies, loadNextPage)
+                .concat(loadFavorites, loadPopularAndLatest)
                 .map { _ in }
                 .asDriver(onErrorJustReturn: ())
         
@@ -190,50 +219,27 @@ class HomeViewModel: ViewModel {
     }
     
     private func loadPopularMovies(on page: Int) -> Observable<Void> {
-       return self.movieService.getPopular(page: self.popularMoviesPage)
-            .asObservable()
-            .flatMap { moviesResultsResponse -> Observable<Void> in
-                let transformedResults = moviesResultsResponse.results.map({ response in
-                    Movie(id: response.id,
-                          imagePath: response.poster_path,
-                          isFavorite: false)
+        return self.movieService.getPopular(page: page)
+            .do { moviesResultsResponse in
+                let transformedResults = moviesResultsResponse.results.map({ response -> Movie in
+                    let isFavoriteStatus = self.favoriteMovies.contains(response.id)
+                    return Movie(id: response.id,
+                                 imagePath: response.poster_path,
+                                 isFavorite: isFavoriteStatus)
                 })
                 self.popularMovies += transformedResults
-
+                self.showPopularMoviesRelay.accept(self.popularMovies)
+                
                 if moviesResultsResponse.page < moviesResultsResponse.total_pages {
                     self.popularMoviesPage += 1
                 } else {
                     self.popularMoviesPage = 1
                 }
-                
-                return Observable.from(moviesResultsResponse.results)
-                    .flatMap { movieResponse -> Driver<Void> in
-                        guard let user = try self.keychainUseCase.getUser()
-                        else {
-                            return .never()
-                        }
-                        return self.getStatus(for: user.session_id, movieId: movieResponse.id)
-                    }
             }
-            .do(onError: { [errorRelay] error in
+            onError: { [errorRelay] error in
                 errorRelay.accept(error.localizedDescription)
-            })
-            .asObservable()
-    }
-
-    private func getStatus(for userId: String, movieId: Int) -> Driver<Void> {
-        return userService.isFavorite(for: userId, movieId: movieId)
-            .do {  [showPopularMoviesRelay] response in
-                guard let movieIndex = self.popularMovies.firstIndex(where: {$0.id == response.id})
-                else {
-                    return
-                }
-                var updatedMovie = self.popularMovies[movieIndex]
-                updatedMovie.markAs(favorite: response.favorite)
-                self.popularMovies[movieIndex] = updatedMovie
-                showPopularMoviesRelay.accept(self.popularMovies)
             }
-            .map { _ in }
-            .asDriver(onErrorJustReturn: ())
+            .map {_ in }
+            .asObservable()
     }
 }

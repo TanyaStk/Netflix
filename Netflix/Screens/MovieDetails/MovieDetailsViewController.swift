@@ -334,7 +334,7 @@ class MovieDetailsViewController: UIViewController {
         trailerPlayer.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(navigationButtonsStackView.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(0.55)
+            make.bottom.equalTo(movieCoverImageView.snp.bottom)
         }
         
         playButton.snp.makeConstraints { make in
@@ -347,7 +347,7 @@ class MovieDetailsViewController: UIViewController {
         stopPlayingButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.3)
             make.height.equalToSuperview().multipliedBy(0.05)
-            make.top.equalTo(trailerPlayer.snp.bottom)
+            make.top.equalTo(movieCoverImageView.snp.bottom)
             make.centerX.equalToSuperview()
         }
         
@@ -380,7 +380,10 @@ class MovieDetailsViewController: UIViewController {
         synopsisStackView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(releaseDateStackView.snp.bottom).offset(8)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        synopsisHeaderLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
         }
     }
     
