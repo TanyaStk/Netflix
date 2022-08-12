@@ -34,11 +34,11 @@ class LoginViewModel: ViewModel {
     private let errorRelay = PublishRelay<String>()
     private let coordinator: LoginCoordinator
     private let userService: UserInfoProvider
-    private let keychainUseCase: KeychainUseCase
+    private let keychainUseCase: Keychain
     
     init(coordinator: LoginCoordinator,
          loginService: UserInfoProvider,
-         keychainUseCase: KeychainUseCase) {
+         keychainUseCase: Keychain) {
         self.coordinator = coordinator
         self.userService = loginService
         self.keychainUseCase = keychainUseCase

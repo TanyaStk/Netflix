@@ -24,11 +24,11 @@ class SplashViewModel: ViewModel {
     
     private let coordinator: SplashCoordinator
     private let loginService: UserInfoProvider
-    private let keychainUseCase: KeychainUseCase
+    private let keychainUseCase: Keychain
     
     init(coordinator: SplashCoordinator,
          loginService: UserInfoProvider,
-         keychainUseCase: KeychainUseCase) {
+         keychainUseCase: Keychain) {
         self.coordinator = coordinator
         self.loginService = loginService
         self.keychainUseCase = keychainUseCase
