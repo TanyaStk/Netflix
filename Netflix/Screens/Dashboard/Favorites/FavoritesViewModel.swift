@@ -114,7 +114,7 @@ class FavoritesViewModel: ViewModel {
             .map { _ in }
             .asDriver(onErrorJustReturn: ())
                 
-        let isFavoritesEmpty = isFavoritesEmptyRelay.asDriver(onErrorJustReturn: true)
+        let isFavoritesEmpty = isFavoritesEmptyRelay.skip(1).asDriver(onErrorJustReturn: true)
         
         let showMovieDetails = input.movieCoverTap
             .do(onNext: { index in
