@@ -8,13 +8,15 @@
 import Foundation
 
 struct LatestMovie: Codable {
-    var genres: [String]
-    var id: Int
-    var posterPath: String
-    var title: String
-    var isFavorite: Bool?
+    let adult: Bool
+    let genres: [String]
+    let id: Int
+    let posterPath: String
+    let title: String
+    let isFavorite: Bool?
     
-    init(genres: [String], id: Int, imagePath: String?, title: String, isFavorite: Bool?) {
+    init(adult: Bool, genres: [String], id: Int, imagePath: String?, title: String, isFavorite: Bool?) {
+        self.adult = adult
         self.genres = genres
         self.id = id
         let imagePath = imagePath ?? ""

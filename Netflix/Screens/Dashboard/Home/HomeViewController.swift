@@ -280,13 +280,17 @@ class HomeViewController: UIViewController {
         latestMovieTitle.text = movie.title
         latestMovieGenres.text = movie.genres.joined(separator: " \u{2022} ")
         
-        guard let url = URL(string: movie.posterPath) else { return }
-        latestMovieImageView.filmCoverImageView.sd_setImage(
-            with: url,
-            placeholderImage: nil,
-            options: .continueInBackground,
-            context: nil
-        )
+        if movie.adult {
+            latestMovieImageView.filmCoverImageView.image = Asset.Assets.adultContentImage.image
+        } else {
+            guard let url = URL(string: movie.posterPath) else { return }
+            latestMovieImageView.filmCoverImageView.sd_setImage(
+                with: url,
+                placeholderImage: nil,
+                options: .continueInBackground,
+                context: nil
+            )
+        }
     }
     
     private func addSubviews() {

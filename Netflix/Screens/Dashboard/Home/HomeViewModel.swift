@@ -34,7 +34,7 @@ class HomeViewModel: ViewModel {
     }
     
     private let showLatestMovieRelay = BehaviorRelay<LatestMovie>(value: LatestMovie(
-        genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
+        adult: false, genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
     )
     private let showPopularMoviesRelay = BehaviorRelay<[Movie]>(value: [Movie]())
     private let isLatestFavoriteBehaviorRelay = BehaviorRelay(value: false)
@@ -100,6 +100,7 @@ class HomeViewModel: ViewModel {
         let loadLatestMovie = movieService.getLatest()
             .do { getLatestResponse in
                 let latestMovie = LatestMovie(
+                    adult: getLatestResponse.adult,
                     genres: getLatestResponse.genres.map({ genre in
                         genre.name
                     }),
@@ -144,7 +145,9 @@ class HomeViewModel: ViewModel {
                 .asDriver(onErrorJustReturn: ())
         
         let showLatestMovie = showLatestMovieRelay
-            .asDriver(onErrorJustReturn: LatestMovie(genres: [], id: 0, imagePath: "", title: "", isFavorite: false))
+            .asDriver(onErrorJustReturn: LatestMovie(
+                adult: false, genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
+            )
         
         let showPopularMovies =  showPopularMoviesRelay
             .asDriver(onErrorJustReturn: [Movie]())
