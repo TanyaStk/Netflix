@@ -44,7 +44,7 @@ class HomeViewModel: ViewModel {
     private let coordinator: HomeCoordinator
     private let movieService: MoviesProvider
     private let userService: UserInfoProvider
-    private let keychainUseCase: KeychainUseCase
+    private let keychainUseCase: Keychain
 
     private var popularMoviesPage = 1
     private var popularMovies = [Movie]()
@@ -53,7 +53,7 @@ class HomeViewModel: ViewModel {
     init(coordinator: HomeCoordinator,
          movieService: MoviesProvider,
          userService: UserInfoProvider,
-         keychainUseCase: KeychainUseCase) {
+         keychainUseCase: Keychain) {
         self.coordinator = coordinator
         self.movieService = movieService
         self.userService = userService

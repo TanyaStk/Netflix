@@ -35,7 +35,7 @@ class MovieDetailsViewModel: ViewModel {
     private let coordinator: MovieDetailsCoordinator
     private let movieService: MoviesProvider
     private let userService: UserInfoProvider
-    private let keychainUseCase: KeychainUseCase
+    private let keychainUseCase: Keychain
     private let movieId: Int
     
     private var hasVideo = false
@@ -43,7 +43,7 @@ class MovieDetailsViewModel: ViewModel {
     init(coordinator: MovieDetailsCoordinator,
          movieService: MoviesProvider,
          userService: UserInfoProvider,
-         keychainUseCase: KeychainUseCase,
+         keychainUseCase: Keychain,
          movieId: Int) {
         self.coordinator = coordinator
         self.movieService = movieService
