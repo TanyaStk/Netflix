@@ -42,7 +42,8 @@ class DashboardCoordinator: Coordinator {
                                                comingSoonNavigationController,
                                                favoritesNavigationController]
         
-        navigationController.pushViewController(dashboardController, animated: false)
+        dashboardController.modalPresentationStyle = .fullScreen
+        navigationController.present(dashboardController, animated: false)
         
         homeCoordinator.start()
         comingSoonCoordinator.start()
