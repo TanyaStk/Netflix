@@ -213,8 +213,8 @@ class MovieDetailsViewController: UIViewController {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
-        stack.distribution = .fill
         stack.spacing = 4
+        stack.distribution = .fillProportionally
         [self.synopsisHeaderLabel,
          self.synopsisDescriptionLabel].forEach { stack.addArrangedSubview($0) }
         return stack
