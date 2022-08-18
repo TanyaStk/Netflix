@@ -19,11 +19,10 @@ extension MovieEntity {
     @NSManaged public var isFavorite: Bool
     @NSManaged public var overview: String?
     @NSManaged public var posterPath: String?
-    @NSManaged public var releaseData: String?
+    @NSManaged public var releaseDate: Date?
     @NSManaged public var runtime: Int64
     @NSManaged public var title: String?
-    @NSManaged public var voteAverage: String?
-    @NSManaged public var category: CategoryEntity?
+    @NSManaged public var voteAverage: Float
 
 }
 

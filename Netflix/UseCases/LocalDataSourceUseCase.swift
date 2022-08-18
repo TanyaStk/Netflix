@@ -11,10 +11,15 @@ import CoreData
 import RxSwift
 
 protocol LocalDataSourceProtocol {
-    func saveMoviesFor(categoryName: String, models: [Movie]) throws
-    func fetchMoviesFor(categoryName: String) throws -> [Movie]
-    func saveLatest(model: LatestMovie) throws
-    func fetchLatest() throws -> LatestMovie
+    func saveToPopular(movie: Movie) throws -> Single<Void>
+    func saveToUpcoming(movie: Movie) throws -> Single<Void>
+    func saveToFavorites(movie: Movie) throws -> Single<Void>
+    func saveMovieDetails(with movieDetails: MovieDetails) throws -> Single<Void>
+    func fetchLatest() throws -> Single<LatestMovie>
+    func fetchPopular() throws -> Single<[Movie]>
+    func fetchUpcoming() throws -> Single<[Movie]>
+    func fetchFavorites() throws -> Single<[Movie]>
+    func fetchMovieDetails(for movieId: Int) throws -> Single<MovieDetails>
 }
 
 class LocalDataSourceUseCase: LocalDataSourceProtocol {
@@ -30,73 +35,188 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
     
     private lazy var context = appDelegate!.persistentContainer.viewContext
     
-    func saveMoviesFor(categoryName: String, models: [Movie]) throws {
-        let category = CategoryEntity(context: context)
-        category.name = categoryName
+    func saveToPopular(movie: Movie) throws -> Single<Void> {
+        let popularEntity = PopularEntity(context: context)
+        popularEntity.id = Int64(movie.id)
         
-        let movies = models.map { movieModel -> MovieEntity in
-            let movieEntity = MovieEntity(context: context)
-            movieEntity.id = Int64(movieModel.id)
-            movieEntity.isFavorite = movieModel.isFavorite
-            movieEntity.posterPath = movieModel.posterPath
-            return movieEntity
-        }
-        let moviesSet = NSSet(array: movies)
-        
-        category.addToMovies(moviesSet)
+        let movieEntity = MovieEntity(context: context)
+        movieEntity.id = Int64(movie.id)
+        movieEntity.isFavorite = movie.isFavorite
+        movieEntity.posterPath = movie.posterPath
         
         do {
             try context.save()
+            return .just(())
         } catch {
             throw LocalDataSourceError.failedToSaveData
         }
     }
     
-    func fetchMoviesFor(categoryName: String) throws -> [Movie] {
+    func saveToUpcoming(movie: Movie) throws -> Single<Void> {
+        let upcomingEntity = UpcomingEntity(context: context)
+        upcomingEntity.id = Int64(movie.id)
+        
+        let movieEntity = MovieEntity(context: context)
+        movieEntity.id = Int64(movie.id)
+        movieEntity.isFavorite = movie.isFavorite
+        movieEntity.posterPath = movie.posterPath
+        
+        do {
+            try context.save()
+            return .just(())
+        } catch {
+            throw LocalDataSourceError.failedToSaveData
+        }
+    }
+    
+    func saveToFavorites(movie: Movie) throws -> Single<Void> {
+        let favoriteEntity = FavoriteEntity(context: context)
+        favoriteEntity.id = Int64(movie.id)
+        
+        let movieEntity = MovieEntity(context: context)
+        movieEntity.id = Int64(movie.id)
+        movieEntity.isFavorite = movie.isFavorite
+        movieEntity.posterPath = movie.posterPath
+        
+        do {
+            try context.save()
+            return .just(())
+        } catch {
+            throw LocalDataSourceError.failedToSaveData
+        }
+    }
+    
+    func saveMovieDetails(with movieDetails: MovieDetails) throws -> Single<Void> {
         let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "category = %@", categoryName)
+        request.predicate = NSPredicate(format: "id = %@", movieDetails.id)
         
         do {
-            let movies = try context.fetch(request)
-            return movies.map { movieEntity in
-                Movie(id: Int(movieEntity.id),
-                      imagePath: movieEntity.posterPath,
-                      isFavorite: movieEntity.isFavorite
-                )
-            }
-        } catch {
-            throw LocalDataSourceError.failedToFetchData
-        }
-    }
-
-    func saveLatest(model: LatestMovie) throws {
-        let latestMovie = LatestMovieEntity(context: context)
-        latestMovie.id = Int64(model.id)
-        latestMovie.genres = model.genres
-        latestMovie.posterPath = model.posterPath
-        latestMovie.title = model.title
-        
-        do {
+            let movie = try context.fetch(request).first
+            movie?.title = movieDetails.title
+            movie?.overview = movieDetails.overview
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            movie?.releaseDate = dateFormatter.date(from: movieDetails.releaseDate)
+            movie?.voteAverage = Float(movieDetails.voteAverage) ?? 0
+            
             try context.save()
+            return .just(())
         } catch {
             throw LocalDataSourceError.failedToSaveData
         }
     }
     
-    func fetchLatest() throws -> LatestMovie {
-        let request: NSFetchRequest<LatestMovieEntity> = LatestMovieEntity.fetchRequest()
+    func fetchLatest() throws -> Single<LatestMovie> {
+        let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "releaseDate", ascending: false)]
+        request.fetchLimit = 1
 
         do {
             let movies = try context.fetch(request)
             guard let latestMovie = movies.first else {
-                return LatestMovie(adult: false, genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
+                return .never()
             }
-            return LatestMovie(adult: false,
-                               genres: latestMovie.genres ?? [],
-                               id: Int(latestMovie.id),
-                               imagePath: latestMovie.posterPath,
-                               title: latestMovie.title ?? "",
-                               isFavorite: false)
+            return .just(LatestMovie(adult: false,
+                                     genres: [],
+                                     id: Int(latestMovie.id),
+                                     imagePath: latestMovie.posterPath,
+                                     title: latestMovie.title ?? "",
+                                     isFavorite: false))
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
+    
+    func fetchPopular() throws -> Single<[Movie]> {
+        let requestPopular: NSFetchRequest<PopularEntity> = PopularEntity.fetchRequest()
+        let requestMovies: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        
+        do {
+            let popularMovies = try context.fetch(requestPopular)
+            let movies = try context.fetch(requestMovies)
+            let filteredMovies = movies.filter { movieEntity in
+                popularMovies.contains { popularEntity in
+                    popularEntity.id == movieEntity.id
+                }
+            }
+            
+            return .just(filteredMovies.map({ movieEntity in
+                Movie(id: Int(movieEntity.id),
+                      imagePath: movieEntity.posterPath,
+                      isFavorite: movieEntity.isFavorite)
+            }))
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
+    
+    func fetchUpcoming() throws -> Single<[Movie]> {
+        let requestUpcoming: NSFetchRequest<UpcomingEntity> = UpcomingEntity.fetchRequest()
+        let requestMovies: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        
+        do {
+            let upcomingMovies = try context.fetch(requestUpcoming)
+            let movies = try context.fetch(requestMovies)
+            let filteredMovies = movies.filter { movieEntity in
+                upcomingMovies.contains { upcomingEntity in
+                    upcomingEntity.id == movieEntity.id
+                }
+            }
+            
+            return .just(filteredMovies.map({ movieEntity in
+                Movie(id: Int(movieEntity.id),
+                      imagePath: movieEntity.posterPath,
+                      isFavorite: movieEntity.isFavorite)
+            }))
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
+    
+    func fetchFavorites() throws -> Single<[Movie]> {
+        let requestFavorites: NSFetchRequest<FavoriteEntity> = FavoriteEntity.fetchRequest()
+        let requestMovies: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        
+        do {
+            let favoriteMovies = try context.fetch(requestFavorites)
+            let movies = try context.fetch(requestMovies)
+            let filteredMovies = movies.filter { movieEntity in
+                favoriteMovies.contains { favoriteEntity in
+                    favoriteEntity.id == movieEntity.id
+                }
+            }
+            
+            return .just(filteredMovies.map({ movieEntity in
+                Movie(id: Int(movieEntity.id),
+                      imagePath: movieEntity.posterPath,
+                      isFavorite: movieEntity.isFavorite)
+            }))
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
+    
+    func fetchMovieDetails(for movieId: Int) throws -> Single<MovieDetails> {
+        let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id = %@", Int64(movieId))
+        
+        do {
+            guard let movie = try context.fetch(request).first else {
+                return .never()
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            return .just(MovieDetails(
+                id: movieId,
+                overview: movie.overview ?? "",
+                imagePath: movie.posterPath,
+                releaseDate: dateFormatter.string(from: movie.releaseDate ?? Date()),
+                runtime: Int(movie.runtime),
+                title: movie.title ?? "",
+                voteAverage: movie.voteAverage))
         } catch {
             throw LocalDataSourceError.failedToFetchData
         }
