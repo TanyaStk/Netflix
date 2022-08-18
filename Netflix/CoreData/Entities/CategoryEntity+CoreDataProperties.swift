@@ -1,27 +1,27 @@
 //
-//  UpcomingMovieEntity+CoreDataProperties.swift
+//  CategoryEntity+CoreDataProperties.swift
 //  Netflix
 //
-//  Created by Tanya Samastroyenka on 17.08.2022.
+//  Created by Tanya Samastroyenka on 18.08.2022.
 //
 //
 
 import Foundation
 import CoreData
 
+extension CategoryEntity {
 
-extension UpcomingMovieEntity {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<UpcomingMovieEntity> {
-        return NSFetchRequest<UpcomingMovieEntity>(entityName: "UpcomingMovieEntity")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CategoryEntity> {
+        return NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
     }
 
+    @NSManaged public var name: String?
     @NSManaged public var movies: NSSet?
 
 }
 
 // MARK: Generated accessors for movies
-extension UpcomingMovieEntity {
+extension CategoryEntity {
 
     @objc(addMoviesObject:)
     @NSManaged public func addToMovies(_ value: MovieEntity)
@@ -37,6 +37,6 @@ extension UpcomingMovieEntity {
 
 }
 
-extension UpcomingMovieEntity : Identifiable {
+extension CategoryEntity: Identifiable {
 
 }

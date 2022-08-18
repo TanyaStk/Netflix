@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="FavoriteMovieEntity" representedClassName="FavoriteMovieEntity" syncable="YES">
-        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MovieEntity" inverseName="inFavorite" inverseEntity="MovieEntity"/>
+    <entity name="CategoryEntity" representedClassName="CategoryEntity" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MovieEntity" inverseName="category" inverseEntity="MovieEntity"/>
     </entity>
     <entity name="LatestMovieEntity" representedClassName="LatestMovieEntity" syncable="YES">
         <attribute name="genres" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[String]"/>
@@ -18,15 +19,7 @@
         <attribute name="runtime" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="voteAverage" optional="YES" attributeType="String"/>
-        <relationship name="inFavorite" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteMovieEntity" inverseName="movies" inverseEntity="FavoriteMovieEntity"/>
-        <relationship name="inPopular" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PopularMovieEntity" inverseName="movies" inverseEntity="PopularMovieEntity"/>
-        <relationship name="inUpcoming" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UpcomingMovieEntity" inverseName="movies" inverseEntity="UpcomingMovieEntity"/>
-    </entity>
-    <entity name="PopularMovieEntity" representedClassName="PopularMovieEntity" syncable="YES">
-        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MovieEntity" inverseName="inPopular" inverseEntity="MovieEntity"/>
-    </entity>
-    <entity name="UpcomingMovieEntity" representedClassName="UpcomingMovieEntity" syncable="YES">
-        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MovieEntity" inverseName="inUpcoming" inverseEntity="MovieEntity"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CategoryEntity" inverseName="movies" inverseEntity="CategoryEntity"/>
     </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -34,11 +27,9 @@
         <attribute name="username" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="FavoriteMovieEntity" positionX="20.16015625" positionY="12.15625" width="128" height="44"/>
-        <element name="LatestMovieEntity" positionX="-519.03125" positionY="-18.45703125" width="128" height="89"/>
-        <element name="MovieEntity" positionX="-522.890625" positionY="127.5625" width="128" height="208"/>
-        <element name="PopularMovieEntity" positionX="-93.11328125" positionY="-68.6796875" width="128" height="44"/>
-        <element name="UpcomingMovieEntity" positionX="-58.8125" positionY="133.04296875" width="128" height="44"/>
+        <element name="LatestMovieEntity" positionX="-519.03125" positionY="-18.45703125" width="128" height="103"/>
+        <element name="MovieEntity" positionX="-522.890625" positionY="127.5625" width="128" height="178"/>
         <element name="UserEntity" positionX="-394.13671875" positionY="-157.65234375" width="128" height="88"/>
+        <element name="CategoryEntity" positionX="-285.515625" positionY="150.140625" width="128" height="73"/>
     </elements>
 </model>

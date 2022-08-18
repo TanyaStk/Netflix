@@ -2,7 +2,7 @@
 //  LatestMovieEntity+CoreDataClass.swift
 //  Netflix
 //
-//  Created by Tanya Samastroyenka on 17.08.2022.
+//  Created by Tanya Samastroyenka on 18.08.2022.
 //
 //
 
