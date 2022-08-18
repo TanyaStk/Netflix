@@ -11,6 +11,7 @@ import CoreData
 import RxSwift
 
 protocol LocalDataSourceProtocol {
+    func saveMovie(movie: Movie) throws -> Single<Void>
     func saveToPopular(movie: Movie) throws -> Single<Void>
     func saveToUpcoming(movie: Movie) throws -> Single<Void>
     func saveToFavorites(movie: Movie) throws -> Single<Void>
@@ -34,18 +35,26 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         case unknown
     }
     
-    private let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    private let coreDataManager = CoreDataManager()
+    private lazy var context = coreDataManager.persistentContainer.viewContext
     
-    private lazy var context = appDelegate!.persistentContainer.viewContext
-    
-    func saveToPopular(movie: Movie) throws -> Single<Void> {
-        let popularEntity = PopularEntity(context: context)
-        popularEntity.id = Int64(movie.id)
-        
+    func saveMovie(movie: Movie) throws -> Single<Void> {
         let movieEntity = MovieEntity(context: context)
         movieEntity.id = Int64(movie.id)
         movieEntity.isFavorite = movie.isFavorite
         movieEntity.posterPath = movie.posterPath
+        
+        do {
+            try context.save()
+            return .just(())
+        } catch {
+            throw LocalDataSourceError.failedToSaveData
+        }
+    }
+    
+    func saveToPopular(movie: Movie) throws -> Single<Void> {
+        let popularEntity = PopularEntity(context: context)
+        popularEntity.id = Int64(movie.id)
         
         do {
             try context.save()
@@ -59,11 +68,6 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         let upcomingEntity = UpcomingEntity(context: context)
         upcomingEntity.id = Int64(movie.id)
         
-        let movieEntity = MovieEntity(context: context)
-        movieEntity.id = Int64(movie.id)
-        movieEntity.isFavorite = movie.isFavorite
-        movieEntity.posterPath = movie.posterPath
-        
         do {
             try context.save()
             return .just(())
@@ -75,11 +79,6 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
     func saveToFavorites(movie: Movie) throws -> Single<Void> {
         let favoriteEntity = FavoriteEntity(context: context)
         favoriteEntity.id = Int64(movie.id)
-        
-        let movieEntity = MovieEntity(context: context)
-        movieEntity.id = Int64(movie.id)
-        movieEntity.isFavorite = movie.isFavorite
-        movieEntity.posterPath = movie.posterPath
         
         do {
             try context.save()
