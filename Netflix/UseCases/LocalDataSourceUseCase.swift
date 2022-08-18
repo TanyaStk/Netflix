@@ -11,8 +11,8 @@ import CoreData
 import RxSwift
 
 protocol LocalDataSourceProtocol {
-    func savePopular(models: [Movie]) throws
-    func fetchPopular() throws -> [Movie]
+    func saveMoviesFor(categoryName: String, models: [Movie]) throws
+    func fetchMoviesFor(categoryName: String) throws -> [Movie]
     func saveLatest(model: LatestMovie) throws
     func fetchLatest() throws -> LatestMovie
 }
@@ -30,9 +30,9 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
     
     private lazy var context = appDelegate!.persistentContainer.viewContext
     
-    func savePopular(models: [Movie]) throws {
-        let popularMovies = CategoryEntity(context: context)
-        popularMovies.name = "popular"
+    func saveMoviesFor(categoryName: String, models: [Movie]) throws {
+        let category = CategoryEntity(context: context)
+        category.name = categoryName
         
         let movies = models.map { movieModel -> MovieEntity in
             let movieEntity = MovieEntity(context: context)
@@ -43,7 +43,7 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         }
         let moviesSet = NSSet(array: movies)
         
-        popularMovies.addToMovies(moviesSet)
+        category.addToMovies(moviesSet)
         
         do {
             try context.save()
@@ -52,9 +52,9 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         }
     }
     
-    func fetchPopular() throws -> [Movie] {
+    func fetchMoviesFor(categoryName: String) throws -> [Movie] {
         let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "name = %@", "popular")
+        request.predicate = NSPredicate(format: "category = %@", categoryName)
         
         do {
             let movies = try context.fetch(request)
