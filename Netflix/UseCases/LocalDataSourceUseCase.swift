@@ -15,11 +15,14 @@ protocol LocalDataSourceProtocol {
     func saveToUpcoming(movie: Movie) throws -> Single<Void>
     func saveToFavorites(movie: Movie) throws -> Single<Void>
     func saveMovieDetails(with movieDetails: MovieDetails) throws -> Single<Void>
+    func saveAccountDetails(for account: AccountDetails) throws -> Single<Void>
+    
     func fetchLatest() throws -> Single<LatestMovie>
     func fetchPopular() throws -> Single<[Movie]>
     func fetchUpcoming() throws -> Single<[Movie]>
     func fetchFavorites() throws -> Single<[Movie]>
     func fetchMovieDetails(for movieId: Int) throws -> Single<MovieDetails>
+    func fetchAccountDetails() throws -> Single<AccountDetails>
 }
 
 class LocalDataSourceUseCase: LocalDataSourceProtocol {
@@ -100,6 +103,20 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
             movie?.releaseDate = dateFormatter.date(from: movieDetails.releaseDate)
             movie?.voteAverage = Float(movieDetails.voteAverage) ?? 0
             
+            try context.save()
+            return .just(())
+        } catch {
+            throw LocalDataSourceError.failedToSaveData
+        }
+    }
+    
+    func saveAccountDetails(for account: AccountDetails) throws -> Single<Void> {
+        let userEntity = UserEntity(context: context)
+        userEntity.id = Int64(account.id)
+        userEntity.name = account.name
+        userEntity.username = account.username
+        
+        do {
             try context.save()
             return .just(())
         } catch {
@@ -217,6 +234,22 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
                 runtime: Int(movie.runtime),
                 title: movie.title ?? "",
                 voteAverage: movie.voteAverage))
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
+    
+    func fetchAccountDetails() throws -> Single<AccountDetails> {
+        let request: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
+        request.fetchLimit = 1
+
+        do {
+            let user = try context.fetch(request).first
+            return .just(AccountDetails(
+                id: Int(user?.id ?? 0),
+                name: user?.name ?? "",
+                username: user?.username ?? ""
+            ))
         } catch {
             throw LocalDataSourceError.failedToFetchData
         }
