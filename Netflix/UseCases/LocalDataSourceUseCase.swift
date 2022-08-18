@@ -12,6 +12,7 @@ import RxSwift
 
 protocol LocalDataSourceProtocol {
     func savePopular(models: [Movie]) throws
+    func fetchPopular() throws -> [Movie]
     func saveLatest(model: LatestMovie) throws
     func fetchLatest() throws -> LatestMovie
 }
@@ -25,16 +26,13 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         case unknown
     }
     
-    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    private let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    
+    private lazy var context = appDelegate!.persistentContainer.viewContext
     
     func savePopular(models: [Movie]) throws {
-        guard let appDelegate = appDelegate else {
-            throw LocalDataSourceError.unknown
-        }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        
-        let popularMovies = PopularMovieEntity(context: context)
+        let popularMovies = CategoryEntity(context: context)
+        popularMovies.name = "popular"
         
         let movies = models.map { movieModel -> MovieEntity in
             let movieEntity = MovieEntity(context: context)
@@ -53,14 +51,25 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
             throw LocalDataSourceError.failedToSaveData
         }
     }
+    
+    func fetchPopular() throws -> [Movie] {
+        let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "name = %@", "popular")
+        
+        do {
+            let movies = try context.fetch(request)
+            return movies.map { movieEntity in
+                Movie(id: Int(movieEntity.id),
+                      imagePath: movieEntity.posterPath,
+                      isFavorite: movieEntity.isFavorite
+                )
+            }
+        } catch {
+            throw LocalDataSourceError.failedToFetchData
+        }
+    }
 
     func saveLatest(model: LatestMovie) throws {
-        guard let appDelegate = appDelegate else {
-            throw LocalDataSourceError.unknown
-        }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        
         let latestMovie = LatestMovieEntity(context: context)
         latestMovie.id = Int64(model.id)
         latestMovie.genres = model.genres
@@ -75,12 +84,6 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
     }
     
     func fetchLatest() throws -> LatestMovie {
-        guard let appDelegate = appDelegate else {
-            throw LocalDataSourceError.unknown
-        }
-
-        let context = appDelegate.persistentContainer.viewContext
-
         let request: NSFetchRequest<LatestMovieEntity> = LatestMovieEntity.fetchRequest()
 
         do {
