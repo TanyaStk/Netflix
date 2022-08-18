@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol Keychain {
+protocol KeychainProtocol {
     func save(user: User) throws
     func getUser() throws -> User?
     func deleteUser() throws
     func update(user: User) throws
 }
 
-class KeychainUseCase: Keychain {
+class KeychainUseCase: KeychainProtocol {
     
     enum KeychainError: Error {
         case duplicateEntry

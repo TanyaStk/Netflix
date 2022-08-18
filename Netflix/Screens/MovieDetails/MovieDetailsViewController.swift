@@ -19,6 +19,7 @@ class MovieDetailsViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     private lazy var movieCoverImageView = HeadMovieCoverView()
+    
     private lazy var trailerPlayer: YouTubePlayerView = {
         let player = YouTubePlayerView()
         player.isHidden = true

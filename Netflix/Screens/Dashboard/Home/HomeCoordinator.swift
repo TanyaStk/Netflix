@@ -20,7 +20,8 @@ class HomeCoordinator: Coordinator {
         let homeViewModel = HomeViewModel(coordinator: self,
                                           movieService: MoviesProvider(),
                                           userService: UserInfoProvider(),
-                                          keychainUseCase: KeychainUseCase())
+                                          keychainUseCase: KeychainUseCase(),
+                                          localStorageUseCase: LocalDataSourceUseCase())
         let homeViewController = HomeViewController()
         homeViewController.viewModel = homeViewModel
         

@@ -44,7 +44,8 @@ class HomeViewModel: ViewModel {
     private let coordinator: HomeCoordinator
     private let movieService: MoviesProvider
     private let userService: UserInfoProvider
-    private let keychainUseCase: Keychain
+    private let keychainUseCase: KeychainProtocol
+    private let localStorageUseCase: LocalDataSourceProtocol
 
     private var favoriteMovies = [Int]()
     private var popularMoviesPage = 1
@@ -54,11 +55,13 @@ class HomeViewModel: ViewModel {
     init(coordinator: HomeCoordinator,
          movieService: MoviesProvider,
          userService: UserInfoProvider,
-         keychainUseCase: Keychain) {
+         keychainUseCase: KeychainProtocol,
+         localStorageUseCase: LocalDataSourceProtocol) {
         self.coordinator = coordinator
         self.movieService = movieService
         self.userService = userService
         self.keychainUseCase = keychainUseCase
+        self.localStorageUseCase = localStorageUseCase
     }
     
     func transform(_ input: Input) -> Output {
@@ -99,8 +102,8 @@ class HomeViewModel: ViewModel {
                 }
                 return userService.getAccountDetails(with: user.session_id)
             }
-            .flatMap { [userService, keychainUseCase, latestMovieId, isLatestFavoriteBehaviorRelay] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
-                isLatestFavoriteBehaviorRelay.accept(!(isLatestFavoriteBehaviorRelay.value))
+            .flatMap { [userService, keychainUseCase, latestMovieId] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
+                self.isLatestFavoriteBehaviorRelay.accept(!(self.isLatestFavoriteBehaviorRelay.value))
                 guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
@@ -110,7 +113,7 @@ class HomeViewModel: ViewModel {
                     with: user.session_id,
                     mediaType: "movie",
                     mediaId: latestMovieId,
-                    favorite: isLatestFavoriteBehaviorRelay.value
+                    favorite: self.isLatestFavoriteBehaviorRelay.value
                 )
             }
             .do(onError: { error in
@@ -229,7 +232,7 @@ class HomeViewModel: ViewModel {
                 })
                 self.popularMovies += transformedResults
                 self.showPopularMoviesRelay.accept(self.popularMovies)
-                
+
                 if moviesResultsResponse.page < moviesResultsResponse.total_pages {
                     self.popularMoviesPage += 1
                 } else {
