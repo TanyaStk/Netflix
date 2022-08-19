@@ -68,13 +68,7 @@ class MovieDetailsViewModel: ViewModel {
             .do(onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)
             })
-            .asDriver(onErrorJustReturn: MovieDetails(id: 0,
-                                                      overview: "",
-                                                      imagePath: "",
-                                                      releaseDate: "",
-                                                      runtime: 0,
-                                                      title: "",
-                                                      voteAverage: 0))
+            .asDriver(onErrorJustReturn: MovieDetails())
                 
         let loadFavoriteStatus = input.isViewLoaded
             .flatMapLatest { _ -> Driver<Void> in
