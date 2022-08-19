@@ -12,9 +12,9 @@ import RxSwift
 
 protocol LocalDataSourceProtocol {
     func saveMovie(movie: Movie) throws -> Single<Void>
-    func saveToPopular(movie: Movie) throws -> Single<Void>
-    func saveToUpcoming(movie: Movie) throws -> Single<Void>
-    func saveToFavorites(movie: Movie) throws -> Single<Void>
+    func saveToPopular(movieId: Int) throws -> Single<Void>
+    func saveToUpcoming(movieId: Int) throws -> Single<Void>
+    func saveToFavorites(movieId: Int) throws -> Single<Void>
     func saveMovieDetails(with movieDetails: MovieDetails) throws -> Single<Void>
     func saveAccountDetails(for account: AccountDetails) throws -> Single<Void>
     
@@ -52,9 +52,9 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         }
     }
     
-    func saveToPopular(movie: Movie) throws -> Single<Void> {
+    func saveToPopular(movieId: Int) throws -> Single<Void> {
         let popularEntity = PopularEntity(context: context)
-        popularEntity.id = Int64(movie.id)
+        popularEntity.id = Int64(movieId)
         
         do {
             try context.save()
@@ -64,9 +64,9 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         }
     }
     
-    func saveToUpcoming(movie: Movie) throws -> Single<Void> {
+    func saveToUpcoming(movieId: Int) throws -> Single<Void> {
         let upcomingEntity = UpcomingEntity(context: context)
-        upcomingEntity.id = Int64(movie.id)
+        upcomingEntity.id = Int64(movieId)
         
         do {
             try context.save()
@@ -76,9 +76,9 @@ class LocalDataSourceUseCase: LocalDataSourceProtocol {
         }
     }
     
-    func saveToFavorites(movie: Movie) throws -> Single<Void> {
+    func saveToFavorites(movieId: Int) throws -> Single<Void> {
         let favoriteEntity = FavoriteEntity(context: context)
-        favoriteEntity.id = Int64(movie.id)
+        favoriteEntity.id = Int64(movieId)
         
         do {
             try context.save()
