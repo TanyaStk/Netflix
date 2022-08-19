@@ -15,6 +15,15 @@ struct LatestMovie: Codable {
     let title: String
     let isFavorite: Bool?
     
+    init() {
+        self.adult = false
+        self.genres = []
+        self.id = 0
+        self.posterPath = ""
+        self.title = ""
+        self.isFavorite = false
+    }
+    
     init(adult: Bool, genres: [String], id: Int, imagePath: String?, title: String, isFavorite: Bool?) {
         self.adult = adult
         self.genres = genres

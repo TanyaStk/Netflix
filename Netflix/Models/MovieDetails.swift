@@ -16,6 +16,16 @@ struct MovieDetails {
     let title: String
     let voteAverage: String
     
+    init() {
+        self.id = 0
+        self.overview = ""
+        self.posterPath = ""
+        self.releaseDate = ""
+        self.runtime = 0
+        self.title = ""
+        self.voteAverage = ""
+    }
+    
     init(id: Int, overview: String, imagePath: String?, releaseDate: String,
          runtime: Int, title: String, voteAverage: Float) {
         self.id = id
