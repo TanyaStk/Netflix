@@ -18,8 +18,8 @@ class HomeCoordinator: Coordinator {
     
     func start() {
         let homeViewModel = HomeViewModel(coordinator: self,
-                                          movieService: MoviesProvider(),
-                                          userService: UserInfoProvider(),
+                                          moviesProvider: MoviesProvider(),
+                                          userInfoProvider: UserInfoProvider(),
                                           keychainUseCase: KeychainUseCase())
         let homeViewController = HomeViewController()
         homeViewController.viewModel = homeViewModel
