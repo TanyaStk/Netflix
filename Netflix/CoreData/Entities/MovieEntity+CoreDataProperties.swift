@@ -2,12 +2,13 @@
 //  MovieEntity+CoreDataProperties.swift
 //  Netflix
 //
-//  Created by Tanya Samastroyenka on 18.08.2022.
+//  Created by Tanya Samastroyenka on 19.08.2022.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension MovieEntity {
 
@@ -23,9 +24,10 @@ extension MovieEntity {
     @NSManaged public var runtime: Int64
     @NSManaged public var title: String?
     @NSManaged public var voteAverage: Float
+    @NSManaged public var genres: [String]?
 
 }
 
-extension MovieEntity: Identifiable {
+extension MovieEntity : Identifiable {
 
 }
