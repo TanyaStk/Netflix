@@ -38,7 +38,7 @@ class ComingSoonViewModel: ViewModel {
     private let coordinator: ComingSoonCoordinator
     private let moviesProvider: MoviesProviderProtocol
     private let userService: UserInfoProvider
-    private let keychainUseCase: Keychain
+    private let keychainUseCase: KeychainProtocol
    
     private var favoriteMovies = [Int]()
     private var upcomingMovies = [Movie]()
@@ -48,7 +48,7 @@ class ComingSoonViewModel: ViewModel {
     init(coordinator: ComingSoonCoordinator,
          moviesProvider: MoviesProviderProtocol,
          userService: UserInfoProvider,
-         keychainUseCase: Keychain) {
+         keychainUseCase: KeychainProtocol) {
         self.coordinator = coordinator
         self.moviesProvider = moviesProvider
         self.userService = userService

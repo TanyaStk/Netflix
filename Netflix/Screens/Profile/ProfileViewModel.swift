@@ -28,11 +28,11 @@ class ProfileViewModel: ViewModel {
 
     private let coordinator: ProfileCoordinator
     private let service: UserInfoProvider
-    private let keychainUseCase: Keychain
+    private let keychainUseCase: KeychainProtocol
     
     init(coordinator: ProfileCoordinator,
          service: UserInfoProvider,
-         keychainUseCase: Keychain) {
+         keychainUseCase: KeychainProtocol) {
         self.coordinator = coordinator
         self.service = service
         self.keychainUseCase = keychainUseCase

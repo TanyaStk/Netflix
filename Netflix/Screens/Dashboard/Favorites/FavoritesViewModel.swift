@@ -33,12 +33,12 @@ class FavoritesViewModel: ViewModel {
     
     private let coordinator: FavoritesCoordinator
     private let service: UserInfoProvider
-    private let keychainUseCase: Keychain
+    private let keychainUseCase: KeychainProtocol
     private var favoriteMovies = [Movie]()
     
     init(coordinator: FavoritesCoordinator,
          service: UserInfoProvider,
-         keychainUseCase: Keychain) {
+         keychainUseCase: KeychainProtocol) {
         self.coordinator = coordinator
         self.service = service
         self.keychainUseCase = keychainUseCase
