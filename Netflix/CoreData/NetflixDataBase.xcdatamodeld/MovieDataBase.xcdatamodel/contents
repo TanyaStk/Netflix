@@ -25,10 +25,10 @@
         <attribute name="username" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="MovieEntity" positionX="-522.890625" positionY="127.5625" width="128" height="163"/>
-        <element name="UserEntity" positionX="-394.13671875" positionY="-157.65234375" width="128" height="88"/>
         <element name="FavoriteEntity" positionX="-450" positionY="9" width="128" height="44"/>
-        <element name="UpcomingEntity" positionX="-441" positionY="18" width="128" height="44"/>
+        <element name="MovieEntity" positionX="-522.890625" positionY="127.5625" width="128" height="149"/>
         <element name="PopularEntity" positionX="-432" positionY="27" width="128" height="44"/>
+        <element name="UpcomingEntity" positionX="-441" positionY="18" width="128" height="44"/>
+        <element name="UserEntity" positionX="-394.13671875" positionY="-157.65234375" width="128" height="88"/>
     </elements>
 </model>

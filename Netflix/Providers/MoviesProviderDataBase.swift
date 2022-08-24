@@ -16,7 +16,7 @@ final class MoviesProviderDataBase: MoviesProviderProtocol {
     }
     
     func getUpcoming(page: Int) -> Single<MoviesResultsResponse> {
-        return localDataSourceUseCase.fetchUpcoming()
+        return localDataSourceUseCase.fetchUpcoming(page: page)
     }
     
     func getPopular(page: Int) -> Single<MoviesResultsResponse> {

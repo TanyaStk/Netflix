@@ -8,9 +8,9 @@
 import Foundation
 
 struct Movie: Codable {
-    var id: Int
-    var posterPath: String
-    var isFavorite: Bool
+    let id: Int
+    let posterPath: String
+    let isFavorite: Bool
     
     init() {
         self.id = 0

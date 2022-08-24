@@ -40,7 +40,7 @@ class HomeViewModel: ViewModel {
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: HomeCoordinator
-    private let moviesProvider: MoviesProvider
+    private let moviesProvider: MoviesProviderProtocol
     private let userInfoProvider: UserInfoProvider
     private let keychainUseCase: Keychain
     
@@ -50,7 +50,7 @@ class HomeViewModel: ViewModel {
     private var latestMovieId = 0
     
     init(coordinator: HomeCoordinator,
-         moviesProvider: MoviesProvider,
+         moviesProvider: MoviesProviderProtocol,
          userInfoProvider: UserInfoProvider,
          keychainUseCase: Keychain) {
         self.coordinator = coordinator

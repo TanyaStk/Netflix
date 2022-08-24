@@ -20,7 +20,7 @@ class ComingSoonCoordinator: Coordinator {
         let comingSoonViewController = ComingSoonViewController()
         let comingSoonViewModel = ComingSoonViewModel(
             coordinator: self,
-            movieService: MoviesProvider(),
+            moviesProvider: MoviesProvider(),
             userService: UserInfoProvider(),
             keychainUseCase: KeychainUseCase()
         )

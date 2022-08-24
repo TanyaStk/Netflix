@@ -21,7 +21,7 @@ class MovieDetailsCoordinator: Coordinator {
     
     func start() {
         let movieDetailsViewModel = MovieDetailsViewModel(coordinator: self,
-                                                          movieService: MoviesProvider(),
+                                                          movieService: MoviesProviderAPI(),
                                                           userService: UserInfoProvider(),
                                                           keychainUseCase: KeychainUseCase(),
                                                           movieId: movieId)

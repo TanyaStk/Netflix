@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension MovieEntity {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MovieEntity> {
@@ -24,10 +23,8 @@ extension MovieEntity {
     @NSManaged public var runtime: Int64
     @NSManaged public var title: String?
     @NSManaged public var voteAverage: Float
-    @NSManaged public var genres: [String]?
-
 }
 
-extension MovieEntity : Identifiable {
+extension MovieEntity: Identifiable {
 
 }
