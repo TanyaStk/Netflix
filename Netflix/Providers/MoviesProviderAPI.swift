@@ -9,16 +9,7 @@ import Foundation
 import RxSwift
 import Moya
 
-protocol Movies {
-    func getLatest() -> Single<GetLatestResponse>
-    func getUpcoming(page: Int) -> Single<MoviesResultsResponse>
-    func getPopular(page: Int) -> Single<MoviesResultsResponse>
-    func getDetails(movieId: Int) -> Single<MovieDetailsResponse>
-    func search(for movie: String, on page: Int) -> Single<MoviesResultsResponse>
-    func getVideos(for movieId: Int) -> Single<GetVideosResponse>
-}
-
-final class MoviesProvider: Movies {
+final class MoviesProviderAPI: MoviesProviderProtocol {
 
     private let provider = MoyaProvider<MoviesAPI>()
 

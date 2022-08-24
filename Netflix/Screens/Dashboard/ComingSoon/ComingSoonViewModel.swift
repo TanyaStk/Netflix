@@ -36,7 +36,7 @@ class ComingSoonViewModel: ViewModel {
     private let errorRelay = PublishRelay<String>()
 
     private let coordinator: ComingSoonCoordinator
-    private let movieService: MoviesProvider
+    private let moviesProvider: MoviesProviderProtocol
     private let userService: UserInfoProvider
     private let keychainUseCase: Keychain
    
@@ -46,11 +46,11 @@ class ComingSoonViewModel: ViewModel {
     private var searchingResults = [Movie]()
 
     init(coordinator: ComingSoonCoordinator,
-         movieService: MoviesProvider,
+         moviesProvider: MoviesProviderProtocol,
          userService: UserInfoProvider,
          keychainUseCase: Keychain) {
         self.coordinator = coordinator
-        self.movieService = movieService
+        self.moviesProvider = moviesProvider
         self.userService = userService
         self.keychainUseCase = keychainUseCase
     }
@@ -103,8 +103,8 @@ class ComingSoonViewModel: ViewModel {
             .distinctUntilChanged()
             .filter { !$0.isEmpty }
             .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
-            .flatMapLatest { [movieService] query in
-                movieService.search(for: query, on: 1)
+            .flatMapLatest { [moviesProvider] query in
+                moviesProvider.search(for: query, on: 1)
             }
             .asObservable().materialize()
             .do { [unowned self] materializedEvent in
@@ -170,7 +170,7 @@ class ComingSoonViewModel: ViewModel {
     }
     
     private func loadUpcoming(on page: Int) -> Observable<Void> {
-        return self.movieService.getUpcoming(page: page)
+        return self.moviesProvider.getUpcoming(page: page)
             .do { moviesResultsResponse in
                 let transformedResults = moviesResultsResponse.results.map({ response -> Movie in
                     let isFavoriteStatus = self.favoriteMovies.contains(response.id)

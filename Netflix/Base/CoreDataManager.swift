@@ -8,7 +8,11 @@
 import Foundation
 import CoreData
 
-class CoreDataManager {
+class CoreDataManager: NSObject {
+    
+    static let sharedInstance = CoreDataManager()
+    
+    private override init() {}
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "NetflixDataBase")

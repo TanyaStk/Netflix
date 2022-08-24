@@ -33,31 +33,29 @@ class HomeViewModel: ViewModel {
         let error: Driver<String>
     }
     
-    private let showLatestMovieRelay = BehaviorRelay<LatestMovie>(value: LatestMovie(
-        adult: false, genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
-    )
+    private let showLatestMovieRelay = BehaviorRelay<LatestMovie>(value: LatestMovie())
     private let showPopularMoviesRelay = BehaviorRelay<[Movie]>(value: [Movie]())
     private let isLatestFavoriteBehaviorRelay = BehaviorRelay(value: false)
     private let movieVideoKeyRelay = BehaviorRelay(value: "")
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: HomeCoordinator
-    private let movieService: MoviesProvider
-    private let userService: UserInfoProvider
+    private let moviesProvider: MoviesProviderProtocol
+    private let userInfoProvider: UserInfoProvider
     private let keychainUseCase: Keychain
-
+    
     private var favoriteMovies = [Int]()
     private var popularMoviesPage = 1
     private var popularMovies = [Movie]()
     private var latestMovieId = 0
     
     init(coordinator: HomeCoordinator,
-         movieService: MoviesProvider,
-         userService: UserInfoProvider,
+         moviesProvider: MoviesProviderProtocol,
+         userInfoProvider: UserInfoProvider,
          keychainUseCase: Keychain) {
         self.coordinator = coordinator
-        self.movieService = movieService
-        self.userService = userService
+        self.moviesProvider = moviesProvider
+        self.userInfoProvider = userInfoProvider
         self.keychainUseCase = keychainUseCase
     }
     
@@ -69,12 +67,12 @@ class HomeViewModel: ViewModel {
             .asDriver(onErrorDriveWith: .never())
                 
         let loadFavorites = input.viewDidLoad
-                .flatMap { [userService] _ -> Single<MoviesResultsResponse> in
+                .flatMap { [userInfoProvider] _ -> Single<MoviesResultsResponse> in
                     guard let user = try self.keychainUseCase.getUser()
                     else {
                         return .never()
                     }
-                    return userService.getFavoriteMovies(for: user.session_id)
+                    return userInfoProvider.getFavoriteMovies(for: user.session_id)
                 }.asObservable().materialize()
             .do { [unowned self] materializedEvent in
                 switch materializedEvent {
@@ -92,25 +90,25 @@ class HomeViewModel: ViewModel {
             .asObservable()
                 
         let addToFavorites = input.likeButtonTap
-            .flatMapLatest { [userService, keychainUseCase] _ -> Single<AccountDetailsResponse> in
+            .flatMapLatest { [userInfoProvider, keychainUseCase] _ -> Single<AccountDetailsResponse> in
                 guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
-                return userService.getAccountDetails(with: user.session_id)
+                return userInfoProvider.getAccountDetails(with: user.session_id)
             }
-            .flatMap { [userService, keychainUseCase, latestMovieId, isLatestFavoriteBehaviorRelay] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
-                isLatestFavoriteBehaviorRelay.accept(!(isLatestFavoriteBehaviorRelay.value))
+            .flatMap { [userInfoProvider, keychainUseCase, latestMovieId] accountDetailsResponse -> Single<MarkAsFavoriteResponse> in
+                self.isLatestFavoriteBehaviorRelay.accept(!(self.isLatestFavoriteBehaviorRelay.value))
                 guard let user = try keychainUseCase.getUser()
                 else {
                     return .never()
                 }
-                return userService.markAsFavorite(
+                return userInfoProvider.markAsFavorite(
                     for: accountDetailsResponse.id,
                     with: user.session_id,
                     mediaType: "movie",
                     mediaId: latestMovieId,
-                    favorite: isLatestFavoriteBehaviorRelay.value
+                    favorite: self.isLatestFavoriteBehaviorRelay.value
                 )
             }
             .do(onError: { error in
@@ -121,7 +119,7 @@ class HomeViewModel: ViewModel {
                     
         let isLatestMovieFavorite = isLatestFavoriteBehaviorRelay.asDriver(onErrorJustReturn: false)
                     
-        let loadLatestMovie = movieService.getLatest()
+        let loadLatestMovie = moviesProvider.getLatest()
             .do { getLatestResponse in
                 let latestMovie = LatestMovie(
                     adult: getLatestResponse.adult,
@@ -164,9 +162,9 @@ class HomeViewModel: ViewModel {
             .asDriver(onErrorJustReturn: ())
                 
         let loadPopularAndLatest = Observable
-            .merge(loadLatestMovie,
-                   loadFirstPageOfPopularMovies,
-                   loadNextPageOfPopularMovies)
+            .merge(loadFirstPageOfPopularMovies,
+                    loadLatestMovie,
+                    loadNextPageOfPopularMovies)
         
         let loadMovies = Observable
                 .concat(loadFavorites, loadPopularAndLatest)
@@ -174,12 +172,10 @@ class HomeViewModel: ViewModel {
                 .asDriver(onErrorJustReturn: ())
         
         let showLatestMovie = showLatestMovieRelay
-            .asDriver(onErrorJustReturn: LatestMovie(
-                adult: false, genres: [], id: 0, imagePath: "", title: "", isFavorite: false)
-            )
+            .asDriver(onErrorJustReturn: LatestMovie())
         
-        let showPopularMovies =  showPopularMoviesRelay
-            .asDriver(onErrorJustReturn: [Movie]())
+        let showPopularMovies = showPopularMoviesRelay
+            .asDriver(onErrorJustReturn: [])
         
         let showMovieDetails = input.movieCoverTap
             .do(onNext: { [coordinator] index in
@@ -204,7 +200,7 @@ class HomeViewModel: ViewModel {
     }
     
     private func getVideoKey() -> Driver<Void> {
-        return movieService.getVideos(for: self.latestMovieId)
+        return moviesProvider.getVideos(for: self.latestMovieId)
             .do(onSuccess: { getVideosResponse in
                 guard let videoKey = getVideosResponse.results.first?.key else {
                     self.movieVideoKeyRelay.accept("")
@@ -219,7 +215,7 @@ class HomeViewModel: ViewModel {
     }
     
     private func loadPopularMovies(on page: Int) -> Observable<Void> {
-        return self.movieService.getPopular(page: page)
+        return self.moviesProvider.getPopular(page: page)
             .do { moviesResultsResponse in
                 let transformedResults = moviesResultsResponse.results.map({ response -> Movie in
                     let isFavoriteStatus = self.favoriteMovies.contains(response.id)

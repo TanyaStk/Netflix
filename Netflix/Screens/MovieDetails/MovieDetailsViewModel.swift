@@ -33,7 +33,7 @@ class MovieDetailsViewModel: ViewModel {
     private let errorRelay = PublishRelay<String>()
     
     private let coordinator: MovieDetailsCoordinator
-    private let movieService: MoviesProvider
+    private let movieService: MoviesProviderAPI
     private let userService: UserInfoProvider
     private let keychainUseCase: Keychain
     private let movieId: Int
@@ -41,7 +41,7 @@ class MovieDetailsViewModel: ViewModel {
     private var hasVideo = false
     
     init(coordinator: MovieDetailsCoordinator,
-         movieService: MoviesProvider,
+         movieService: MoviesProviderAPI,
          userService: UserInfoProvider,
          keychainUseCase: Keychain,
          movieId: Int) {
@@ -68,13 +68,7 @@ class MovieDetailsViewModel: ViewModel {
             .do(onError: { [weak self] error in
                 self?.errorRelay.accept(error.localizedDescription)
             })
-            .asDriver(onErrorJustReturn: MovieDetails(id: 0,
-                                                      overview: "",
-                                                      imagePath: "",
-                                                      releaseDate: "",
-                                                      runtime: 0,
-                                                      title: "",
-                                                      voteAverage: 0))
+            .asDriver(onErrorJustReturn: MovieDetails())
                 
         let loadFavoriteStatus = input.isViewLoaded
             .flatMapLatest { _ -> Driver<Void> in

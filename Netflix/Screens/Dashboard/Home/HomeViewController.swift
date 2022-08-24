@@ -169,7 +169,7 @@ class HomeViewController: UIViewController {
             trailing: spacing)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPaging
+        section.orthogonalScrollingBehavior = .continuous
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
